@@ -1,8 +1,11 @@
 const GOOGLE_MAPS_API_KEY = 'AIzaSyBlxyY6T31oqQ7sBvGGm-Q23QU5zInRo0I';
 const GOOGLE_BASELINE_DEFAULT_CENTER = { lat: 39.2672138, lng: -111.6346885 };
 const GOOGLE_BASELINE_DEFAULT_ZOOM = 7;
-const LOCAL_HUNT_BOUNDARIES_PATH = 'https://json.uoga.workers.dev/hunt-boundaries';
-const OUTFITTERS_DATA_SOURCES = ['./data/outfitters.json', './data/outfitters.json.json'];
+
+// --- CLOUDFLARE JSON SOURCES ---
+const CLOUDFLARE_BASE = 'https://json.uoga.workers.dev';
+const LOCAL_HUNT_BOUNDARIES_PATH = `${CLOUDFLARE_BASE}/hunt-boundaries`;
+const OUTFITTERS_DATA_SOURCES = [`${CLOUDFLARE_BASE}/outfitters.json`];
 
 const USFS_QUERY_URL =
   "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_ForestSystemBoundaries_01/MapServer/0/query?where=" +
@@ -13,20 +16,20 @@ const BLM_QUERY_URL =
   'https://gis.blm.gov/utarcgis/rest/services/AdminBoundaries/BLM_UT_ADMU/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson';
 
 const HUNT_DATA_SOURCES = [
-  { label: 'Buck Deer', required: true, candidates: ['./data/Utah_Hunt_Planner_Master_BuckDeer_Pages_43_53.json', './data/Utah_Hunt_Planner_Master_BuckDeer_Pages_43_53.json.json'] },
-  { label: 'Pronghorn', required: false, candidates: ['./data/Utah_Hunt_Planner_Master_Pronghorn.json', './data/Utah_Hunt_Planner_Master_Pronghorn.json.json'] },
-  { label: 'Moose', required: false, candidates: ['./data/Utah_Hunt_Planner_Master_Moose.json', './data/Utah_Hunt_Planner_Master_Moose.json.json'] },
-  { label: 'Bighorn Sheep', required: false, candidates: ['./data/Utah_Hunt_Planner_Master_BighornSheep.json', './data/Utah_Hunt_Planner_Master_BighornSheep.json.json'] },
-  { label: 'Mountain Goat', required: false, candidates: ['./data/Utah_Hunt_Planner_Master_MountainGoat.json', './data/Utah_Hunt_Planner_Master_MountainGoat.json.json'] },
-  { label: 'Bison', required: false, candidates: ['./data/Utah_Hunt_Planner_Master_Bison.json', './data/Utah_Hunt_Planner_Master_Bison.json.json'] },
-  { label: 'Black Bear', required: false, candidates: ['./data/Utah_Hunt_Planner_Master_BlackBear.json', './data/Utah_Hunt_Planner_Master_BlackBear.json.json'] },
-  { label: 'Turkey', required: false, candidates: ['./data/Utah_Hunt_Planner_Master_Turkey.json', './data/Utah_Hunt_Planner_Master_Turkey.json.json'] },
-  { label: 'Cougar', required: false, candidates: ['./data/Utah_Hunt_Planner_Master_Cougar.json', './data/Utah_Hunt_Planner_Master_Cougar.json.json'] },
-  { label: 'Bull Elk', required: false, candidates: ['./data/Utah_Hunt_Planner_Master_BullElk.json', './data/Utah_Hunt_Planner_Master_BullElk.json.json', './data/Utah_Hunt_Planner_Master_Elk.json', './data/Utah_Hunt_Planner_Master_Elk.json.json'] },
-  { label: 'General Elk', required: false, candidates: ['./data/Utah_Hunt_Planner_Master_GeneralElk.json', './data/Utah_Hunt_Planner_Master_GeneralElk.json.json'] },
-  { label: 'Spike Elk', required: false, candidates: ['./data/Utah_Hunt_Planner_Master_SpikeElk.json', './data/Utah_Hunt_Planner_Master_SpikeElk.json.json'] },
-  { label: 'Antlerless Elk', required: false, candidates: ['./data/Utah_Hunt_Planner_Master_AntlerlessElk.json', './data/Utah_Hunt_Planner_Master_AntlerlessElk.json.json'] },
-  { label: 'Special Elk', required: false, candidates: ['./data/Utah_Hunt_Planner_Master_SpecialElk.json', './data/Utah_Hunt_Planner_Master_SpecialElk.json.json'] }
+  { label: 'Buck Deer', required: true, candidates: [`${CLOUDFLARE_BASE}/Utah_Hunt_Planner_Master_BuckDeer_Pages_43_53.json`] },
+  { label: 'Pronghorn', required: false, candidates: [`${CLOUDFLARE_BASE}/Utah_Hunt_Planner_Master_Pronghorn.json`] },
+  { label: 'Moose', required: false, candidates: [`${CLOUDFLARE_BASE}/Utah_Hunt_Planner_Master_Moose.json`] },
+  { label: 'Bighorn Sheep', required: false, candidates: [`${CLOUDFLARE_BASE}/Utah_Hunt_Planner_Master_BighornSheep.json`] },
+  { label: 'Mountain Goat', required: false, candidates: [`${CLOUDFLARE_BASE}/Utah_Hunt_Planner_Master_MountainGoat.json`] },
+  { label: 'Bison', required: false, candidates: [`${CLOUDFLARE_BASE}/Utah_Hunt_Planner_Master_Bison.json`] },
+  { label: 'Black Bear', required: false, candidates: [`${CLOUDFLARE_BASE}/Utah_Hunt_Planner_Master_BlackBear.json`] },
+  { label: 'Turkey', required: false, candidates: [`${CLOUDFLARE_BASE}/Utah_Hunt_Planner_Master_Turkey.json`] },
+  { label: 'Cougar', required: false, candidates: [`${CLOUDFLARE_BASE}/Utah_Hunt_Planner_Master_Cougar.json`] },
+  { label: 'Bull Elk', required: false, candidates: [`${CLOUDFLARE_BASE}/Utah_Hunt_Planner_Master_BullElk.json`] },
+  { label: 'General Elk', required: false, candidates: [`${CLOUDFLARE_BASE}/Utah_Hunt_Planner_Master_GeneralElk.json`] },
+  { label: 'Spike Elk', required: false, candidates: [`${CLOUDFLARE_BASE}/Utah_Hunt_Planner_Master_SpikeElk.json`] },
+  { label: 'Antlerless Elk', required: false, candidates: [`${CLOUDFLARE_BASE}/Utah_Hunt_Planner_Master_AntlerlessElk.json`] },
+  { label: 'Special Elk', required: false, candidates: [`${CLOUDFLARE_BASE}/Utah_Hunt_Planner_Master_SpecialElk.json`] }
 ];
 
 const HUNT_BOUNDARY_NAME_OVERRIDES = {
@@ -37,9 +40,30 @@ const HUNT_BOUNDARY_NAME_OVERRIDES = {
   EA1258: ['La Sal Mtns', 'Dolores Triangle', 'La Sal, La Sal Mtns-North']
 };
 
+// Custom Google Maps Hunting Style (Clean, modern aesthetic)
+const huntPlannerMapStyle = [
+  { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#f2f2f2' }] },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#aadaff' }] },
+  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#6688aa' }] },
+  { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#c8e6c9' }] },
+  { featureType: 'landscape.natural', elementType: 'geometry', stylers: [{ color: '#dcf0da' }] },
+  { featureType: 'road.highway', elementType: 'geometry.fill', stylers: [{ color: '#8c8c8c' }] },
+  { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ color: '#7e7e7e' }] },
+  { featureType: 'road.arterial', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
+  { featureType: 'road.local', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
+  { featureType: 'administrative.locality', elementType: 'labels.text.fill', stylers: [{ color: '#4a4a4a' }] },
+  { featureType: 'administrative.locality', elementType: 'labels.text.stroke', stylers: [{ color: '#ffffff' }, { weight: 3 }] },
+  { featureType: 'poi.business', stylers: [{ visibility: 'off' }] },
+  { featureType: 'poi.attraction', stylers: [{ visibility: 'off' }] },
+  { featureType: 'poi.place_of_worship', stylers: [{ visibility: 'off' }] },
+  { featureType: 'poi.school', stylers: [{ visibility: 'off' }] },
+  { featureType: 'poi.sports_complex', stylers: [{ visibility: 'off' }] },
+  { featureType: 'transit', stylers: [{ visibility: 'off' }] }
+];
+
 const HUNT_TYPE_ORDER = [ 'General', 'Youth', 'Limited Entry', 'Premium Limited Entry', 'Management', 'Dedicated Hunter', 'Cactus Buck', 'Once-in-a-Lifetime', 'Antlerless' ];
 const HUNT_CATEGORY_ORDER = [ 'Mature Bull', 'General Bull', 'Spike Only', 'Youth', 'Extended Archery', 'Private Land Only', 'Antlerless', 'Pronghorn', 'Moose', 'Rocky Mountain Bighorn', 'Desert Bighorn', 'Mountain Goat', 'Bison', 'Turkey', 'Cougar', 'Conservation', 'Pursuit', 'Spot and Stalk', 'Control', 'CWMU', 'Select Areas', 'Statewide Permit' ];
-const SEX_ORDER = ['Buck', 'Bull', 'Antlerless', 'Either Sex'];
+const SEX_ORDER = ['Buck', 'Bull', 'Antlerless', 'Either Sex', "Hunter's Choice"];
 const WEAPON_ORDER = [ 'Any Legal Weapon', 'Archery', 'Extended Archery', 'Restricted Archery', 'Muzzleloader', 'Restricted Muzzleloader', 'Restricted Rifle', 'HAMSS', 'Multiseason', 'Restricted Multiseason' ];
 
 let googleBaselineMap = null;
@@ -57,7 +81,6 @@ let blmLayer = null;
 let outfitters = [];
 let outfitterMarkers = [];
 let overlaysLoaded = { usfs: false, blm: false };
-
 let activeLoads = 0;
 let loaderShowTimer = null;
 
@@ -77,7 +100,6 @@ function setLoaderText(text) {
   const label = document.getElementById('loadingText');
   if (label) label.textContent = text;
 }
-
 function showLoader(text = 'Working...') {
   setLoaderText(text);
   if (loaderShowTimer) { clearTimeout(loaderShowTimer); loaderShowTimer = null; }
@@ -88,7 +110,6 @@ function showLoader(text = 'Working...') {
     loaderShowTimer = null;
   }, 140);
 }
-
 function hideLoader() {
   if (loaderShowTimer) { clearTimeout(loaderShowTimer); loaderShowTimer = null; }
   activeLoads = Math.max(0, activeLoads - 1);
@@ -97,24 +118,14 @@ function hideLoader() {
     if (overlay) overlay.classList.add('hidden');
   }
 }
-
-async function withLoader(text, work) {
-  showLoader(text);
-  try { return await work(); } finally { hideLoader(); }
-}
-
+async function withLoader(text, work) { showLoader(text); try { return await work(); } finally { hideLoader(); } }
 function updateStatus(message) {
   const el = document.getElementById('status');
   if (el) el.textContent = message;
   const overlay = document.getElementById('loadingOverlay');
   if (overlay && !overlay.classList.contains('hidden')) setLoaderText(message);
 }
-
-function hideLoadingOverlay() {
-  activeLoads = 0;
-  const overlay = document.getElementById('loadingOverlay');
-  if (overlay) overlay.classList.add('hidden');
-}
+function hideLoadingOverlay() { activeLoads = 0; const overlay = document.getElementById('loadingOverlay'); if (overlay) overlay.classList.add('hidden'); }
 
 function setMapChooserOpen(isOpen) {
   const chooser = document.getElementById('mapChooser');
@@ -149,7 +160,23 @@ function getSpeciesRaw(h) { return firstNonEmpty(h.species, h.Species, h.SPECIES
 function getSpeciesList(h) { return getSpeciesRaw(h).split(',').map(v => v.trim()).filter(Boolean); }
 function getWeapon(h) { return firstNonEmpty(h.weapon, h.Weapon, h.WEAPON); }
 function getHuntType(h) { return firstNonEmpty(h.huntType, h.HuntType, h.hunt_type, h.type, h.Type); }
-function getHuntCategory(h) { return firstNonEmpty(h.huntCategory, h.HuntCategory, h.hunt_category); }
+
+function getHuntCategory(h) {
+  let c = firstNonEmpty(h.huntCategory, h.HuntCategory, h.hunt_category);
+  if (c) return c;
+  const sp = getSpeciesList(h).map(s => s.toLowerCase());
+  const ti = getHuntTitle(h).toLowerCase();
+  const ty = getHuntType(h).toLowerCase();
+  if (ti.includes('antlerless')) return 'Antlerless';
+  if (ti.includes('private-lands') || ti.includes('private lands')) return 'Private Land Only';
+  if (ti.includes('extended archery')) return 'Extended Archery';
+  if (ti.includes('spike')) return 'Spike Only';
+  if (ty.includes('youth') || ti.includes('youth')) return 'Youth';
+  if (ty.includes('mature bull')) return 'Mature Bull';
+  if (sp.includes('elk') && ty.includes('general')) return 'General Bull';
+  return ty || '';
+}
+
 function getDates(h) { return firstNonEmpty(h.seasonLabel, h.seasonDates, h.dates, h.Dates); }
 
 function normalizeSpeciesLabel(value) {
@@ -168,8 +195,8 @@ function getNormalizedSex(valueOrHunt) {
   const title = hunt ? getHuntTitle(hunt).toLowerCase() : '';
   const species = hunt ? getSpeciesDisplay(hunt).toLowerCase() : '';
 
-  if (title.includes("hunter's choice") || title.includes('hunters choice') || title.includes('either sex')) return 'Either Sex';
-  if (raw === 'Either') return 'Either Sex';
+  if (title.includes("hunter's choice") || title.includes('hunters choice')) return "Hunter's Choice";
+  if (raw === 'Either' || title.includes('either sex')) return 'Either Sex';
   if (safe(raw).trim().toLowerCase() === 'buck/bull') {
     if (species.includes('deer') || species.includes('pronghorn')) return 'Buck';
     if (species.includes('elk') || species.includes('moose')) return 'Bull';
@@ -240,23 +267,7 @@ function getFilteredHunts(excludeKey = '') {
     const sexOk = excludeKey === 'sex' || matchesFilter(sex, getNormalizedSex(h));
     const weaponOk = excludeKey === 'weapon' || matchesFilter(weapon, getWeapon(h));
     const huntTypeOk = excludeKey === 'huntType' || matchesFilter(huntType, getHuntType(h));
-    
-    // For Hunt Class (Category), we use our extracted category logic
-    let derivedCategory = getHuntCategory(h);
-    if (!derivedCategory) {
-      const sp = getSpeciesList(h).map(s => s.toLowerCase());
-      const ti = getHuntTitle(h).toLowerCase();
-      const ty = getHuntType(h).toLowerCase();
-      if (ti.includes('antlerless')) derivedCategory = 'Antlerless';
-      else if (ti.includes('private-lands') || ti.includes('private lands')) derivedCategory = 'Private Land Only';
-      else if (ti.includes('extended archery')) derivedCategory = 'Extended Archery';
-      else if (ti.includes('spike')) derivedCategory = 'Spike Only';
-      else if (ty.includes('youth') || ti.includes('youth')) derivedCategory = 'Youth';
-      else if (ty.includes('mature bull')) derivedCategory = 'Mature Bull';
-      else if (sp.includes('elk') && ty.includes('general')) derivedCategory = 'General Bull';
-      else derivedCategory = getHuntType(h) || '';
-    }
-    const huntCategoryOk = excludeKey === 'huntCategory' || matchesFilter(huntCategory, derivedCategory);
+    const huntCategoryOk = excludeKey === 'huntCategory' || matchesFilter(huntCategory, getHuntCategory(h));
     const unitOk = excludeKey === 'unit' || !unit || getUnitValue(h) === unit || getUnitName(h) === unit || getUnitCode(h) === unit;
 
     return searchOk && speciesOk && sexOk && weaponOk && huntTypeOk && huntCategoryOk && unitOk;
@@ -266,15 +277,64 @@ function getFilteredHunts(excludeKey = '') {
 function refreshSelectionMatrix() {
   if (!speciesFilter) return;
 
-  // Species
+  // 1. Species
   const prevSpecies = speciesFilter.value || 'All Species';
   const speciesSet = new Set(['All Species']);
   getFilteredHunts('species').forEach(h => getSpeciesDisplayList(h).forEach(s => speciesSet.add(s)));
   const speciesOptions = Array.from(speciesSet).sort((a, b) => (a === 'All Species' ? -1 : b === 'All Species' ? 1 : a.localeCompare(b)));
   speciesFilter.innerHTML = speciesOptions.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
-  speciesFilter.value = speciesOptions.includes(prevSpecies) ? prevSpecies : 'All Species';
+  if (!speciesOptions.includes(prevSpecies) && prevSpecies !== 'All Species') speciesFilter.value = 'All Species';
+  else speciesFilter.value = prevSpecies;
 
-  // Units
+  // 2. Sex 
+  const prevSex = sexFilter.value || 'All';
+  const sexSet = new Set(['All']);
+  getFilteredHunts('sex').forEach(h => {
+    const s = getNormalizedSex(h);
+    if (s) sexSet.add(s);
+  });
+  const sexOptions = sortWithPreferredOrder(Array.from(sexSet), ['All', ...SEX_ORDER]);
+  sexFilter.innerHTML = sexOptions.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
+  if (!sexOptions.includes(prevSex) && prevSex !== 'All') sexFilter.value = 'All';
+  else sexFilter.value = prevSex;
+
+  // 3. Weapon
+  const prevWeapon = weaponFilter.value || 'All';
+  const weaponSet = new Set(['All']);
+  getFilteredHunts('weapon').forEach(h => {
+    const w = getWeapon(h);
+    if (w) weaponSet.add(w);
+  });
+  const weaponOptions = sortWithPreferredOrder(Array.from(weaponSet), ['All', ...WEAPON_ORDER]);
+  weaponFilter.innerHTML = weaponOptions.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
+  if (!weaponOptions.includes(prevWeapon) && prevWeapon !== 'All') weaponFilter.value = 'All';
+  else weaponFilter.value = prevWeapon;
+
+  // 4. Hunt Type
+  const prevType = huntTypeFilter.value || 'All';
+  const typeSet = new Set(['All']);
+  getFilteredHunts('huntType').forEach(h => {
+    const t = getHuntType(h);
+    if (t) typeSet.add(t);
+  });
+  const typeOptions = sortWithPreferredOrder(Array.from(typeSet), ['All', ...HUNT_TYPE_ORDER]);
+  huntTypeFilter.innerHTML = typeOptions.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v === 'General' ? 'General Season' : v)}</option>`).join('');
+  if (!typeOptions.includes(prevType) && prevType !== 'All') huntTypeFilter.value = 'All';
+  else huntTypeFilter.value = prevType;
+
+  // 5. Hunt Category
+  const prevCat = huntCategoryFilter.value || 'All';
+  const catSet = new Set(['All']);
+  getFilteredHunts('huntCategory').forEach(h => {
+    const c = getHuntCategory(h);
+    if (c) catSet.add(c);
+  });
+  const catOptions = sortWithPreferredOrder(Array.from(catSet), ['All', ...HUNT_CATEGORY_ORDER]);
+  huntCategoryFilter.innerHTML = catOptions.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
+  if (!catOptions.includes(prevCat) && prevCat !== 'All') huntCategoryFilter.value = 'All';
+  else huntCategoryFilter.value = prevCat;
+
+  // 6. Unit
   const prevUnit = unitFilter.value || '';
   const unitsMap = new Map();
   getFilteredHunts('unit').forEach(h => {
@@ -283,7 +343,8 @@ function refreshSelectionMatrix() {
   });
   const unitOptions = Array.from(unitsMap.entries()).sort((a, b) => a[1].localeCompare(b[1]));
   unitFilter.innerHTML = `<option value="">All Units</option>` + unitOptions.map(([v, l]) => `<option value="${escapeHtml(v)}">${escapeHtml(l)}</option>`).join('');
-  unitFilter.value = unitOptions.some(([v]) => v === prevUnit) ? prevUnit : '';
+  if (!unitOptions.some(([v]) => v === prevUnit) && prevUnit !== '') unitFilter.value = '';
+  else unitFilter.value = prevUnit;
 }
 
 async function fetchJsonWithCandidates(candidates) {
@@ -300,7 +361,6 @@ async function fetchJsonWithCandidates(candidates) {
 async function loadHuntData() {
   return withLoader('Loading hunt datasets...', async () => {
     const merged = [];
-
     for (const source of HUNT_DATA_SOURCES) {
       try {
         const payload = await fetchJsonWithCandidates(source.candidates);
@@ -315,7 +375,6 @@ async function loadHuntData() {
         console.warn(`Optional dataset ${source.label} failed to load.`, error);
       }
     }
-
     const seenKeys = new Set();
     huntData = merged.filter(record => {
       const key = [ safe(getHuntCode(record)).trim(), safe(getUnitCode(record)).trim(), safe(getWeapon(record)).trim(), safe(getDates(record)).trim() ].join('||') || JSON.stringify(record);
@@ -339,6 +398,10 @@ async function loadOutfittersData() {
           listingName: safe(o.listingName || o.name).trim(),
           website: normalizeUrl(o.website),
           city: safe(o.city).trim(),
+          address: safe(o.address).trim(),
+          lat: o.lat ? parseFloat(o.lat) : null,
+          lng: o.lng ? parseFloat(o.lng) : null,
+          logoUrl: safe(o.logoUrl).trim(),
           phone: Array.isArray(o.phone) ? o.phone.join(', ') : safe(o.phone).trim(),
           certLevel: safe(o.certLevel).trim(),
           verificationStatus: safe(o.verificationStatus).trim(),
@@ -401,7 +464,7 @@ function setOverlayVisibility(kind, visible) {
 }
 
 function clearOutfitterMarkers() {
-  outfitterMarkers.forEach(marker => marker.setMap(null));
+  outfitterMarkers.forEach(marker => marker.map = null);
   outfitterMarkers = [];
 }
 
@@ -446,31 +509,71 @@ function renderOutfitterResults() {
   const baseLng = center && typeof center.lng === 'function' ? center.lng() : GOOGLE_BASELINE_DEFAULT_CENTER.lng;
   const cityOffsets = new Map();
 
-  container.innerHTML = matches.map(o => `
+  container.innerHTML = matches.map(o => {
+    const logoUrl = escapeHtml(o.logoUrl || 'https://www.uoga.org/assets/default-logo.png');
+    return `
     <div class="outfitter-card">
-      <div class="hunt-card-title">${escapeHtml(o.listingName)}</div>
-      <div class="hunt-card-meta">${escapeHtml(o.city || 'Utah')}</div>
-      <div class="hunt-card-meta">${escapeHtml(o.speciesServed || 'Species N/A')}</div>
-      <div class="hunt-card-meta">${escapeHtml(formatPhoneList(o.phone) || 'Phone N/A')}</div>
-      ${o.website ? `<div class="hunt-card-meta"><a href="${escapeHtml(o.website)}" target="_blank" rel="noopener noreferrer">Visit Website</a></div>` : ''}
+      <div class="outfitter-card-header">
+        <img src="${logoUrl}" alt="${escapeHtml(o.listingName)} Logo" class="outfitter-card-logo" onerror="this.style.display='none'">
+        <div class="outfitter-card-title-wrap">
+          <div class="hunt-card-title">${escapeHtml(o.listingName)}</div>
+          <div class="hunt-card-meta">${escapeHtml(o.city || 'Utah')}</div>
+        </div>
+      </div>
+      <div class="hunt-card-meta"><strong>Species:</strong> ${escapeHtml(o.speciesServed || 'N/A')}</div>
+      <div class="hunt-card-meta"><strong>Phone:</strong> ${escapeHtml(formatPhoneList(o.phone) || 'N/A')}</div>
+      ${o.website ? `<div class="hunt-card-meta" style="margin-top:4px;"><a href="${escapeHtml(o.website)}" target="_blank" rel="noopener noreferrer" class="outfitter-link">Visit Website ➔</a></div>` : ''}
     </div>
-  `).join('');
+  `}).join('');
 
-  if (!outfittersEnabled || !googleBaselineMap) return;
+  if (!outfittersEnabled || !googleBaselineMap || !google.maps.marker) return;
 
   matches.forEach((o, i) => {
-    const cityCenter = getOutfitterCityCenter(o);
-    const cityKey = safe(o.city).trim().toLowerCase() || `fallback-${i}`;
-    const cityIndex = cityOffsets.get(cityKey) || 0;
-    cityOffsets.set(cityKey, cityIndex + 1);
+    let lat, lng;
+    if (o.lat && o.lng) {
+      lat = o.lat;
+      lng = o.lng;
+    } else {
+      const cityCenter = getOutfitterCityCenter(o);
+      const cityKey = safe(o.city).trim().toLowerCase() || `fallback-${i}`;
+      const cityIndex = cityOffsets.get(cityKey) || 0;
+      cityOffsets.set(cityKey, cityIndex + 1);
+      lat = (cityCenter && cityCenter[0] ? cityCenter[0] : baseLat) + cityIndex * 0.02;
+      lng = (cityCenter && cityCenter[1] ? cityCenter[1] : baseLng) + cityIndex * 0.02;
+    }
 
-    const lat = (cityCenter && cityCenter[0] ? cityCenter[0] : baseLat) + cityIndex * 0.02;
-    const lng = (cityCenter && cityCenter[1] ? cityCenter[1] : baseLng) + cityIndex * 0.02;
+    const pinElement = document.createElement('div');
+    const logoUrl = escapeHtml(o.logoUrl || 'https://www.uoga.org/assets/default-logo.png');
+    pinElement.innerHTML = `
+      <div class="outfitter-logo-pin-shell">
+        <div class="outfitter-logo-pin-base"></div>
+        <div class="outfitter-logo-pin-center">
+          <img src="${logoUrl}" alt="${escapeHtml(o.listingName)}" onerror="this.style.display='none'">
+        </div>
+      </div>
+    `;
 
-    const marker = new google.maps.Marker({ position: { lat, lng }, map: googleBaselineMap, title: o.listingName });
-    const info = new google.maps.InfoWindow({ content: `<div style="min-width:210px;font-family:Segoe UI,Arial,sans-serif;"><strong>${escapeHtml(o.listingName)}</strong><br>${escapeHtml(o.city || 'Utah')}<br>${escapeHtml(formatPhoneList(o.phone) || '')}${o.website ? `<br><a href="${escapeHtml(o.website)}" target="_blank" rel="noopener noreferrer">Website</a>` : ''}</div>` });
+    const marker = new google.maps.marker.AdvancedMarkerElement({ 
+      position: { lat, lng }, 
+      map: googleBaselineMap, 
+      title: o.listingName,
+      content: pinElement 
+    });
 
-    marker.addListener('click', () => info.open({ anchor: marker, map: googleBaselineMap }));
+    const info = new google.maps.InfoWindow({ 
+      content: `<div style="min-width:210px;font-family:Segoe UI,Arial,sans-serif;color:#333;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+          <img src="${logoUrl}" style="width:32px; height:32px; object-fit:contain; border-radius:4px; border:1px solid #ccc;" onerror="this.style.display='none'">
+          <strong style="font-size:15px;">${escapeHtml(o.listingName)}</strong>
+        </div>
+        ${o.address ? escapeHtml(o.address) + '<br>' : ''}
+        ${escapeHtml(o.city || 'Utah')}<br>
+        ${escapeHtml(formatPhoneList(o.phone) || '')}
+        ${o.website ? `<br><a href="${escapeHtml(o.website)}" target="_blank" rel="noopener noreferrer" style="color:#2563eb; font-weight:bold; text-decoration:none; display:inline-block; margin-top:6px;">Visit Website ➔</a>` : ''}
+      </div>` 
+    });
+
+    pinElement.addEventListener('click', () => info.open({ anchor: marker, map: googleBaselineMap }));
     outfitterMarkers.push(marker);
   });
 }
@@ -555,12 +658,9 @@ function getSelectedBoundaryMatchSets() {
   return { ids, names };
 }
 
-// --- NEW FUNCTION: Identifies which boundary features should be visible based on active filters ---
 function getFilteredBoundaryMatchSets() {
   const ids = new Set();
   const names = new Set();
-  
-  // Only calculate this if we actually have filters applied to save time
   if (!hasActiveFilters()) return { ids, names };
 
   const currentFilteredHunts = getFilteredHunts();
@@ -584,12 +684,9 @@ function styleBoundaryLayer() {
     const featureId = getBoundaryFeatureId(feature);
     const featureName = getBoundaryFeatureName(feature).toLowerCase();
 
-    // Hide boundaries that don't match the current filters!
     if (isFiltering) {
       const matchesFilter = (featureId && filterSets.ids.has(featureId)) || (featureName && filterSets.names.has(featureName));
-      if (!matchesFilter) {
-        return { visible: false }; // Hide completely
-      }
+      if (!matchesFilter) return { visible: false }; 
     }
 
     const isSelected = (featureId && matchSets.ids.has(featureId)) || (featureName && matchSets.names.has(featureName));
@@ -668,9 +765,7 @@ function renderMatchingHunts() {
   const container = document.getElementById('matchingHunts');
   if (!container) return;
 
-  // Change: If we have an active search but no selected boundary, show ALL filtered hunts
   let listToRender = selectedBoundaryMatches;
-  
   if (!selectedBoundaryFeature && hasActiveFilters()) {
     listToRender = getFilteredHunts();
   }
@@ -766,7 +861,6 @@ function findMatchingHuntsForFeature(feature) {
   const featureId = getBoundaryFeatureId(feature);
   const featureName = getBoundaryFeatureName(feature).toLowerCase();
 
-  // ONLY match against hunts that currently pass the filter!
   const candidates = getFilteredHunts();
 
   return candidates
@@ -791,7 +885,7 @@ function bindBoundaryLayerInteraction() {
   huntUnitsLayer.addListener('mouseout', () => {
     huntHoverFeature = null;
     styleBoundaryLayer();
-    updateStatus(selectedHunt ? `Selected ${getHuntTitle(selectedHunt) || getHuntCode(selectedHunt)}.` : 'Showing native Google terrain with Utah hunt boundaries. Click a unit to load matching hunts.');
+    updateStatus(selectedHunt ? `Selected ${getHuntTitle(selectedHunt) || getHuntCode(selectedHunt)}.` : 'Showing native Google terrain with Utah hunt boundaries. Use filters to narrow them down.');
   });
 
   huntUnitsLayer.addListener('click', event => {
@@ -809,7 +903,7 @@ function bindBoundaryLayerInteraction() {
       renderMapChooser(boundaryName, selectedBoundaryMatches);
 
       const count = selectedBoundaryMatches.length;
-      const infoHtml = `<div style="min-width:220px;font-family:Segoe UI,Arial,sans-serif;"><strong>${escapeHtml(boundaryName)}</strong><br><span style="color:#6b5646;">${count} matching hunt${count === 1 ? '' : 's'} loaded.</span></div>`;
+      const infoHtml = `<div style="min-width:220px;font-family:Segoe UI,Arial,sans-serif;color:#333;"><strong>${escapeHtml(boundaryName)}</strong><br><span style="color:#6b5646;">${count} matching hunt${count === 1 ? '' : 's'} loaded.</span></div>`;
 
       if (!selectionInfoWindow) selectionInfoWindow = new google.maps.InfoWindow();
       selectionInfoWindow.setContent(infoHtml);
@@ -836,14 +930,13 @@ async function buildBoundaryLayer() {
 }
 
 function handleFilterChange() {
-  // Clear any active boundary click when filters change
   selectedBoundaryFeature = null;
   selectedBoundaryMatches = [];
   selectedHunt = null;
   if (selectionInfoWindow) selectionInfoWindow.close();
 
   refreshSelectionMatrix();
-  styleBoundaryLayer(); // This hides the unmatched boundaries!
+  styleBoundaryLayer(); 
   renderMatchingHunts();
   renderSelectedHunt();
   renderOutfitterResults();
@@ -892,7 +985,6 @@ function bindControls() {
   const toggleOutfitters = document.getElementById('toggleOutfitters');
   if (toggleOutfitters) toggleOutfitters.addEventListener('change', renderOutfitterResults);
 
-  // Bind the new filters!
   [searchInput, speciesFilter, sexFilter, weaponFilter, huntTypeFilter, huntCategoryFilter].forEach(el => {
     if (!el) return;
     el.addEventListener('input', handleFilterChange);
@@ -933,6 +1025,8 @@ function initGoogleBaseline() {
     center: GOOGLE_BASELINE_DEFAULT_CENTER,
     zoom: GOOGLE_BASELINE_DEFAULT_ZOOM,
     mapTypeId: getSelectedMapType(),
+    mapId: 'DEMO_MAP_ID', // Keeps our custom Logo Pins working!
+    styles: huntPlannerMapStyle, // Hides map clutter
     streetViewControl: false,
     fullscreenControl: true,
     mapTypeControl: true,
@@ -975,7 +1069,7 @@ function loadGoogleMapsApi() {
   }, 8000);
 
   const script = document.createElement('script');
-  script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&callback=initGoogleBaseline`;
+  script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=marker&callback=initGoogleBaseline`;
   script.async = true;
   script.defer = true;
   script.onload = () => window.clearTimeout(timeoutId);
