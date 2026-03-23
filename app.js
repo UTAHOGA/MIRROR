@@ -465,7 +465,7 @@ function setOverlayVisibility(kind, visible) {
 }
 
 function clearOutfitterMarkers() {
-  outfitterMarkers.forEach(marker => marker.map = null);
+  outfitterMarkers.forEach(marker => marker.setMap(null));
   outfitterMarkers = [];
 }
 
@@ -527,7 +527,7 @@ function renderOutfitterResults() {
     </div>
   `}).join('');
 
-  if (!outfittersEnabled || !googleBaselineMap || !google.maps.marker) return;
+  if (!outfittersEnabled || !googleBaselineMap || !google.maps.Marker) return;
 
   matches.forEach((o, i) => {
     let lat, lng;
@@ -543,22 +543,17 @@ function renderOutfitterResults() {
       lng = (cityCenter && cityCenter[1] ? cityCenter[1] : baseLng) + cityIndex * 0.02;
     }
 
-    const pinElement = document.createElement('div');
     const logoUrl = escapeHtml(o.logoUrl || 'https://www.uoga.org/assets/default-logo.png');
-    pinElement.innerHTML = `
-      <div class="outfitter-logo-pin-shell">
-        <div class="outfitter-logo-pin-base"></div>
-        <div class="outfitter-logo-pin-center">
-          <img src="${logoUrl}" alt="${escapeHtml(o.listingName)}" onerror="this.style.display='none'">
-        </div>
-      </div>
-    `;
 
-    const marker = new google.maps.marker.AdvancedMarkerElement({ 
+    // USING STANDARD GOOGLE MARKERS NOW SO IT DOES NOT CRASH
+    const marker = new google.maps.Marker({ 
       position: { lat, lng }, 
       map: googleBaselineMap, 
       title: o.listingName,
-      content: pinElement 
+      icon: {
+        url: logoUrl,
+        scaledSize: new google.maps.Size(36, 36)
+      }
     });
 
     const info = new google.maps.InfoWindow({ 
@@ -570,11 +565,11 @@ function renderOutfitterResults() {
         ${o.address ? escapeHtml(o.address) + '<br>' : ''}
         ${escapeHtml(o.city || 'Utah')}<br>
         ${escapeHtml(formatPhoneList(o.phone) || '')}
-        ${o.website ? `<br><a href="${escapeHtml(o.website)}" target="_blank" rel="noopener noreferrer" style="color:#2563eb; font-weight:bold; text-decoration:none; display:inline-block; margin-top:6px;">Visit Website ➔</a>` : ''}
+        ${o.website ? `<br><a href="${escapeHtml(o.website)}" target="_blank" rel="noopener noreferrer" style="color:#3ea6ff; font-weight:800; text-decoration:none; display:inline-block; margin-top:6px;">Visit Website ➔</a>` : ''}
       </div>` 
     });
 
-    pinElement.addEventListener('click', () => info.open({ anchor: marker, map: googleBaselineMap }));
+    marker.addListener('click', () => info.open({ anchor: marker, map: googleBaselineMap }));
     outfitterMarkers.push(marker);
   });
 }
@@ -1014,6 +1009,7 @@ function bindControls() {
   }
 }
 
+// THIS BLOCK HAS BEEN CLEANED UP AND FIXED
 function initGoogleBaseline() {
   const mapEl = document.getElementById('map');
   if (!mapEl || !window.google || !google.maps) {
@@ -1026,7 +1022,6 @@ function initGoogleBaseline() {
     center: GOOGLE_BASELINE_DEFAULT_CENTER,
     zoom: GOOGLE_BASELINE_DEFAULT_ZOOM,
     mapTypeId: getSelectedMapType(),
-    mapId: 'DEMO_MAP_ID', // Keeps our custom Logo Pins working!
     styles: huntPlannerMapStyle, // Hides map clutter
     streetViewControl: false,
     fullscreenControl: true,
