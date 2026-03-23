@@ -200,7 +200,7 @@ function getNormalizedSex(valueOrHunt) {
   const title = hunt ? getHuntTitle(hunt).toLowerCase() : '';
   const species = hunt ? getSpeciesDisplay(hunt).toLowerCase() : '';
 
-  if (title.includes("hunter's choice") || title.includes('hunters choice')) return "Hunter's Choice";
+  if (title.includes("hunter's choice") || title.includes('hunters choice') || title.includes('any deer') || raw.toLowerCase().includes('choice')) return "Hunter's Choice";
   if (raw === 'Either' || title.includes('either sex')) return 'Either Sex';
   if (safe(raw).trim().toLowerCase() === 'buck/bull') {
     if (species.includes('deer') || species.includes('pronghorn')) return 'Buck';
@@ -280,76 +280,72 @@ function getFilteredHunts(excludeKey = '') {
 }
 
 function refreshSelectionMatrix() {
-  if (!speciesFilter) return;
+  // Store current selections to preserve across repopulation
+  const current = {
+    species: speciesFilter?.value || 'All Species',
+    sex: sexFilter?.value || 'All',
+    weapon: weaponFilter?.value || 'All',
+    type: huntTypeFilter?.value || 'All',
+    category: huntCategoryFilter?.value || 'All',
+    unit: unitFilter?.value || ''
+  };
 
   // 1. Species
-  const prevSpecies = speciesFilter.value || 'All Species';
   const speciesSet = new Set(['All Species']);
   getFilteredHunts('species').forEach(h => getSpeciesDisplayList(h).forEach(s => speciesSet.add(s)));
-  const speciesOptions = Array.from(speciesSet).sort((a, b) => (a === 'All Species' ? -1 : b === 'All Species' ? 1 : a.localeCompare(b)));
-  speciesFilter.innerHTML = speciesOptions.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
-  if (!speciesOptions.includes(prevSpecies) && prevSpecies !== 'All Species') speciesFilter.value = 'All Species';
-  else speciesFilter.value = prevSpecies;
+  const speciesOptions = Array.from(speciesSet).sort((a,b) => a==='All Species'?-1:b==='All Species'?1:a.localeCompare(b));
+  if (speciesFilter) {
+    speciesFilter.innerHTML = speciesOptions.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
+    speciesFilter.value = speciesOptions.includes(current.species) ? current.species : 'All Species';
+  }
 
   // 2. Sex 
-  const prevSex = sexFilter.value || 'All';
   const sexSet = new Set(['All']);
-  getFilteredHunts('sex').forEach(h => {
-    const s = getNormalizedSex(h);
-    if (s) sexSet.add(s);
-  });
+  getFilteredHunts('sex').forEach(h => { const s = getNormalizedSex(h); if (s) sexSet.add(s); });
   const sexOptions = sortWithPreferredOrder(Array.from(sexSet), ['All', ...SEX_ORDER]);
-  sexFilter.innerHTML = sexOptions.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
-  if (!sexOptions.includes(prevSex) && prevSex !== 'All') sexFilter.value = 'All';
-  else sexFilter.value = prevSex;
+  if (sexFilter) {
+    sexFilter.innerHTML = sexOptions.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
+    sexFilter.value = sexOptions.includes(current.sex) ? current.sex : 'All';
+  }
 
   // 3. Weapon
-  const prevWeapon = weaponFilter.value || 'All';
   const weaponSet = new Set(['All']);
-  getFilteredHunts('weapon').forEach(h => {
-    const w = getWeapon(h);
-    if (w) weaponSet.add(w);
-  });
+  getFilteredHunts('weapon').forEach(h => { const w = getWeapon(h); if (w) weaponSet.add(w); });
   const weaponOptions = sortWithPreferredOrder(Array.from(weaponSet), ['All', ...WEAPON_ORDER]);
-  weaponFilter.innerHTML = weaponOptions.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
-  if (!weaponOptions.includes(prevWeapon) && prevWeapon !== 'All') weaponFilter.value = 'All';
-  else weaponFilter.value = prevWeapon;
+  if (weaponFilter) {
+    weaponFilter.innerHTML = weaponOptions.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
+    weaponFilter.value = weaponOptions.includes(current.weapon) ? current.weapon : 'All';
+  }
 
   // 4. Hunt Type
-  const prevType = huntTypeFilter.value || 'All';
   const typeSet = new Set(['All']);
-  getFilteredHunts('huntType').forEach(h => {
-    const t = getHuntType(h);
-    if (t) typeSet.add(t);
-  });
+  getFilteredHunts('huntType').forEach(h => { const t = getHuntType(h); if (t) typeSet.add(t); });
   const typeOptions = sortWithPreferredOrder(Array.from(typeSet), ['All', ...HUNT_TYPE_ORDER]);
-  huntTypeFilter.innerHTML = typeOptions.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v === 'General' ? 'General Season' : v)}</option>`).join('');
-  if (!typeOptions.includes(prevType) && prevType !== 'All') huntTypeFilter.value = 'All';
-  else huntTypeFilter.value = prevType;
+  if (huntTypeFilter) {
+    huntTypeFilter.innerHTML = typeOptions.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v === 'General' ? 'General Season' : v)}</option>`).join('');
+    huntTypeFilter.value = typeOptions.includes(current.type) ? current.type : 'All';
+  }
 
   // 5. Hunt Category
-  const prevCat = huntCategoryFilter.value || 'All';
   const catSet = new Set(['All']);
-  getFilteredHunts('huntCategory').forEach(h => {
-    const c = getHuntCategory(h);
-    if (c) catSet.add(c);
-  });
+  getFilteredHunts('huntCategory').forEach(h => { const c = getHuntCategory(h); if (c) catSet.add(c); });
   const catOptions = sortWithPreferredOrder(Array.from(catSet), ['All', ...HUNT_CATEGORY_ORDER]);
-  huntCategoryFilter.innerHTML = catOptions.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
-  if (!catOptions.includes(prevCat) && prevCat !== 'All') huntCategoryFilter.value = 'All';
-  else huntCategoryFilter.value = prevCat;
+  if (huntCategoryFilter) {
+    huntCategoryFilter.innerHTML = catOptions.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
+    huntCategoryFilter.value = catOptions.includes(current.category) ? current.category : 'All';
+  }
 
   // 6. Unit
-  const prevUnit = unitFilter.value || '';
   const unitsMap = new Map();
   getFilteredHunts('unit').forEach(h => {
     const val = getUnitValue(h);
     if (val && !unitsMap.has(val)) unitsMap.set(val, getUnitName(h) || val);
   });
-  const unitOptions = Array.from(unitsMap.entries()).sort((a, b) => a[1].localeCompare(b[1]));
-  unitFilter.innerHTML = `<option value="">All Units</option>` + unitOptions.map(([v, l]) => `<option value="${escapeHtml(v)}">${escapeHtml(l)}</option>`).join('');
-  if (!unitOptions.some(([v]) => v === prevUnit) && prevUnit !== '') unitFilter.value = '';
-  else unitFilter.value = prevUnit;
+  const unitOptions = Array.from(unitsMap.entries()).sort((a,b) => a[1].localeCompare(b[1]));
+  if (unitFilter) {
+    unitFilter.innerHTML = `<option value="">All Units</option>` + unitOptions.map(([v, l]) => `<option value="${escapeHtml(v)}">${escapeHtml(l)}</option>`).join('');
+    unitFilter.value = unitOptions.some(([v]) => v === current.unit) ? current.unit : '';
+  }
 }
 
 async function fetchJsonWithCandidates(candidates) {
