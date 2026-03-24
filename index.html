@@ -126,14 +126,10 @@
       backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     }
     .brand-logo-lockup { display: flex; align-items: center; justify-content: center; gap: 16px; width: 100%; }
-    .brand-logo-lockup img { height: 52px; width: auto; object-fit: contain; border-radius: 4px; background: #fff; padding: 2px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); }
+    .brand-logo-lockup img { height: 72px; width: auto; object-fit: contain; border-radius: 4px; background: #fff; padding: 2px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); }
     
     .brand h1 { margin: 0; font-family: var(--font-display); font-size: 24px; line-height: 1; color: var(--text); text-align: center; }
     .brand p { margin: 4px 0 0; color: var(--accent); font-family: var(--font-display); font-size: 24px; line-height: 1; font-weight: 700; letter-spacing: 0; text-transform: none; text-align: center; }
-    
-    .compact-nav { display: flex; gap: 12px; margin-top: 6px; justify-content: center; width: 100%; }
-    .compact-nav a { color: var(--accent); text-decoration: none; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; transition: color 0.2s; }
-    .compact-nav a:hover { color: var(--accent-dark); text-decoration: underline; }
     
     /* --- CONTROLS --- */
     .controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
@@ -186,38 +182,6 @@
     /* --- LAYOUT & SIDEBAR --- */
     .layout { display: grid; grid-template-columns: 340px 1fr; min-height: 0; }
     .sidebar { border-right: 1px solid var(--line); background: var(--panel); overflow: auto; padding: 14px; backdrop-filter: blur(10px); }
-    .sidebar-brand {
-      display: grid;
-      justify-items: center;
-      text-align: center;
-      gap: 10px;
-      margin-bottom: 14px;
-      padding: 14px 12px 16px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
-      box-shadow: var(--shadow);
-    }
-    .sidebar-brand img {
-      height: 64px;
-      width: auto;
-      object-fit: contain;
-      border-radius: 6px;
-      background: #fff;
-      padding: 3px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    }
-    .sidebar-brand-title,
-    .sidebar-brand-subtitle {
-      margin: 0;
-      font-family: var(--font-display);
-      font-size: 24px;
-      line-height: 1.02;
-      color: var(--text);
-    }
-    .sidebar-brand-subtitle {
-      color: var(--accent);
-    }
     .panel { border: 1px solid var(--line); border-radius: 12px; background: var(--panel2); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 12px; }
     .panel h2 { margin: 0; padding: 12px 14px; font-family: var(--font-display); font-size: 19px; line-height: 1.05; background: linear-gradient(180deg, var(--accent), var(--accent-dark)); color: #fff6ed; letter-spacing: 0.02em; }
     .panel-body { padding: 14px; }
@@ -248,12 +212,6 @@
     #globeMap { display: none; background: #0f1723; }
     .map-wrap.is-globe-mode #map { display: none; }
     .map-wrap.is-globe-mode #globeMap { display: block; }
-    
-    .map-card { position: absolute; left: 18px; bottom: 28px; z-index: 2; width: min(420px, calc(100vw - 36px)); padding: 16px 20px; border: 1px solid rgba(185, 144, 111, 0.5); border-radius: 16px; background: rgba(255, 251, 244, 0.95); box-shadow: 0 12px 30px rgba(58, 37, 18, 0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
-    /* Force Map Card colors to stay legible even in dark mode, since it floats over the map */
-    body.theme-dark .map-card { background: rgba(35, 30, 26, 0.95); border-color: var(--line); }
-    .map-card h3 { margin: 0 0 6px; font-family: var(--font-display); font-size: 22px; line-height: 1.1; color: var(--text); }
-    .map-card p { margin: 0; color: var(--accent); line-height: 1.5; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; text-align: center;}
     
     /* --- NEW OUTFITTER LOGO & LINK STYLES --- */
     .outfitter-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
@@ -297,7 +255,6 @@
       .layout { grid-template-columns: 1fr; }
       .sidebar { border-right: none; border-bottom: 1px solid var(--line); }
       #map { min-height: 58vh; }
-      .compact-nav { display: none; }
     }
   </style>
 </head>
@@ -326,12 +283,6 @@
         <div>
           <h1>U.O.G.A. Hunt Planner</h1>
           <p>Vetted Outfitters</p>
-          <nav class="compact-nav">
-            <a href="https://www.uoga.org" target="_blank">Home</a> |
-            <a href="https://www.uoga.org/about" target="_blank">About</a> |
-            <a href="https://www.uoga.org/membership" target="_blank">Membership</a> |
-            <a href="https://www.uoga.org/contact" target="_blank">Contact</a>
-          </nav>
         </div>
       </div>
     </div>
@@ -348,6 +299,7 @@
         </select>
       </div>
       <div class="toggle-row">
+        <label class="toggle-chip"><input id="toggleDwrUnits" type="checkbox" checked>DWR Hunt Units</label>
         <label class="toggle-chip"><input id="toggleUSFS" type="checkbox" checked>USFS</label>
         <label class="toggle-chip"><input id="toggleBLM" type="checkbox" checked>BLM</label>
         <label class="toggle-chip"><input id="toggleSITLA" type="checkbox">SITLA</label>
@@ -361,14 +313,6 @@
 
   <main class="layout">
     <aside class="sidebar">
-      <section class="sidebar-brand">
-        <a href="https://www.uoga.org" target="_blank" title="Go to U.O.G.A. Home">
-          <img src="https://static.wixstatic.com/media/43f827_24f00cd070494533955d4910eef3a2fb~mv2.jpg/v1/fill/w_207,h_105,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Group%20945%20(1).jpg" alt="U.O.G.A. Logo">
-        </a>
-        <h2 class="sidebar-brand-title">U.O.G.A. Hunt Planner</h2>
-        <h2 class="sidebar-brand-subtitle">Vetted Outfitters</h2>
-      </section>
-
       <section class="panel">
         <h2>Find a Hunt</h2>
         <div class="panel-body">
@@ -438,11 +382,6 @@
       <div class="map-stage">
         <div id="map" aria-label="Google DWR mirror map"></div>
         <div id="globeMap" aria-label="Cesium globe view"></div>
-      </div>
-      
-      <div class="map-card">
-        <h3>U.O.G.A. Hunt Planner</h3>
-        <p>VETTED OUTFITTERS</p>
       </div>
 
       <div id="mapChooser" class="map-chooser" aria-hidden="true">

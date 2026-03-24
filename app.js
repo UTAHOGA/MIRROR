@@ -102,6 +102,7 @@ const toggleBLM = document.getElementById('toggleBLM');
 const toggleSITLA = document.getElementById('toggleSITLA');
 const toggleState = document.getElementById('toggleState');
 const togglePrivate = document.getElementById('togglePrivate');
+const toggleDwrUnits = document.getElementById('toggleDwrUnits');
 const toggleOutfitters = document.getElementById('toggleOutfitters');
 const mapWrapEl = document.querySelector('.map-wrap');
 const globeMapEl = document.getElementById('globeMap');
@@ -753,6 +754,10 @@ function renderMapChooser(matches, boundaryName) {
 
 function styleBoundaryLayer() {
   if (!huntUnitsLayer) return;
+  if (toggleDwrUnits && !toggleDwrUnits.checked) {
+    huntUnitsLayer.setStyle(() => ({ visible: false }));
+    return;
+  }
   const filteredNames = getFilteredBoundaryNames();
   const selectedNames = selectedHunt ? buildBoundaryMatchSet(selectedHunt) : new Set();
   huntUnitsLayer.setStyle(feature => {
@@ -1092,6 +1097,12 @@ function bindControls() {
   if (togglePrivate) {
     togglePrivate.addEventListener('change', () => {
       void syncOverlayToggles();
+    });
+  }
+
+  if (toggleDwrUnits) {
+    toggleDwrUnits.addEventListener('change', () => {
+      styleBoundaryLayer();
     });
   }
 
