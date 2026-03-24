@@ -307,6 +307,55 @@
     /* Map Modals */
     .map-chooser { position: absolute; inset: 50% auto auto 50%; transform: translate(-50%, -50%); z-index: 3; width: min(640px, calc(100vw - 40px)); max-height: min(68vh, 720px); display: none; flex-direction: column; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); box-shadow: var(--shadow); overflow: hidden; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
     .map-chooser.is-open { display: flex; }
+    .selected-hunt-float {
+      position: absolute;
+      top: 50%;
+      left: 41%;
+      transform: translate(-50%, -50%);
+      z-index: 4;
+      width: min(780px, calc(100vw - 48px));
+      max-height: min(74vh, 760px);
+      display: none;
+      overflow: auto;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .selected-hunt-float.is-open { display: block; }
+    .globe-basemap-panel {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 4;
+      display: none;
+      width: min(290px, calc(100vw - 48px));
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .map-wrap.is-globe-mode .globe-basemap-panel { display: grid; gap: 10px; }
+    .globe-basemap-title {
+      margin: 0;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .globe-basemap-note {
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.35;
+      color: var(--muted);
+    }
     .map-chooser-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; background: linear-gradient(180deg, var(--accent), var(--accent-dark)); color: #fff6ed; }
     .map-chooser-kicker { font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; opacity: 0.95; margin: 0 0 4px; color: rgba(255,255,255,0.8); }
     .map-chooser-title { margin: 0; font-family: var(--font-display); font-size: 24px; line-height: 1.05; }
@@ -466,6 +515,8 @@
           <div class="map-chooser-empty">Click a hunt boundary to load matching hunts.</div>
         </div>
       </div>
+
+      <div id="selectedHuntFloat" class="selected-hunt-float" aria-hidden="true"></div>
     </section>
 
     <aside class="rightbar">

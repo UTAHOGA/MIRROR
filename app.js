@@ -8,6 +8,7 @@ const HUNT_DATA_VERSION = '20260324-master-1733';
 const LOCAL_HUNT_BOUNDARIES_PATH = `${CLOUDFLARE_BASE}/hunt_boundaries.geojson`;
 const OUTFITTERS_DATA_SOURCES = [`${CLOUDFLARE_BASE}/outfitters.json`];
 const LOGO_DNR = 'https://static.wixstatic.com/media/43f827_34cd9f26f53f4b9ebcb200f6d878bea2~mv2.jpg';
+const LOGO_DNR_ROOMY = 'https://static.wixstatic.com/media/43f827_59419a126e0b4c0b9593fab8b0e4b970~mv2.jpg';
 const LOGO_DWR_WMA = './assets/logos/dwr-wma.jpg';
 const LOGO_USFS = './assets/logos/usfs.png';
 const LOGO_BLM = './assets/logos/blm.png';
@@ -82,7 +83,8 @@ const searchInput = document.getElementById('searchInput'),
   mapChooser = document.getElementById('mapChooser'),
   mapChooserTitle = document.getElementById('mapChooserTitle'),
   mapChooserKicker = document.getElementById('mapChooserKicker'),
-  mapChooserBody = document.getElementById('mapChooserBody');
+  mapChooserBody = document.getElementById('mapChooserBody'),
+  selectedHuntFloat = document.getElementById('selectedHuntFloat');
 
 // --- UTILITIES ---
 function escapeHtml(v) { return String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
@@ -197,6 +199,66 @@ function normalizeHuntCategoryLabel(raw) {
 function getHuntCategory(h) { return normalizeHuntCategoryLabel(firstNonEmpty(h.huntCategory, h.HuntCategory, h.category)); }
 function getDates(h) { return firstNonEmpty(h.seasonLabel, h.seasonDates, h.dates); }
 function getBoundaryLink(h) { return firstNonEmpty(h.boundaryLink, h.boundaryURL, h.huntBoundaryLink); }
+function getSpeciesHeadingLabel(species) {
+  if (species === 'Rocky Mountain Bighorn Sheep') return 'R.M. Sheep';
+  if (species === 'Desert Bighorn Sheep') return 'Desert Sheep';
+  return species;
+}
+function getPermitTotal(hunt) {
+  const values = [
+    hunt.permitsTotal, hunt.permitTotal, hunt.totalPermits, hunt.quota,
+    hunt.residentPermits, hunt.nonresidentPermits, hunt.resident, hunt.nonresident
+  ].map(v => Number(v)).filter(v => Number.isFinite(v) && v >= 0);
+  if (!values.length) return null;
+  if (values.length >= 2 && values[0] !== values[1]) return values[0] + values[1];
+  return values[0];
+}
+function getPanelHeading(hunt) {
+  const species = getSpeciesDisplay(hunt) || 'Hunt';
+  const speciesHeading = getSpeciesHeadingLabel(species);
+  const sex = getNormalizedSex(hunt) || '';
+  const huntType = getHuntType(hunt) || '';
+  const huntClass = getHuntCategory(hunt) || '';
+  const combined = `${huntType} ${huntClass}`.toLowerCase();
+  const permitTotal = getPermitTotal(hunt);
+
+  const prefixParts = [];
+  const isOil = combined.includes('once-in-a-lifetime');
+  const isPremium = combined.includes('premium');
+  if (isOil) prefixParts.push('O.I.L.');
+  else if (isPremium || combined.includes('limited')) prefixParts.push('L.E.');
+  else if (combined.includes('general')) prefixParts.push('G.S.');
+
+  let classLabel = '';
+  if (combined.includes('mature bull')) classLabel = 'Mature Bull';
+  else if (combined.includes('mature buck')) classLabel = 'Mature Buck';
+  else if (combined.includes('general bull')) classLabel = 'General Bull';
+  else if (combined.includes('general buck')) classLabel = 'General Buck';
+  else if (combined.includes('spike')) classLabel = 'Spike Only';
+  else if (combined.includes('antlerless')) classLabel = 'Antlerless';
+  else if (sex === 'Bull' && prefixParts.includes('L.E.')) classLabel = 'Mature Bull';
+  else if (sex === 'Buck' && prefixParts.includes('L.E.')) classLabel = 'Mature Buck';
+  else if (sex === 'Bull' && prefixParts.includes('G.S.')) classLabel = 'General Bull';
+  else if (sex === 'Buck' && prefixParts.includes('G.S.')) classLabel = 'General Buck';
+  else if (sex && sex !== 'All') classLabel = sex;
+
+  const parts = [];
+  if (prefixParts.length) parts.push(prefixParts.join(' '));
+  const isTrophyOilSpecies = isOil && ['Rocky Mountain Bighorn Sheep', 'Desert Bighorn Sheep', 'Moose', 'Mountain Goat', 'Bison'].includes(species);
+  const isPremiumDeerTrophy = isPremium && species === 'Deer';
+  const isLowPermitElkTrophy = species === 'Elk' && prefixParts.includes('L.E.') && permitTotal !== null && permitTotal < 20;
+  const isTrophy = isTrophyOilSpecies || isPremiumDeerTrophy || isLowPermitElkTrophy;
+
+  if (isTrophy) {
+    parts.push('Trophy');
+    parts.push(speciesHeading);
+  } else {
+    if (classLabel) parts.push(classLabel);
+    parts.push(speciesHeading);
+  }
+  parts.push('Hunt');
+  return parts.join(' ');
+}
 function normalizeBoundaryKey(value) {
   return safe(value)
     .toLowerCase()
@@ -357,6 +419,7 @@ function resetAllFilters() {
   selectedHunt = null;
   selectedBoundaryFeature = null;
   closeSelectedHuntPopup();
+  closeSelectedHuntFloat();
   closeSelectionInfoWindow();
   refreshSelectionMatrix();
   styleBoundaryLayer();
@@ -369,6 +432,7 @@ function handleFilterChange(event) {
   selectedHunt = null;
   selectedBoundaryFeature = null;
   closeSelectedHuntPopup();
+  closeSelectedHuntFloat();
   closeSelectionInfoWindow();
   if (event && event.target && event.target.id === 'speciesFilter') {
     if (sexFilter) sexFilter.value = 'All';
@@ -495,6 +559,32 @@ function closeSelectionInfoWindow() {
   }
 }
 
+function closeSelectedHuntFloat() {
+  if (!selectedHuntFloat) return;
+  selectedHuntFloat.classList.remove('is-open');
+  selectedHuntFloat.setAttribute('aria-hidden', 'true');
+  selectedHuntFloat.innerHTML = '';
+}
+
+function openSelectedHuntFloat() {
+  if (!selectedHuntFloat || !selectedHunt) {
+    closeSelectedHuntFloat();
+    return;
+  }
+  selectedHuntFloat.innerHTML = `
+    <div style="display:grid;gap:12px;">
+      <div style="display:flex;justify-content:flex-end;">
+        <button type="button" data-close-selected-hunt-float style="border:1px solid #d6c1ae;border-radius:999px;background:#fffdf8;color:#2b1c12;padding:8px 14px;cursor:pointer;font-weight:800;">Close</button>
+      </div>
+      ${buildDnrPlate(selectedHunt, false, true)}
+    </div>`;
+  selectedHuntFloat.classList.add('is-open');
+  selectedHuntFloat.setAttribute('aria-hidden', 'false');
+  selectedHuntFloat.querySelector('[data-close-selected-hunt-float]')?.addEventListener('click', () => {
+    closeSelectedHuntFloat();
+  });
+}
+
 function buildLandInfoCard({ logo, title, subtitle, detailText = '', detailsLinkText = '', detailsLink = '' }) {
   const resolvedLogo = logo ? assetUrl(logo) : '';
   return `
@@ -510,8 +600,8 @@ function buildLandInfoCard({ logo, title, subtitle, detailText = '', detailsLink
       ${detailsLink ? `<a href="${escapeHtml(detailsLink)}" target="_blank" rel="noopener noreferrer" style="color:#2f7fd1;font-weight:800;text-decoration:none;">${escapeHtml(detailsLinkText || 'Open details')}</a>` : ''}
     </div>`;
 }
-function buildDnrPlate(hunt, compact = false) {
-  const plateUrl = assetUrl(LOGO_DNR);
+function buildDnrPlate(hunt, compact = false, roomy = false) {
+  const plateUrl = assetUrl(roomy ? LOGO_DNR_ROOMY : LOGO_DNR);
   const code = escapeHtml(getHuntCode(hunt) || '');
   const unit = escapeHtml(getUnitName(hunt) || getHuntTitle(hunt));
   const species = escapeHtml(getSpeciesDisplay(hunt) || 'N/A');
@@ -519,32 +609,39 @@ function buildDnrPlate(hunt, compact = false) {
   const huntType = escapeHtml(getHuntType(hunt) || 'N/A');
   const weapon = escapeHtml(getWeapon(hunt) || 'N/A');
   const dates = escapeHtml(getDates(hunt) || 'See official hunt details');
+  const heading = escapeHtml(getPanelHeading(hunt));
   const boundaryLink = getBoundaryLink(hunt);
-  const panelWidth = compact ? 480 : 560;
-  const panelHeight = compact ? 184 : 214;
+  const panelWidth = roomy ? 720 : (compact ? 480 : 560);
+  const panelHeight = roomy ? 440 : (compact ? 184 : 214);
   const wrapperWidth = compact ? `width:${panelWidth}px;max-width:${panelWidth}px;` : `width:${panelWidth}px;max-width:100%;`;
-  const titleSize = compact ? '21px' : '23px';
-  const metaSize = compact ? '14px' : '15px';
-  const infoTop = compact ? '15px' : '17px';
-  const infoLeft = compact ? '38%' : '37%';
+  const titleSize = roomy ? '26px' : (compact ? '21px' : '23px');
+  const metaSize = roomy ? '16px' : (compact ? '14px' : '15px');
+  const infoTop = roomy ? '32px' : (compact ? '15px' : '17px');
+  const infoLeft = roomy ? '39%' : (compact ? '38%' : '37%');
+  const infoRight = roomy ? '30px' : '18px';
+  const infoBottom = roomy ? '28px' : '16px';
+  const infoGap = roomy ? '10px' : (compact ? '7px' : '9px');
+  const detailGap = roomy ? '6px' : (compact ? '4px' : '6px');
+  const unitSize = roomy ? '24px' : (compact ? '18px' : '19px');
+  const linkSize = roomy ? '16px' : metaSize;
 
   return `
     <div style="position:relative;${wrapperWidth}height:${panelHeight}px;border:1px solid #d38449;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 8px 24px rgba(58,37,18,0.18);">
       <img src="${plateUrl}" alt="Utah DNR hunt information plate" style="display:block;width:${panelWidth}px;max-width:100%;height:${panelHeight}px;object-fit:fill;border:0;">
-      <div style="position:absolute;top:${infoTop};left:${infoLeft};right:18px;bottom:16px;display:grid;align-content:start;gap:${compact ? '7px' : '9px'};color:#2b1c12;">
-        <div style="display:grid;gap:2px;">
-          <div style="font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#bf6b34;">Selected Hunt</div>
+      <div style="position:absolute;top:${infoTop};left:${infoLeft};right:${infoRight};bottom:${infoBottom};display:grid;align-content:start;gap:${infoGap};color:#2b1c12;">
+        <div style="display:grid;gap:3px;">
+          <div style="font-size:13px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#bf6b34;">${heading}</div>
           <div style="font-size:${titleSize};font-weight:900;line-height:1.05;">${code}</div>
-          <div style="font-size:${compact ? '18px' : '19px'};font-weight:800;line-height:1.12;">${unit}</div>
+          <div style="font-size:${unitSize};font-weight:800;line-height:1.12;">${unit}</div>
         </div>
-        <div style="display:grid;gap:${compact ? '4px' : '6px'};font-size:${metaSize};line-height:1.28;">
+        <div style="display:grid;gap:${detailGap};font-size:${metaSize};line-height:1.28;">
           <div><strong>Species:</strong> ${species}</div>
           <div><strong>Sex:</strong> ${sex}</div>
           <div><strong>Hunt Type:</strong> ${huntType}</div>
           <div><strong>Weapon:</strong> ${weapon}</div>
           <div><strong>Dates:</strong> ${dates}</div>
         </div>
-        ${boundaryLink ? `<a href="${escapeHtml(boundaryLink)}" target="_blank" rel="noopener noreferrer" style="margin-top:2px;color:#2f7fd1;font-size:${metaSize};font-weight:800;text-decoration:none;">Official Utah DWR Hunt Details</a>` : ''}
+        ${boundaryLink ? `<a href="${escapeHtml(boundaryLink)}" target="_blank" rel="noopener noreferrer" style="margin-top:2px;color:#2f7fd1;font-size:${linkSize};font-weight:800;text-decoration:none;">Official Utah DWR Hunt Details</a>` : ''}
       </div>
     </div>`;
 }
@@ -564,24 +661,29 @@ window.selectHuntByCode = (code) => {
 
 function renderSelectedHunt() {
   const p = document.getElementById('selectedHuntPanel');
-  if (!p) return;
   if (!selectedHunt) {
-    p.innerHTML = '<div class="empty-note">Select a hunt result or hunt unit to see details.</div>';
+    if (p) {
+      p.innerHTML = '<div class="empty-note">Select a hunt result or hunt unit to see details.</div>';
+    }
+    closeSelectedHuntFloat();
     return;
   }
-  p.innerHTML = `
-    <div style="display:grid;gap:12px;">
-      ${buildDnrPlate(selectedHunt, false)}
-      <div class="detail-grid">
-        <div><strong>Species</strong>${escapeHtml(getSpeciesDisplay(selectedHunt))}</div>
-        <div><strong>Sex</strong>${escapeHtml(getNormalizedSex(selectedHunt))}</div>
-        <div><strong>Hunt Type</strong>${escapeHtml(getHuntType(selectedHunt))}</div>
-        <div><strong>Weapon</strong>${escapeHtml(getWeapon(selectedHunt))}</div>
-        <div><strong>Hunt Class</strong>${escapeHtml(getHuntCategory(selectedHunt))}</div>
-        <div><strong>DWR Hunt Unit</strong>${escapeHtml(getUnitName(selectedHunt))}</div>
-        <div style="grid-column:1 / -1;"><strong>Dates</strong>${escapeHtml(getDates(selectedHunt) || 'See official hunt details')}</div>
-      </div>
-    </div>`;
+  if (p) {
+    p.innerHTML = `
+      <div style="display:grid;gap:12px;">
+        ${buildDnrPlate(selectedHunt, false)}
+        <div class="detail-grid">
+          <div><strong>Species</strong>${escapeHtml(getSpeciesDisplay(selectedHunt))}</div>
+          <div><strong>Sex</strong>${escapeHtml(getNormalizedSex(selectedHunt))}</div>
+          <div><strong>Hunt Type</strong>${escapeHtml(getHuntType(selectedHunt))}</div>
+          <div><strong>Weapon</strong>${escapeHtml(getWeapon(selectedHunt))}</div>
+          <div><strong>Hunt Class</strong>${escapeHtml(getHuntCategory(selectedHunt))}</div>
+          <div><strong>DWR Hunt Unit</strong>${escapeHtml(getUnitName(selectedHunt))}</div>
+          <div style="grid-column:1 / -1;"><strong>Dates</strong>${escapeHtml(getDates(selectedHunt) || 'See official hunt details')}</div>
+        </div>
+      </div>`;
+  }
+  openSelectedHuntFloat();
 }
 
 function getMatchingOutfittersForHunt(hunt) {
@@ -672,14 +774,9 @@ function openSelectedHuntPopup() {
     return;
   }
 
-  closeSelectedHuntPopup();
   closeSelectionInfoWindow();
-  selectionInfoWindow = new google.maps.InfoWindow({
-    content: buildPopupCardForHunt(selectedHunt),
-    position: popupPosition,
-    pixelOffset: new google.maps.Size(-120, -8)
-  });
-  selectionInfoWindow.open(googleBaselineMap);
+  closeSelectedHuntPopup();
+  openSelectedHuntFloat();
 }
 
 function closeSelectedHuntPopup() {
@@ -728,6 +825,7 @@ function buildPopupListForMatches(matches) {
 
 function openMapChooser(feature, matches) {
   if (!mapChooser || !mapChooserBody || !mapChooserTitle || !mapChooserKicker) return;
+  closeSelectedHuntFloat();
   selectedBoundaryMatches = matches.slice();
   const boundaryName = firstNonEmpty(feature?.getProperty('Boundary_Name'), 'Selected Unit');
   mapChooserKicker.textContent = 'Selected Unit';
@@ -767,13 +865,13 @@ function openBoundaryPopup(feature, latLng) {
     return;
   }
   closeSelectedHuntPopup();
+  closeSelectedHuntFloat();
   closeSelectionInfoWindow();
-  selectionInfoWindow = new google.maps.InfoWindow({
-    content: buildPopupCardForHunt(matches[0]),
-    position: latLng,
-    pixelOffset: new google.maps.Size(-120, -8)
-  });
-  selectionInfoWindow.open(googleBaselineMap);
+  selectedHunt = matches[0] || null;
+  renderSelectedHunt();
+  renderOutfitters();
+  renderMatchingHunts();
+  styleBoundaryLayer();
 }
 
 async function loadOutfitters() {
@@ -1096,6 +1194,7 @@ function bindControls() {
   });
   applyFiltersBtn?.addEventListener('click', () => {
     closeSelectedHuntPopup();
+    closeSelectedHuntFloat();
     closeSelectionInfoWindow();
     selectedHunt = null;
     selectedBoundaryFeature = null;
@@ -1136,6 +1235,7 @@ function bindControls() {
     if (!toggleDwrUnits.checked) {
       closeSelectionInfoWindow();
       closeSelectedHuntPopup();
+      closeSelectedHuntFloat();
     }
     styleBoundaryLayer();
   });
