@@ -90,6 +90,7 @@ let selectedBoundaryMatches = [];
 let isDataReady = false;
 let isMapReady = false;
 let boundaryInfoWindow = null;
+let boundaryHoverInfoWindow = null;
 let overlayInfoWindow = null;
 let utahOutlinePolygon = null;
 let usfsLayer = null;
@@ -135,10 +136,15 @@ const globeMapEl = document.getElementById('globeMap');
 const OFFICIAL_DWR_WMA_PAGE_URL = 'https://wildlife.utah.gov/discover/lands/wmas.html';
 const OFFICIAL_DWR_WATERFOWL_MAPS_URL = 'https://wildlife.utah.gov/hunting/maps.html';
 const OFFICIAL_DWR_WATERFOWL_CONDITIONS_URL = 'https://wildlife.utah.gov/waterfowl-opener-conditions';
-const OFFICIAL_DWR_WMA_LOGO_URL = 'https://static.wixstatic.com/media/43f827_42c37bffbd804a1ca0bae3654d4ad46c~mv2.jpg';
+const OFFICIAL_DWR_WMA_LOGO_URL = './assets/logos/dwr-wma.jpg';
+const OFFICIAL_USFS_PAGE_URL = 'https://www.fs.usda.gov/';
+const OFFICIAL_USFS_LOGO_URL = './assets/logos/usfs.png';
+const OFFICIAL_BLM_PAGE_URL = 'https://www.blm.gov/office/utah-state-office';
+const OFFICIAL_BLM_LOGO_URL = './assets/logos/blm.png';
 const OFFICIAL_SITLA_PAGE_URL = 'https://trustlands.utah.gov/';
+const OFFICIAL_SITLA_LOGO_URL = './assets/logos/sitla.png';
 const OFFICIAL_STATE_PARKS_PAGE_URL = 'https://stateparks.utah.gov/';
-const OFFICIAL_STATE_PARKS_LOGO_URL = 'https://static.wixstatic.com/media/43f827_a14118657cd642c5a5f1aa4febc6f82c~mv2.png';
+const OFFICIAL_STATE_PARKS_LOGO_URL = './assets/logos/state-parks.png';
 const stateLayersSummaryEl = document.getElementById('stateLayersSummary');
 
 function safe(value) {
@@ -409,29 +415,46 @@ function getOverlayFeatureLabel(feature) {
 function buildOverlayInfoContent(kind, feature) {
   const label = getOverlayFeatureLabel(feature);
   const safeLabel = escapeHtml(label);
-  const wmaLogoHtml = `
+  const renderLogoHtml = (src, alt) => `
     <div style="margin-bottom:10px;text-align:center;">
       <img
-        src="${OFFICIAL_DWR_WMA_LOGO_URL}"
-        alt="Utah DWR WMA"
+        src="${src}"
+        alt="${alt}"
         style="display:block;margin:0 auto;max-width:88px;height:auto;"
       >
     </div>
   `;
 
-  const stateParksLogoHtml = `
-    <div style="margin-bottom:10px;text-align:center;">
-      <img
-        src="${OFFICIAL_STATE_PARKS_LOGO_URL}"
-        alt="Utah State Parks"
-        style="display:block;margin:0 auto;max-width:88px;height:auto;"
-      >
-    </div>
-  `;
+  if (kind === 'usfs') {
+    return `
+      <div style="font-family:Segoe UI,Arial,sans-serif;color:#2b1c12;line-height:1.4;max-width:260px;">
+        ${renderLogoHtml(OFFICIAL_USFS_LOGO_URL, 'US Forest Service')}
+        <strong>${safeLabel}</strong><br>
+        United States Forest Service reference layer.
+        <div style="margin-top:10px;display:grid;gap:6px;">
+          <a href="${OFFICIAL_USFS_PAGE_URL}" target="_blank" rel="noopener noreferrer">US Forest Service</a>
+        </div>
+      </div>
+    `;
+  }
+
+  if (kind === 'blm') {
+    return `
+      <div style="font-family:Segoe UI,Arial,sans-serif;color:#2b1c12;line-height:1.4;max-width:260px;">
+        ${renderLogoHtml(OFFICIAL_BLM_LOGO_URL, 'Bureau of Land Management')}
+        <strong>${safeLabel}</strong><br>
+        Bureau of Land Management reference layer.
+        <div style="margin-top:10px;display:grid;gap:6px;">
+          <a href="${OFFICIAL_BLM_PAGE_URL}" target="_blank" rel="noopener noreferrer">Utah BLM</a>
+        </div>
+      </div>
+    `;
+  }
 
   if (kind === 'sitla') {
     return `
       <div style="font-family:Segoe UI,Arial,sans-serif;color:#2b1c12;line-height:1.4;max-width:260px;">
+        ${renderLogoHtml(OFFICIAL_SITLA_LOGO_URL, 'Utah SITLA')}
         <strong>${safeLabel}</strong><br>
         Official Utah Trust Lands reference.
         <div style="margin-top:10px;display:grid;gap:6px;">
@@ -441,10 +464,23 @@ function buildOverlayInfoContent(kind, feature) {
     `;
   }
 
+  if (kind === 'stateLands') {
+    return `
+      <div style="font-family:Segoe UI,Arial,sans-serif;color:#2b1c12;line-height:1.4;max-width:260px;">
+        <strong>${safeLabel}</strong><br>
+        Utah state lands reference layer.
+        <div style="margin-top:10px;display:grid;gap:6px;">
+          <a href="${OFFICIAL_SITLA_PAGE_URL}" target="_blank" rel="noopener noreferrer">Utah Trust Lands</a>
+          <a href="${OFFICIAL_STATE_PARKS_PAGE_URL}" target="_blank" rel="noopener noreferrer">Utah State Parks</a>
+        </div>
+      </div>
+    `;
+  }
+
   if (kind === 'stateParks') {
     return `
       <div style="font-family:Segoe UI,Arial,sans-serif;color:#2b1c12;line-height:1.4;max-width:260px;">
-        ${stateParksLogoHtml}
+        ${renderLogoHtml(OFFICIAL_STATE_PARKS_LOGO_URL, 'Utah State Parks')}
         <strong>${safeLabel}</strong><br>
         Official Utah State Parks reference.
         <div style="margin-top:10px;display:grid;gap:6px;">
@@ -457,7 +493,7 @@ function buildOverlayInfoContent(kind, feature) {
   if (kind === 'waterfowlWma') {
     return `
       <div style="font-family:Segoe UI,Arial,sans-serif;color:#2b1c12;line-height:1.4;max-width:260px;">
-        ${wmaLogoHtml}
+        ${renderLogoHtml(OFFICIAL_DWR_WMA_LOGO_URL, 'Utah DWR WMA')}
         <strong>${safeLabel}</strong><br>
         Official Utah DWR waterfowl management area reference.
         <div style="margin-top:10px;display:grid;gap:6px;">
@@ -471,7 +507,7 @@ function buildOverlayInfoContent(kind, feature) {
   if (kind === 'wildlifeWma') {
     return `
       <div style="font-family:Segoe UI,Arial,sans-serif;color:#2b1c12;line-height:1.4;max-width:260px;">
-        ${wmaLogoHtml}
+        ${renderLogoHtml(OFFICIAL_DWR_WMA_LOGO_URL, 'Utah DWR WMA')}
         <strong>${safeLabel}</strong><br>
         Official Utah DWR wildlife management area reference.
         <div style="margin-top:10px;display:grid;gap:6px;">
@@ -490,7 +526,7 @@ function buildOverlayInfoContent(kind, feature) {
 }
 
 function bindOverlayLayerInteraction(kind, layer) {
-  if (!layer || kind === 'usfs' || kind === 'blm' || kind === 'stateLands' || kind === 'private') {
+  if (!layer || kind === 'private') {
     return;
   }
 
@@ -580,7 +616,8 @@ async function ensureOverlayLayer(kind) {
         strokeColor: '#476f2d',
         strokeOpacity: 0.95,
         strokeWeight: 2.4,
-        fillOpacity: 0
+        fillColor: '#476f2d',
+        fillOpacity: 0.04
       }
     },
     blm: {
@@ -625,21 +662,21 @@ async function ensureOverlayLayer(kind) {
     wildlifeWma: {
       url: WMA_QUERY_URL,
       style: {
-        strokeColor: '#2f8f6b',
-        strokeOpacity: 0.94,
-        strokeWeight: 2.1,
-        fillColor: '#2f8f6b',
-        fillOpacity: 0.06
+        strokeColor: '#2f6fce',
+        strokeOpacity: 0.98,
+        strokeWeight: 2.4,
+        fillColor: '#2f6fce',
+        fillOpacity: 0.08
       }
     },
     waterfowlWma: {
       url: WMA_QUERY_URL,
       style: {
-        strokeColor: '#2d6f9f',
-        strokeOpacity: 0.94,
-        strokeWeight: 2.1,
-        fillColor: '#2d6f9f',
-        fillOpacity: 0.06
+        strokeColor: '#1e56a8',
+        strokeOpacity: 0.98,
+        strokeWeight: 2.4,
+        fillColor: '#1e56a8',
+        fillOpacity: 0.08
       }
     },
     private: {
@@ -934,6 +971,15 @@ function getFeatureBoundaryName(feature) {
   return safe(feature.getProperty('Boundary_Name') || feature.getProperty('BOUNDARY_NAME')).trim();
 }
 
+function buildHuntUnitHoverContent(feature) {
+  const boundaryName = getFeatureBoundaryName(feature) || 'DWR Hunt Unit';
+  return `
+    <div style="font-family:Segoe UI,Arial,sans-serif;font-size:12px;font-weight:700;color:#2b1c12;line-height:1.2;white-space:nowrap;">
+      ${escapeHtml(boundaryName)}
+    </div>
+  `;
+}
+
 function findMatchingHuntsForFeature(feature) {
   const boundaryName = getFeatureBoundaryName(feature).toLowerCase();
   return getFilteredHunts().filter(hunt => buildBoundaryMatchSet(hunt).has(boundaryName));
@@ -1062,10 +1108,10 @@ function styleBoundaryLayer() {
     const isSelected = selectedNames.has(boundaryName);
     return {
       visible: shouldShow,
-      strokeColor: isSelected ? '#d07b44' : '#3653b3',
-      strokeWeight: isSelected ? 3 : 1.4,
-      fillColor: isSelected ? '#d07b44' : '#8fa7e8',
-      fillOpacity: isSelected ? 0.22 : 0.08
+      strokeColor: isSelected ? '#8d244e' : '#6c43c8',
+      strokeWeight: isSelected ? 3.2 : 1.8,
+      fillColor: isSelected ? '#c1497b' : '#8d74d8',
+      fillOpacity: isSelected ? 0.18 : 0.07
     };
   });
 }
@@ -1251,11 +1297,23 @@ window.selectHuntByCode = selectHuntByCode;
 
 function bindBoundaryLayerInteraction() {
   if (!huntUnitsLayer) return;
-  huntUnitsLayer.addListener('mouseover', () => {
+  huntUnitsLayer.addListener('mouseover', event => {
     googleBaselineMap.setOptions({ draggableCursor: 'pointer' });
+    if (!boundaryHoverInfoWindow) {
+      boundaryHoverInfoWindow = new google.maps.InfoWindow({
+        disableAutoPan: true,
+        pixelOffset: new google.maps.Size(0, -12)
+      });
+    }
+    boundaryHoverInfoWindow.setContent(buildHuntUnitHoverContent(event.feature));
+    boundaryHoverInfoWindow.setPosition(event.latLng);
+    boundaryHoverInfoWindow.open({ map: googleBaselineMap });
   });
   huntUnitsLayer.addListener('mouseout', () => {
     googleBaselineMap.setOptions({ draggableCursor: '' });
+    if (boundaryHoverInfoWindow) {
+      boundaryHoverInfoWindow.close();
+    }
   });
   huntUnitsLayer.addListener('click', event => {
     const matches = findMatchingHuntsForFeature(event.feature);
