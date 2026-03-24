@@ -49,7 +49,7 @@ const HUNT_CLASS_ORDER = [ 'General Season', 'Limited Entry', 'Premium Limited E
 const SEX_ORDER = ['Buck', 'Bull', 'Ram', 'Ewe', 'Bearded', 'Antlerless', 'Either Sex', "Hunter's Choice"];
 const WEAPON_ORDER = [ 'Any Legal Weapon', 'Archery', 'Extended Archery', 'Restricted Archery', 'Muzzleloader', 'Restricted Muzzleloader', 'Restricted Rifle', 'HAMSS', 'Multiseason', 'Restricted Multiseason' ];
 
-let googleBaselineMap = null, huntUnitsLayer = null, googleApiReady = false, huntHoverFeature = null, selectedBoundaryFeature = null, huntData = [], huntBoundaryGeoJson = null, selectedBoundaryMatches = [], selectedHunt = null, selectionInfoWindow = null, usfsLayer = null, blmLayer = null, outfitters = [], outfitterMarkers = [], activeLoads = 0;
+let googleBaselineMap = null, cesiumViewer = null, huntUnitsLayer = null, googleApiReady = false, huntHoverFeature = null, selectedBoundaryFeature = null, huntData = [], huntBoundaryGeoJson = null, selectedBoundaryMatches = [], selectedHunt = null, selectionInfoWindow = null, usfsLayer = null, blmLayer = null, outfitters = [], outfitterMarkers = [], activeLoads = 0;
 
 const searchInput = document.getElementById('searchInput'),
   speciesFilter = document.getElementById('speciesFilter'),
@@ -57,7 +57,9 @@ const searchInput = document.getElementById('searchInput'),
   huntTypeFilter = document.getElementById('huntTypeFilter'),
   weaponFilter = document.getElementById('weaponFilter'),
   huntCategoryFilter = document.getElementById('huntCategoryFilter'),
-  unitFilter = document.getElementById('unitFilter');
+  unitFilter = document.getElementById('unitFilter'),
+  mapTypeSelect = document.getElementById('mapTypeSelect'),
+  resetViewBtn = document.getElementById('resetViewBtn');
 
 // --- UTILITIES ---
 function escapeHtml(v) { return String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
@@ -298,7 +300,7 @@ function renderMatchingHunts() {
   if (!container) return;
   const list = getFilteredHunts();
   container.innerHTML = list.length ? list.map(h => `
-    <div class="hunt-card" onclick="selectHuntByCode('${getHuntCode(h)}')">
+    <div class="hunt-card ${selectedHunt && getHuntCode(selectedHunt) === getHuntCode(h) ? 'is-selected' : ''}" data-hunt-code="${escapeHtml(getHuntCode(h))}" role="button" tabindex="0">
       <div class="hunt-card-title">${getHuntTitle(h)}</div>
       <div class="hunt-card-meta">${getUnitName(h)} | ${getWeapon(h)}</div>
       <div class="hunt-card-meta">${getDates(h)}</div>
@@ -310,6 +312,7 @@ window.selectHuntByCode = (code) => {
   if (h) { 
     selectedHunt = h; 
     renderSelectedHunt(); 
+    renderMatchingHunts();
     styleBoundaryLayer(); 
     zoomToSelectedBoundary(); 
   }
@@ -317,7 +320,11 @@ window.selectHuntByCode = (code) => {
 
 function renderSelectedHunt() {
   const p = document.getElementById('selectedHuntPanel');
-  if (!p || !selectedHunt) return;
+  if (!p) return;
+  if (!selectedHunt) {
+    p.innerHTML = '<div class="empty-note">Select a hunt result or hunt unit to see details.</div>';
+    return;
+  }
   const boundaryLink = getBoundaryLink(selectedHunt);
   p.innerHTML = `
     <div style="display:grid;gap:12px;">
@@ -342,6 +349,71 @@ function renderSelectedHunt() {
         ${boundaryLink ? `<div style="grid-column:1 / -1;"><strong>Official Utah DWR Hunt Details</strong><a href="${escapeHtml(boundaryLink)}" target="_blank" rel="noopener noreferrer">Open official details</a></div>` : ''}
       </div>
     </div>`;
+}
+
+function ensureCesiumViewer() {
+  if (cesiumViewer || typeof Cesium === 'undefined') return;
+  const container = document.getElementById('globeMap');
+  if (!container) return;
+  cesiumViewer = new Cesium.Viewer(container, {
+    animation: false,
+    timeline: false,
+    geocoder: false,
+    homeButton: false,
+    sceneModePicker: false,
+    baseLayerPicker: true,
+    navigationHelpButton: false,
+    fullscreenButton: false,
+    selectionIndicator: false,
+    infoBox: false
+  });
+  cesiumViewer.scene.globe.enableLighting = false;
+}
+
+function applyMapMode() {
+  const value = safe(mapTypeSelect?.value || 'terrain').toLowerCase();
+  const mapWrap = document.querySelector('.map-wrap');
+  if (!googleBaselineMap || !mapWrap) return;
+
+  if (value === 'globe') {
+    ensureCesiumViewer();
+    mapWrap.classList.add('is-globe-mode');
+    if (selectedHunt && cesiumViewer) {
+      const boundaryId = firstNonEmpty(selectedHunt.boundaryId, selectedHunt.boundaryID, getUnitCode(selectedHunt));
+      if (boundaryId && huntUnitsLayer) {
+        const bounds = new google.maps.LatLngBounds();
+        let found = false;
+        huntUnitsLayer.forEach(f => {
+          if (safe(f.getProperty('BoundaryID')) === safe(boundaryId)) {
+            f.getGeometry().forEachLatLng(ll => { bounds.extend(ll); found = true; });
+          }
+        });
+        if (found) {
+          const center = bounds.getCenter();
+          cesiumViewer.camera.flyTo({
+            destination: Cesium.Cartesian3.fromDegrees(center.lng(), center.lat(), 250000)
+          });
+        }
+      }
+    }
+    return;
+  }
+
+  mapWrap.classList.remove('is-globe-mode');
+  googleBaselineMap.setMapTypeId(value);
+}
+
+function resetMapView() {
+  if (mapTypeSelect && safe(mapTypeSelect.value).toLowerCase() === 'globe' && cesiumViewer) {
+    cesiumViewer.camera.flyTo({
+      destination: Cesium.Cartesian3.fromDegrees(GOOGLE_BASELINE_DEFAULT_CENTER.lng, GOOGLE_BASELINE_DEFAULT_CENTER.lat, 850000)
+    });
+    return;
+  }
+  if (googleBaselineMap) {
+    googleBaselineMap.setCenter(GOOGLE_BASELINE_DEFAULT_CENTER);
+    googleBaselineMap.setZoom(GOOGLE_BASELINE_DEFAULT_ZOOM);
+  }
 }
 
 // --- MAP ENGINE ---
@@ -380,6 +452,20 @@ function bindControls() {
     el?.addEventListener('change', handleFilterChange);
     el?.addEventListener('input', handleFilterChange);
   });
+  document.getElementById('matchingHunts')?.addEventListener('click', event => {
+    const card = event.target.closest('[data-hunt-code]');
+    if (!card) return;
+    window.selectHuntByCode(card.getAttribute('data-hunt-code'));
+  });
+  document.getElementById('matchingHunts')?.addEventListener('keydown', event => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    const card = event.target.closest('[data-hunt-code]');
+    if (!card) return;
+    event.preventDefault();
+    window.selectHuntByCode(card.getAttribute('data-hunt-code'));
+  });
+  mapTypeSelect?.addEventListener('change', applyMapMode);
+  resetViewBtn?.addEventListener('click', resetMapView);
 }
 
 function zoomToSelectedBoundary() {
