@@ -185,10 +185,11 @@ function getHuntCategory(h) {
 function getDates(h) { return firstNonEmpty(h.seasonLabel, h.seasonDates, h.dates, h.Dates); }
 
 function normalizeSpeciesLabel(value) {
-  const text = safe(value).trim();
+  const text = safe(value).trim().toLowerCase();
   if (!text) return '';
-  if (text.toLowerCase() === 'mule deer') return 'Mule Deer';
-  return text;
+  // Force "Deer" or "Mule Deer" in the data to show as "Mule Deer" in the UI
+  if (text === 'mule deer' || text === 'deer') return 'Mule Deer';
+  return titleCaseWords(text);
 }
 
 function getSpeciesDisplayList(h) { return Array.from(new Set(getSpeciesList(h).map(normalizeSpeciesLabel).filter(Boolean))); }
@@ -288,15 +289,39 @@ function getFilteredHunts(excludeKey = '') {
 }
 
 function refreshSelectionMatrix() {
-  // Store current selections to preserve across repopulation
-  const current = {
-    species: speciesFilter?.value || 'All Species',
-    sex: sexFilter?.value || 'All',
-    weapon: weaponFilter?.value || 'All',
-    type: huntTypeFilter?.value || 'All',
-    category: huntCategoryFilter?.value || 'All',
-    unit: unitFilter?.value || ''
-  };
+  const selectedSpecies = speciesFilter?.value || 'All Species';
+  
+  // 1. Filter the hunt data to the chosen species
+  const speciesData = huntData.filter(h => {
+    if (selectedSpecies === 'All Species') return true;
+    const hSpecies = getSpeciesDisplayList(h).map(s => s.toLowerCase());
+    const target = selectedSpecies.toLowerCase();
+    
+    // Logic to match "Mule Deer" selection to "Deer" or "Mule Deer" data
+    if (target === 'mule deer') return hSpecies.includes('deer') || hSpecies.includes('mule deer');
+    return hSpecies.includes(target);
+  });
+
+  // 2. Build the Sex list from ONLY the filtered speciesData
+  const sexSet = new Set(['All']);
+  speciesData.forEach(h => {
+    const s = getNormalizedSex(h);
+    if (s) sexSet.add(s);
+  });
+
+  // Sort with DWR-style preference
+  const sexOptions = sortWithPreferredOrder(Array.from(sexSet), 
+    ['All', 'Buck', 'Antlerless', 'Either Sex', "Hunter's Choice", 'Bull']
+  );
+  
+  const prevSex = sexFilter.value;
+  sexFilter.innerHTML = sexOptions.map(v => `<option value="${v}">${v}</option>`).join('');
+  
+  // Keep selection if it still exists for the new species, else default to 'All'
+  sexFilter.value = sexOptions.includes(prevSex) ? prevSex : 'All';
+
+  // 3. (Optional) You can repeat this "speciesData" logic for Weapon and Unit filters too
+}  };
 
   // 1. Species
   const speciesSet = new Set(['All Species']);
