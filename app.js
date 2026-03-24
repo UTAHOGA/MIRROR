@@ -187,7 +187,7 @@ function getDates(h) { return firstNonEmpty(h.seasonLabel, h.seasonDates, h.date
 function normalizeSpeciesLabel(value) {
   const text = safe(value).trim();
   if (!text) return '';
-  if (text.toLowerCase() === 'mule deer') return 'Deer';
+  if (text.toLowerCase() === 'mule deer') return 'Mule Deer';
   return text;
 }
 
@@ -196,9 +196,17 @@ function getSpeciesDisplay(h) { return getSpeciesDisplayList(h)[0] || normalizeS
 
 function getNormalizedSex(valueOrHunt) {
   const raw = typeof valueOrHunt === 'string' ? safe(valueOrHunt).trim() : firstNonEmpty(valueOrHunt.sex, valueOrHunt.Sex, valueOrHunt.SEX);
-  const hunt = typeof valueOrHunt === 'object' ? valueOrHunt : null;
-  const title = hunt ? getHuntTitle(hunt).toLowerCase() : '';
-  const species = hunt ? getSpeciesDisplay(hunt).toLowerCase() : '';
+  const val = raw.toLowerCase();
+
+  if (val.includes('choice')) return "Hunter's Choice";
+  if (val.includes('either')) return 'Either Sex';
+  // Standardizing female terms to Antlerless
+  if (val === 'doe' || val === 'cow' || val === 'ewe' || val.includes('antlerless')) return 'Antlerless';
+  if (val.includes('buck')) return 'Buck';
+  if (val.includes('bull')) return 'Bull';
+  
+  return titleCaseWords(raw) || 'All';
+}
 
   if (title.includes("hunter's choice") || title.includes('hunters choice') || title.includes('any deer') || raw.toLowerCase().includes('choice')) return "Hunter's Choice";
   if (raw === 'Either' || title.includes('either sex')) return 'Either Sex';
@@ -925,17 +933,44 @@ async function buildBoundaryLayer() {
   });
 }
 
-function handleFilterChange() {
+function handleFilterChange(event) {
+  // 1. If species changes, reset all other dependent filters to 'All'
+  if (event && event.target && event.target.id === 'speciesFilter') {
+    sexFilter.value = 'All';
+    weaponFilter.value = 'All';
+    huntTypeFilter.value = 'All';
+    unitFilter.value = '';
+  }
+
+  // 2. Clear current map selections/popups
   selectedBoundaryFeature = null;
   selectedBoundaryMatches = [];
   selectedHunt = null;
   if (selectionInfoWindow) selectionInfoWindow.close();
 
+  // 3. Re-run the matrix logic to update dropdown options (like Sex/Weapon)
   refreshSelectionMatrix();
+  
+  // 4. Update the actual UI elements
   styleBoundaryLayer(); 
   renderMatchingHunts();
   renderSelectedHunt();
   renderOutfitterResults();
+}
+
+  const sexOptions = sortWithPreferredOrder(Array.from(sexSet), ['All', 'Buck', 'Bull', 'Antlerless', 'Either Sex', "Hunter's Choice"]);
+  
+  const currentSex = sexFilter.value;
+  sexFilter.innerHTML = sexOptions.map(v => `<option value="${v}">${v}</option>`).join('');
+  
+  // Try to keep the previous selection if it's still valid for the new species
+  if (sexOptions.includes(currentSex)) {
+    sexFilter.value = currentSex;
+  } else {
+    sexFilter.value = 'All';
+  }
+
+  // Repeat similar logic for Weapon and Hunt Type...
 }
 
 function bindControls() {
