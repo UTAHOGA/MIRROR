@@ -30,8 +30,27 @@ const USFS_QUERY_URL = "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_Fore
 const BLM_QUERY_URL = 'https://gis.blm.gov/utarcgis/rest/services/AdminBoundaries/BLM_UT_ADMU/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson';
 const LAND_OWNERSHIP_BASE_URL = 'https://gis.trustlands.utah.gov/mapping/rest/services/Land_Ownership_WM/MapServer/0/query';
 const SITLA_QUERY_URL = `${LAND_OWNERSHIP_BASE_URL}?where=${encodeURIComponent("state_lgd='State Trust Lands'")}&outFields=state_lgd,label_state,county&returnGeometry=true&outSR=4326&f=geojson`;
-const STATE_QUERY_URL = `${LAND_OWNERSHIP_BASE_URL}?where=${encodeURIComponent("state_lgd IN ('Other State','State Sovereign Land','State Parks and Recreation','State Wildlife Reserve/Management Area')")}&outFields=state_lgd,label_state,county&returnGeometry=true&outSR=4326&f=geojson`;
+const STATE_LANDS_QUERY_URL = `${LAND_OWNERSHIP_BASE_URL}?where=${encodeURIComponent("state_lgd IN ('Other State','State Sovereign Land')")}&outFields=state_lgd,label_state,county&returnGeometry=true&outSR=4326&f=geojson`;
+const STATE_PARKS_QUERY_URL = `${LAND_OWNERSHIP_BASE_URL}?where=${encodeURIComponent("state_lgd='State Parks and Recreation'")}&outFields=state_lgd,label_state,county&returnGeometry=true&outSR=4326&f=geojson`;
+const WMA_QUERY_URL = `${LAND_OWNERSHIP_BASE_URL}?where=${encodeURIComponent("state_lgd='State Wildlife Reserve/Management Area'")}&outFields=state_lgd,label_state,county&returnGeometry=true&outSR=4326&f=geojson`;
 const PRIVATE_QUERY_URL = `${LAND_OWNERSHIP_BASE_URL}?where=${encodeURIComponent("state_lgd='Private'")}&outFields=state_lgd,label_state,county&returnGeometry=true&outSR=4326&f=geojson`;
+const ARCGIS_PAGE_SIZE = 2000;
+const OFFICIAL_WATERFOWL_WMA_NAMES = [
+  'Bicknell Bottoms',
+  'Browns Park',
+  'Clear Lake',
+  'Desert Lake',
+  'Farmington Bay',
+  'Harold Crane',
+  'Howard Slough',
+  'Locomotive Springs',
+  'Ogden Bay',
+  'Public Shooting Grounds',
+  'Salt Creek',
+  'Timpie Springs',
+  'Topaz',
+  'Willard Spur'
+];
 
 const HUNT_BOUNDARY_NAME_OVERRIDES = {
   DB1503: ['Manti, San Rafael'],
@@ -75,7 +94,10 @@ let utahOutlinePolygon = null;
 let usfsLayer = null;
 let blmLayer = null;
 let sitlaLayer = null;
-let stateLayer = null;
+let stateLandsLayer = null;
+let stateParksLayer = null;
+let wildlifeWmaLayer = null;
+let waterfowlWmaLayer = null;
 let privateLayer = null;
 let cesiumViewer = null;
 let cesiumReady = false;
@@ -100,12 +122,16 @@ const outfitterResultsEl = document.getElementById('outfitterResults');
 const toggleUSFS = document.getElementById('toggleUSFS');
 const toggleBLM = document.getElementById('toggleBLM');
 const toggleSITLA = document.getElementById('toggleSITLA');
-const toggleState = document.getElementById('toggleState');
+const toggleStateLands = document.getElementById('toggleStateLands');
+const toggleStateParks = document.getElementById('toggleStateParks');
+const toggleWildlifeWma = document.getElementById('toggleWildlifeWma');
+const toggleWaterfowlWma = document.getElementById('toggleWaterfowlWma');
 const togglePrivate = document.getElementById('togglePrivate');
 const toggleDwrUnits = document.getElementById('toggleDwrUnits');
 const toggleOutfitters = document.getElementById('toggleOutfitters');
 const mapWrapEl = document.querySelector('.map-wrap');
 const globeMapEl = document.getElementById('globeMap');
+const stateLayersSummaryEl = document.getElementById('stateLayersSummary');
 
 function safe(value) {
   return String(value ?? '');
@@ -190,6 +216,13 @@ function setMapChooserOpen(isOpen) {
   if (!chooser) return;
   chooser.classList.toggle('is-open', isOpen);
   chooser.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+}
+
+function updateStateLayersSummary() {
+  if (!stateLayersSummaryEl) return;
+  const toggles = [toggleStateLands, toggleStateParks, toggleWildlifeWma, toggleWaterfowlWma];
+  const activeCount = toggles.filter(toggle => toggle && toggle.checked).length;
+  stateLayersSummaryEl.textContent = activeCount ? `State Lands (${activeCount})` : 'State Lands';
 }
 
 function getHuntCode(hunt) {
@@ -285,6 +318,10 @@ function getSexOptionsForSpecies(speciesValue) {
   return null;
 }
 
+function getFilteredSexValues() {
+  return Array.from(new Set(getFilteredHunts('sex').map(hunt => getNormalizedSex(hunt)).filter(Boolean)));
+}
+
 async function fetchJsonWithCandidates(candidates) {
   let lastStatus = 'not-started';
   for (const url of candidates) {
@@ -294,6 +331,45 @@ async function fetchJsonWithCandidates(candidates) {
     return response.json();
   }
   throw new Error(`Load failed: ${lastStatus}`);
+}
+
+async function fetchAllArcGisGeoJson(url) {
+  const allFeatures = [];
+  let offset = 0;
+
+  while (true) {
+    const pagedUrl = new URL(url);
+    pagedUrl.searchParams.set('resultOffset', String(offset));
+    pagedUrl.searchParams.set('resultRecordCount', String(ARCGIS_PAGE_SIZE));
+
+    const response = await fetch(pagedUrl.toString(), { cache: 'no-store' });
+    if (!response.ok) {
+      throw new Error(`ArcGIS overlay query failed: ${response.status}`);
+    }
+
+    const payload = await response.json();
+    const features = Array.isArray(payload && payload.features) ? payload.features : [];
+    allFeatures.push(...features);
+
+    if (features.length < ARCGIS_PAGE_SIZE) break;
+    offset += features.length;
+  }
+
+  return {
+    type: 'FeatureCollection',
+    features: allFeatures
+  };
+}
+
+function normalizePlaceText(value) {
+  return safe(value).trim().toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+}
+
+function isOfficialWaterfowlWmaFeature(feature) {
+  const properties = feature && feature.properties ? feature.properties : {};
+  const candidateText = `${safe(properties.label_state)} ${safe(properties.county)}`;
+  const normalized = normalizePlaceText(candidateText);
+  return OFFICIAL_WATERFOWL_WMA_NAMES.some(name => normalized.includes(normalizePlaceText(name)));
 }
 
 async function loadHuntData() {
@@ -349,7 +425,10 @@ async function ensureOverlayLayer(kind) {
   if (kind === 'usfs' && usfsLayer) return usfsLayer;
   if (kind === 'blm' && blmLayer) return blmLayer;
   if (kind === 'sitla' && sitlaLayer) return sitlaLayer;
-  if (kind === 'state' && stateLayer) return stateLayer;
+  if (kind === 'stateLands' && stateLandsLayer) return stateLandsLayer;
+  if (kind === 'stateParks' && stateParksLayer) return stateParksLayer;
+  if (kind === 'wildlifeWma' && wildlifeWmaLayer) return wildlifeWmaLayer;
+  if (kind === 'waterfowlWma' && waterfowlWmaLayer) return waterfowlWmaLayer;
   if (kind === 'private' && privateLayer) return privateLayer;
 
   const overlayConfigs = {
@@ -381,14 +460,44 @@ async function ensureOverlayLayer(kind) {
         fillOpacity: 0.05
       }
     },
-    state: {
-      url: STATE_QUERY_URL,
+    stateLands: {
+      url: STATE_LANDS_QUERY_URL,
       style: {
         strokeColor: '#1f9d8b',
         strokeOpacity: 0.9,
         strokeWeight: 1.8,
         fillColor: '#1f9d8b',
         fillOpacity: 0.04
+      }
+    },
+    stateParks: {
+      url: STATE_PARKS_QUERY_URL,
+      style: {
+        strokeColor: '#4bbf73',
+        strokeOpacity: 0.92,
+        strokeWeight: 1.9,
+        fillColor: '#4bbf73',
+        fillOpacity: 0.05
+      }
+    },
+    wildlifeWma: {
+      url: WMA_QUERY_URL,
+      style: {
+        strokeColor: '#2f8f6b',
+        strokeOpacity: 0.94,
+        strokeWeight: 2.1,
+        fillColor: '#2f8f6b',
+        fillOpacity: 0.06
+      }
+    },
+    waterfowlWma: {
+      url: WMA_QUERY_URL,
+      style: {
+        strokeColor: '#2d6f9f',
+        strokeOpacity: 0.94,
+        strokeWeight: 2.1,
+        fillColor: '#2d6f9f',
+        fillOpacity: 0.06
       }
     },
     private: {
@@ -406,14 +515,20 @@ async function ensureOverlayLayer(kind) {
   const config = overlayConfigs[kind];
   if (!config) return null;
   const url = config.url;
-  const response = await fetch(url, { cache: 'no-store' });
-  if (!response.ok) {
-    throw new Error(`${kind.toUpperCase()} overlay failed: ${response.status}`);
+  const geojson = await fetchAllArcGisGeoJson(url);
+  let features = Array.isArray(geojson.features) ? geojson.features : [];
+
+  if (kind === 'waterfowlWma') {
+    features = features.filter(isOfficialWaterfowlWmaFeature);
+  } else if (kind === 'wildlifeWma') {
+    features = features.filter(feature => !isOfficialWaterfowlWmaFeature(feature));
   }
 
-  const geojson = await response.json();
   const layer = new google.maps.Data();
-  layer.addGeoJson(geojson);
+  layer.addGeoJson({
+    type: 'FeatureCollection',
+    features
+  });
   layer.setStyle(config.style);
 
   if (kind === 'usfs') {
@@ -428,9 +543,21 @@ async function ensureOverlayLayer(kind) {
     sitlaLayer = layer;
     return sitlaLayer;
   }
-  if (kind === 'state') {
-    stateLayer = layer;
-    return stateLayer;
+  if (kind === 'stateLands') {
+    stateLandsLayer = layer;
+    return stateLandsLayer;
+  }
+  if (kind === 'stateParks') {
+    stateParksLayer = layer;
+    return stateParksLayer;
+  }
+  if (kind === 'wildlifeWma') {
+    wildlifeWmaLayer = layer;
+    return wildlifeWmaLayer;
+  }
+  if (kind === 'waterfowlWma') {
+    waterfowlWmaLayer = layer;
+    return waterfowlWmaLayer;
   }
 
   privateLayer = layer;
@@ -442,7 +569,10 @@ function setOverlayVisibility(kind, isVisible) {
     usfs: usfsLayer,
     blm: blmLayer,
     sitla: sitlaLayer,
-    state: stateLayer,
+    stateLands: stateLandsLayer,
+    stateParks: stateParksLayer,
+    wildlifeWma: wildlifeWmaLayer,
+    waterfowlWma: waterfowlWmaLayer,
     private: privateLayer
   };
   const layer = layerMap[kind];
@@ -473,11 +603,32 @@ async function syncOverlayToggles() {
       setOverlayVisibility('sitla', false);
     }
 
-    if (toggleState && toggleState.checked) {
-      await ensureOverlayLayer('state');
-      setOverlayVisibility('state', true);
+    if (toggleStateLands && toggleStateLands.checked) {
+      await ensureOverlayLayer('stateLands');
+      setOverlayVisibility('stateLands', true);
     } else {
-      setOverlayVisibility('state', false);
+      setOverlayVisibility('stateLands', false);
+    }
+
+    if (toggleStateParks && toggleStateParks.checked) {
+      await ensureOverlayLayer('stateParks');
+      setOverlayVisibility('stateParks', true);
+    } else {
+      setOverlayVisibility('stateParks', false);
+    }
+
+    if (toggleWildlifeWma && toggleWildlifeWma.checked) {
+      await ensureOverlayLayer('wildlifeWma');
+      setOverlayVisibility('wildlifeWma', true);
+    } else {
+      setOverlayVisibility('wildlifeWma', false);
+    }
+
+    if (toggleWaterfowlWma && toggleWaterfowlWma.checked) {
+      await ensureOverlayLayer('waterfowlWma');
+      setOverlayVisibility('waterfowlWma', true);
+    } else {
+      setOverlayVisibility('waterfowlWma', false);
     }
 
     if (togglePrivate && togglePrivate.checked) {
@@ -537,12 +688,14 @@ function populateSpecies() {
 function populateSexes() {
   const previous = sexFilter.value || 'All';
   const selectedSpecies = safe(speciesFilter.value || 'All Species');
-  let options = getSexOptionsForSpecies(selectedSpecies);
+  const filteredValues = getFilteredSexValues();
+  sortWithPreferredOrder(filteredValues, SEX_ORDER);
 
-  if (!options) {
-    const values = Array.from(new Set(getFilteredHunts('sex').map(hunt => getNormalizedSex(hunt)).filter(Boolean)));
-    sortWithPreferredOrder(values, SEX_ORDER);
-    options = ['All', ...values];
+  let options = getSexOptionsForSpecies(selectedSpecies);
+  if (options) {
+    options = ['All', ...options.filter(value => value !== 'All' && filteredValues.includes(value))];
+  } else {
+    options = ['All', ...filteredValues];
   }
 
   sexFilter.innerHTML = options.map(value => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join('');
@@ -585,7 +738,7 @@ function populateUnits() {
     if (value && !units.has(value)) units.set(value, label);
   });
   const options = Array.from(units.entries()).sort((a, b) => a[1].localeCompare(b[1]));
-  unitFilter.innerHTML = '<option value="">All Units</option>' + options.map(([value, label]) => `<option value="${escapeHtml(value)}">${escapeHtml(label)}</option>`).join('');
+  unitFilter.innerHTML = '<option value="">All DWR Hunt Units</option>' + options.map(([value, label]) => `<option value="${escapeHtml(value)}">${escapeHtml(label)}</option>`).join('');
   unitFilter.value = options.some(([value]) => value === previous) ? previous : '';
 }
 
@@ -1088,8 +1241,30 @@ function bindControls() {
     });
   }
 
-  if (toggleState) {
-    toggleState.addEventListener('change', () => {
+  if (toggleStateLands) {
+    toggleStateLands.addEventListener('change', () => {
+      updateStateLayersSummary();
+      void syncOverlayToggles();
+    });
+  }
+
+  if (toggleStateParks) {
+    toggleStateParks.addEventListener('change', () => {
+      updateStateLayersSummary();
+      void syncOverlayToggles();
+    });
+  }
+
+  if (toggleWildlifeWma) {
+    toggleWildlifeWma.addEventListener('change', () => {
+      updateStateLayersSummary();
+      void syncOverlayToggles();
+    });
+  }
+
+  if (toggleWaterfowlWma) {
+    toggleWaterfowlWma.addEventListener('change', () => {
+      updateStateLayersSummary();
       void syncOverlayToggles();
     });
   }
@@ -1169,6 +1344,7 @@ function initGoogleBaseline() {
   googleApiReady = true;
   isMapReady = true;
   bindControls();
+  updateStateLayersSummary();
   renderUtahOutline();
   buildBoundaryLayer();
   void syncOverlayToggles();

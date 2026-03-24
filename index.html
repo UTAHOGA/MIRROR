@@ -138,6 +138,54 @@
     .toggle-row { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel2); flex-wrap: wrap; }
     .toggle-chip { display: inline-flex; align-items: center; gap: 6px; color: var(--text); font-size: 12px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; cursor: pointer;}
     .toggle-chip input { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer;}
+    .toggle-chip-label { display: inline-block; line-height: 1.05; text-align: center; white-space: normal; }
+    .toggle-menu { position: relative; }
+    .toggle-menu summary {
+      list-style: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--panel);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      user-select: none;
+    }
+    .toggle-menu summary::-webkit-details-marker { display: none; }
+    .toggle-menu summary::after {
+      content: "▾";
+      font-size: 11px;
+      line-height: 1;
+      color: var(--muted);
+    }
+    .toggle-menu[open] summary::after { content: "▴"; }
+    .toggle-menu-panel {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      min-width: 170px;
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel2);
+      box-shadow: var(--shadow);
+      z-index: 5;
+    }
+    .toggle-menu-panel .toggle-chip {
+      display: grid;
+      grid-template-columns: 16px auto;
+      align-items: center;
+      gap: 8px;
+      white-space: normal;
+    }
     .layer-grid { display: grid; gap: 10px; }
     .layer-toggle {
       display: flex;
@@ -180,8 +228,32 @@
     button.secondary:hover { background: var(--panel); }
     
     /* --- LAYOUT & SIDEBAR --- */
-    .layout { display: grid; grid-template-columns: 340px 1fr; min-height: 0; }
+    .layout { display: grid; grid-template-columns: 340px 1fr 320px; min-height: 0; }
     .sidebar { border-right: 1px solid var(--line); background: var(--panel); overflow: auto; padding: 14px; backdrop-filter: blur(10px); }
+    .rightbar { border-left: 1px solid var(--line); background: var(--panel); overflow: auto; padding: 14px; backdrop-filter: blur(10px); }
+    .rightbar-header {
+      margin-bottom: 12px;
+      padding: 14px 12px 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel2);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    .rightbar-header-title {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 30px;
+      line-height: 0.98;
+      color: var(--text);
+    }
+    .rightbar-header-subtitle {
+      margin: 6px 0 0;
+      font-family: var(--font-display);
+      font-size: 24px;
+      line-height: 1;
+      color: var(--accent);
+    }
     .panel { border: 1px solid var(--line); border-radius: 12px; background: var(--panel2); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 12px; }
     .panel h2 { margin: 0; padding: 12px 14px; font-family: var(--font-display); font-size: 19px; line-height: 1.05; background: linear-gradient(180deg, var(--accent), var(--accent-dark)); color: #fff6ed; letter-spacing: 0.02em; }
     .panel-body { padding: 14px; }
@@ -253,7 +325,7 @@
       .topbar { align-items: flex-start; flex-direction: column; }
       .controls { justify-content: flex-start; }
       .layout { grid-template-columns: 1fr; }
-      .sidebar { border-right: none; border-bottom: 1px solid var(--line); }
+      .sidebar, .rightbar { border-right: none; border-left: none; border-bottom: 1px solid var(--line); }
       #map { min-height: 58vh; }
     }
   </style>
@@ -299,11 +371,19 @@
         </select>
       </div>
       <div class="toggle-row">
-        <label class="toggle-chip"><input id="toggleDwrUnits" type="checkbox" checked>DWR Hunt Units</label>
+        <label class="toggle-chip"><input id="toggleDwrUnits" type="checkbox" checked><span class="toggle-chip-label">DWR<br>Hunt Units</span></label>
         <label class="toggle-chip"><input id="toggleUSFS" type="checkbox" checked>USFS</label>
         <label class="toggle-chip"><input id="toggleBLM" type="checkbox" checked>BLM</label>
         <label class="toggle-chip"><input id="toggleSITLA" type="checkbox">SITLA</label>
-        <label class="toggle-chip"><input id="toggleState" type="checkbox">State</label>
+        <details class="toggle-menu">
+          <summary id="stateLayersSummary">State Lands</summary>
+          <div class="toggle-menu-panel">
+            <label class="toggle-chip"><input id="toggleStateLands" type="checkbox"><span class="toggle-chip-label">State<br>Lands</span></label>
+            <label class="toggle-chip"><input id="toggleStateParks" type="checkbox"><span class="toggle-chip-label">State<br>Parks</span></label>
+            <label class="toggle-chip"><input id="toggleWildlifeWma" type="checkbox"><span class="toggle-chip-label">Wildlife<br>WMA</span></label>
+            <label class="toggle-chip"><input id="toggleWaterfowlWma" type="checkbox"><span class="toggle-chip-label">Waterfowl<br>WMA</span></label>
+          </div>
+        </details>
         <label class="toggle-chip"><input id="togglePrivate" type="checkbox">Private</label>
         <label class="toggle-chip"><input id="toggleOutfitters" type="checkbox" checked>Outfitters</label>
       </div>
@@ -341,7 +421,7 @@
             <select id="huntCategoryFilter" class="hunt-select"><option value="All">All</option></select>
           </div>
           <div class="field">
-            <label for="unitFilter">Unit</label>
+            <label for="unitFilter">DWR Hunt Units</label>
             <select id="unitFilter" class="hunt-select"><option value="">Loading...</option></select>
           </div>
           <div class="filter-actions">
@@ -367,15 +447,6 @@
           <div class="empty-note">No hunt selected yet.</div>
         </div>
       </section>
-
-      <section class="panel">
-        <h2>Matching Outfitters</h2>
-        <div class="panel-body">
-          <div id="outfitterResults" class="outfitter-list">
-            <div class="empty-note">Select a hunt to load matching vetted outfitters.</div>
-          </div>
-        </div>
-      </section>
     </aside>
 
     <section class="map-wrap">
@@ -397,6 +468,21 @@
         </div>
       </div>
     </section>
+
+    <aside class="rightbar">
+      <div class="rightbar-header">
+        <h2 class="rightbar-header-title">U.O.G.A.</h2>
+        <p class="rightbar-header-subtitle">Vetted Outfitters</p>
+      </div>
+      <section class="panel">
+        <h2>Outfitters</h2>
+        <div class="panel-body">
+          <div id="outfitterResults" class="outfitter-list">
+            <div class="empty-note">Select a hunt to load matching vetted outfitters.</div>
+          </div>
+        </div>
+      </section>
+    </aside>
   </main>
 
   <script>
