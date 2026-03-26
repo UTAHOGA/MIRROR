@@ -65,6 +65,7 @@ const DNR_BROWN = '#4f2b14';
 
 let googleBaselineMap = null, cesiumViewer = null, huntUnitsLayer = null, cesiumHuntDataSource = null, googleApiReady = false, huntHoverFeature = null, selectedBoundaryFeature = null, huntData = [], huntBoundaryGeoJson = null, selectedBoundaryMatches = [], selectedHunt = null, selectionInfoWindow = null, usfsLayer = null, blmLayer = null, sitlaLayer = null, stateLandsLayer = null, stateParksLayer = null, wmaLayer = null, privateLayer = null, outfitters = [], outfitterMarkers = [], activeLoads = 0, currentGlobeBasemap = 'esriImagery', outfitterMarkerRunId = 0, suppressLandClickUntil = 0;
 const outfitterGeocodeCache = new Map();
+const outfitterMarkerIndex = new Map();
 
 const searchInput = document.getElementById('searchInput'),
   speciesFilter = document.getElementById('speciesFilter'),
@@ -922,13 +923,13 @@ function buildDnrPlate(hunt, compact = false, roomy = false) {
     return `
       <div style="position:relative;width:${panelWidth}px;max-width:100%;height:${panelHeight}px;border:1px solid ${DNR_ORANGE};border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 8px 24px rgba(58,37,18,0.18);">
         <img src="${plateUrl}" alt="Utah DNR hunt information plate" style="display:block;width:${panelWidth}px;max-width:100%;height:${panelHeight}px;object-fit:contain;border:0;">
-        <div style="position:absolute;left:44px;top:272px;width:230px;display:grid;gap:2px;color:#2b1c12;">
-          <div style="font-size:24px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:${DNR_ORANGE};line-height:1.02;">Hunt #</div>
+        <div style="position:absolute;left:44px;top:270px;width:230px;display:grid;gap:1px;color:#2b1c12;">
+          <div style="font-size:28px;font-weight:900;letter-spacing:.03em;text-transform:uppercase;color:${DNR_ORANGE};line-height:1.0;">Hunt #</div>
           <div style="font-size:42px;font-weight:900;line-height:0.98;color:${DNR_BROWN};">${code}</div>
         </div>
         <div style="position:absolute;top:126px;left:37%;right:34px;bottom:28px;display:grid;align-content:start;gap:10px;color:#2b1c12;">
           <div style="display:grid;gap:4px;justify-items:center;text-align:center;">
-            <div style="font-size:24px;font-weight:900;letter-spacing:.02em;text-transform:none;color:${DNR_ORANGE};line-height:1.05;">${heading}</div>
+            <div style="font-size:30px;font-weight:900;letter-spacing:.01em;text-transform:none;color:${DNR_ORANGE};line-height:1.02;">${heading}</div>
             <div style="font-size:32px;font-weight:900;line-height:1.02;">${unit}</div>
           </div>
           <div style="display:grid;gap:6px;font-size:18px;line-height:1.28;">
@@ -1052,7 +1053,7 @@ function renderOutfitters() {
     const location = getOutfitterLocationText(o);
     const tags = getOutfitterSummaryTags(o).slice(0, 3);
     return `
-      <div class="outfitter-card">
+      <div class="outfitter-card" data-outfitter-id="${escapeHtml(firstNonEmpty(o.id, o.slug, o.listingName))}" role="button" tabindex="0" title="Zoom to ${escapeHtml(o.listingName || 'outfitter')}">
         <div class="outfitter-card-header">
           ${logo ? `<img class="outfitter-card-logo" src="${escapeHtml(logo)}" alt="${escapeHtml(o.listingName || 'Outfitter logo')}">` : ''}
           <div class="outfitter-card-title-wrap">
@@ -1066,6 +1067,19 @@ function renderOutfitters() {
         ${phone ? `<div class="hunt-card-meta">${escapeHtml(phone)}</div>` : ''}
       </div>`;
   }).join('');
+  container.querySelectorAll('[data-outfitter-id]').forEach(card => {
+    const outfitterId = card.getAttribute('data-outfitter-id');
+    const outfitter = matches.find(item => firstNonEmpty(item.id, item.slug, item.listingName) === outfitterId);
+    if (!outfitter) return;
+    const open = () => focusOutfitter(outfitter);
+    card.addEventListener('click', open);
+    card.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        open();
+      }
+    });
+  });
   updateOutfitterMarkers(matches);
 }
 
@@ -1141,11 +1155,22 @@ function buildOutfitterPopupCard(outfitter) {
       ${website ? `<a href="${escapeHtml(website)}" target="_blank" rel="noopener noreferrer" style="color:#2f7fd1;font-weight:800;text-decoration:none;">Visit website</a>` : ''}
     </div>`;
 }
+function openOutfitterInfoWindow(outfitter, position) {
+  noteOutfitterInteraction();
+  closeSelectionInfoWindow();
+  selectionInfoWindow = new google.maps.InfoWindow({
+    content: buildOutfitterPopupCard(outfitter),
+    position,
+    pixelOffset: new google.maps.Size(0, -36)
+  });
+  selectionInfoWindow.open(googleBaselineMap);
+}
 
 function clearOutfitterMarkers() {
   outfitterMarkerRunId += 1;
   outfitterMarkers.forEach(marker => marker?.setMap?.(null));
   outfitterMarkers = [];
+  outfitterMarkerIndex.clear();
 }
 
 function createOutfitterLogoMarker(position, outfitter) {
@@ -1175,14 +1200,7 @@ function createOutfitterLogoMarker(position, outfitter) {
         event.preventDefault?.();
         event.stopPropagation?.();
       }
-      noteOutfitterInteraction();
-      closeSelectionInfoWindow();
-      selectionInfoWindow = new google.maps.InfoWindow({
-        content: buildOutfitterPopupCard(outfitter),
-        position,
-        pixelOffset: new google.maps.Size(0, -36)
-      });
-      selectionInfoWindow.open(googleBaselineMap);
+      openOutfitterInfoWindow(outfitter, position);
     };
     ['pointerdown', 'mousedown', 'touchstart'].forEach(type => {
       div.addEventListener(type, event => {
@@ -1242,6 +1260,30 @@ function geocodeOutfitter(outfitter) {
     resolve(null);
   });
 }
+async function focusOutfitter(outfitter) {
+  if (!googleBaselineMap || !outfitter) return;
+  const markerKey = firstNonEmpty(outfitter.id, outfitter.slug, outfitter.listingName);
+  const indexed = outfitterMarkerIndex.get(markerKey);
+  let location = indexed?.position || null;
+  if (!location) {
+    location = await geocodeOutfitter(outfitter);
+  }
+  if (!location) {
+    updateStatus(`Couldn't place ${firstNonEmpty(outfitter.listingName, 'that outfitter')} on the map yet.`);
+    return;
+  }
+  noteOutfitterInteraction();
+  if (safe(mapTypeSelect?.value).toLowerCase() === 'globe') {
+    mapTypeSelect.value = 'terrain';
+    applyMapMode();
+  }
+  googleBaselineMap.panTo(location);
+  if ((googleBaselineMap.getZoom?.() || 0) < 14) {
+    googleBaselineMap.setZoom(14);
+  }
+  openOutfitterInfoWindow(outfitter, location);
+  updateStatus(`${firstNonEmpty(outfitter.listingName, 'Outfitter')} focused on the map.`);
+}
 
 async function updateOutfitterMarkers(matches) {
   clearOutfitterMarkers();
@@ -1263,6 +1305,7 @@ async function updateOutfitterMarkers(matches) {
       const marker = createOutfitterLogoMarker(location, outfitter);
       marker.setMap(googleBaselineMap);
       outfitterMarkers.push(marker);
+      outfitterMarkerIndex.set(firstNonEmpty(outfitter.id, outfitter.slug, outfitter.listingName), { marker, position: location });
     } catch (error) {
       console.error('Outfitter marker failed', outfitter?.listingName, error);
     }
