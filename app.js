@@ -13,7 +13,7 @@ const OUTFITTERS_DATA_SOURCES = [
   './data/outfitters.json'
 ];
 const LOGO_DNR = 'https://static.wixstatic.com/media/43f827_34cd9f26f53f4b9ebcb200f6d878bea2~mv2.jpg';
-const LOGO_DNR_ROOMY = './assets/logos/Hunt-panel-png.png';
+const LOGO_DNR_ROOMY = './assets/logos/hunt-panel-final.png';
 const LOGO_DWR_WMA = './assets/logos/dwr-wma.jpg';
 const LOGO_USFS = './assets/logos/usfs.png';
 const LOGO_BLM = './assets/logos/blm.png';
@@ -60,7 +60,7 @@ const HUNT_TYPE_ORDER = [ 'General', 'Youth', 'Limited Entry', 'Premium Limited 
 const HUNT_CLASS_ORDER = [ 'General Season', 'Limited Entry', 'Premium Limited Entry', 'Youth', 'Management', 'Antlerless', 'CWMU', 'Private Land Only', 'Conservation', 'Statewide Permit', 'Extended Archery' ];
 const SEX_ORDER = ['Buck', 'Bull', 'Ram', 'Ewe', 'Bearded', 'Antlerless', 'Either Sex', "Hunter's Choice"];
 const WEAPON_ORDER = [ 'Any Legal Weapon', 'Archery', 'Extended Archery', 'Restricted Archery', 'Muzzleloader', 'Restricted Muzzleloader', 'Restricted Rifle', 'HAMSS', 'Multiseason', 'Restricted Multiseason' ];
-const DNR_ORANGE = '#d66a1f';
+const DNR_ORANGE = '#ff6600';
 const DNR_BROWN = '#4f2b14';
 
 let googleBaselineMap = null, cesiumViewer = null, huntUnitsLayer = null, cesiumHuntDataSource = null, googleApiReady = false, huntHoverFeature = null, selectedBoundaryFeature = null, huntData = [], huntBoundaryGeoJson = null, selectedBoundaryMatches = [], selectedHunt = null, selectionInfoWindow = null, usfsLayer = null, blmLayer = null, sitlaLayer = null, stateLandsLayer = null, stateParksLayer = null, wmaLayer = null, privateLayer = null, outfitters = [], outfitterMarkers = [], activeLoads = 0, currentGlobeBasemap = 'esriImagery', outfitterMarkerRunId = 0, suppressLandClickUntil = 0;
@@ -704,7 +704,7 @@ function buildLandInfoCard({ logo, title, subtitle, detailText = '', noticeText 
       <div style="display:flex;align-items:center;gap:10px;">
         ${resolvedLogo ? `<img src="${resolvedLogo}" alt="${escapeHtml(subtitle)} logo" style="width:46px;height:46px;object-fit:contain;border-radius:8px;background:#fff;padding:3px;border:1px solid #d6c1ae;">` : ''}
         <div>
-          <div style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#bf6b34;">${escapeHtml(subtitle)}</div>
+          <div style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:${DNR_ORANGE};">${escapeHtml(subtitle)}</div>
           <div style="font-size:15px;font-weight:900;color:#2b1c12;">${escapeHtml(title)}</div>
         </div>
       </div>
@@ -904,8 +904,8 @@ function buildDnrPlate(hunt, compact = false, roomy = false) {
   const dates = escapeHtml(getDates(hunt) || 'See official hunt details');
   const heading = escapeHtml(getPanelHeading(hunt));
   const boundaryLink = getBoundaryLink(hunt);
-  const panelWidth = roomy ? 720 : (compact ? 480 : 560);
-  const panelHeight = roomy ? 440 : (compact ? 184 : 214);
+  const panelWidth = roomy ? 760 : (compact ? 480 : 560);
+  const panelHeight = roomy ? 420 : (compact ? 184 : 214);
   const wrapperWidth = compact ? `width:${panelWidth}px;max-width:${panelWidth}px;` : `width:${panelWidth}px;max-width:100%;`;
   const titleSize = roomy ? '24px' : (compact ? '21px' : '23px');
   const metaSize = roomy ? '15px' : (compact ? '14px' : '15px');
@@ -920,18 +920,18 @@ function buildDnrPlate(hunt, compact = false, roomy = false) {
 
   if (roomy) {
     return `
-      <div style="position:relative;width:${panelWidth}px;max-width:100%;height:${panelHeight}px;border:1px solid #d38449;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 8px 24px rgba(58,37,18,0.18);">
-        <img src="${plateUrl}" alt="Utah DNR hunt information plate" style="display:block;width:${panelWidth}px;max-width:100%;height:${panelHeight}px;object-fit:fill;border:0;">
-        <div style="position:absolute;left:48px;top:292px;width:220px;display:grid;gap:4px;color:#2b1c12;">
-          <div style="font-size:20px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:${DNR_ORANGE};line-height:1.02;">Hunt #</div>
+      <div style="position:relative;width:${panelWidth}px;max-width:100%;height:${panelHeight}px;border:1px solid ${DNR_ORANGE};border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 8px 24px rgba(58,37,18,0.18);">
+        <img src="${plateUrl}" alt="Utah DNR hunt information plate" style="display:block;width:${panelWidth}px;max-width:100%;height:${panelHeight}px;object-fit:contain;border:0;">
+        <div style="position:absolute;left:44px;top:272px;width:230px;display:grid;gap:2px;color:#2b1c12;">
+          <div style="font-size:24px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:${DNR_ORANGE};line-height:1.02;">Hunt #</div>
           <div style="font-size:42px;font-weight:900;line-height:0.98;color:${DNR_BROWN};">${code}</div>
         </div>
-        <div style="position:absolute;top:148px;left:38%;right:36px;bottom:32px;display:grid;align-content:start;gap:12px;color:#2b1c12;">
-          <div style="display:grid;gap:6px;justify-items:center;text-align:center;">
-            <div style="font-size:20px;font-weight:900;letter-spacing:.03em;text-transform:none;color:${DNR_ORANGE};line-height:1.08;">${heading}</div>
+        <div style="position:absolute;top:126px;left:37%;right:34px;bottom:28px;display:grid;align-content:start;gap:10px;color:#2b1c12;">
+          <div style="display:grid;gap:4px;justify-items:center;text-align:center;">
+            <div style="font-size:24px;font-weight:900;letter-spacing:.02em;text-transform:none;color:${DNR_ORANGE};line-height:1.05;">${heading}</div>
             <div style="font-size:32px;font-weight:900;line-height:1.02;">${unit}</div>
           </div>
-          <div style="display:grid;gap:7px;font-size:18px;line-height:1.28;">
+          <div style="display:grid;gap:6px;font-size:18px;line-height:1.28;">
             <div><strong>Species:</strong> ${species}</div>
             <div><strong>Sex:</strong> ${sex}</div>
             <div><strong>Hunt Type:</strong> ${huntType}</div>
@@ -944,11 +944,11 @@ function buildDnrPlate(hunt, compact = false, roomy = false) {
   }
 
   return `
-    <div style="position:relative;${wrapperWidth}height:${panelHeight}px;border:1px solid #d38449;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 8px 24px rgba(58,37,18,0.18);">
+    <div style="position:relative;${wrapperWidth}height:${panelHeight}px;border:1px solid ${DNR_ORANGE};border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 8px 24px rgba(58,37,18,0.18);">
       <img src="${plateUrl}" alt="Utah DNR hunt information plate" style="display:block;width:${panelWidth}px;max-width:100%;height:${panelHeight}px;object-fit:fill;border:0;">
       <div style="position:absolute;top:${infoTop};left:${infoLeft};right:${infoRight};bottom:${infoBottom};display:grid;align-content:start;gap:${infoGap};color:#2b1c12;">
         <div style="display:grid;gap:3px;">
-          <div style="font-size:${roomy ? '12px' : '13px'};font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#bf6b34;">${heading}</div>
+          <div style="font-size:${roomy ? '12px' : '13px'};font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:${DNR_ORANGE};">${heading}</div>
           <div style="font-size:${titleSize};font-weight:900;line-height:1.05;">${code}</div>
           <div style="font-size:${unitSize};font-weight:800;line-height:1.12;">${unit}</div>
         </div>
@@ -990,7 +990,7 @@ function renderSelectedHunt() {
     p.innerHTML = `
       <div style="display:grid;gap:12px;">
         <div style="display:grid;gap:8px;padding:12px;border:1px solid #d6c1ae;border-radius:12px;background:var(--panel);">
-          <div style="font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:${DNR_ORANGE};">${escapeHtml(getPanelHeading(selectedHunt))}</div>
+          <div style="font-size:18px;font-weight:900;letter-spacing:.03em;text-transform:none;color:${DNR_ORANGE};line-height:1.06;">${escapeHtml(getPanelHeading(selectedHunt))}</div>
           <div style="font-size:28px;font-weight:900;line-height:0.95;color:${DNR_BROWN};">${escapeHtml(getHuntCode(selectedHunt))}</div>
           <div style="font-size:18px;font-weight:800;line-height:1.1;color:var(--text);">${escapeHtml(getUnitName(selectedHunt) || getHuntTitle(selectedHunt))}</div>
         </div>
@@ -1047,17 +1047,21 @@ function renderOutfitters() {
   }
   container.innerHTML = matches.map(o => {
     const website = safe(o.website).trim();
-    const phone = normalizeListValues(o.phone)[0] || '';
+    const phone = getOutfitterPrimaryPhone(o);
     const logo = safe(o.logoUrl).trim();
+    const location = getOutfitterLocationText(o);
+    const tags = getOutfitterSummaryTags(o).slice(0, 3);
     return `
       <div class="outfitter-card">
         <div class="outfitter-card-header">
           ${logo ? `<img class="outfitter-card-logo" src="${escapeHtml(logo)}" alt="${escapeHtml(o.listingName || 'Outfitter logo')}">` : ''}
           <div class="outfitter-card-title-wrap">
             <div class="hunt-card-title">${escapeHtml(o.listingName || 'Outfitter')}</div>
-            <div class="hunt-card-meta">${escapeHtml(firstNonEmpty(o.verificationStatus, o.certLevel, o.listingType))}</div>
+            <div class="outfitter-card-subline">${escapeHtml(firstNonEmpty(o.verificationStatus, o.certLevel, o.listingType, 'Outfitter'))}</div>
           </div>
         </div>
+        ${location ? `<div class="outfitter-card-subline">${escapeHtml(location)}</div>` : ''}
+        ${tags.length ? `<div class="outfitter-card-meta-row">${tags.map(tag => `<span class="outfitter-card-chip">${escapeHtml(tag)}</span>`).join('')}</div>` : ''}
         ${website ? `<a class="outfitter-link" href="${escapeHtml(website)}" target="_blank" rel="noopener noreferrer">Visit website</a>` : ''}
         ${phone ? `<div class="hunt-card-meta">${escapeHtml(phone)}</div>` : ''}
       </div>`;
@@ -1066,29 +1070,72 @@ function renderOutfitters() {
 }
 
 function getOutfitterLocationText(outfitter) {
-  return firstNonEmpty(
-    safe(outfitter.address),
-    safe(outfitter.hometown),
-    safe(outfitter.city) ? `${safe(outfitter.city)}, Utah` : '',
-    safe(outfitter.region) ? `${safe(outfitter.region)}` : ''
-  );
+  const address = safe(outfitter.address).trim();
+  const hometown = safe(outfitter.hometown).trim();
+  const city = safe(outfitter.city).trim();
+  const region = safe(outfitter.region).trim();
+  const state = safe(outfitter.state).trim() || 'Utah';
+  if (address) return address;
+  if (hometown && city && hometown.toLowerCase() !== city.toLowerCase()) return `${hometown} | ${city}, ${state}`;
+  if (hometown) return hometown;
+  if (city) return `${city}, ${state}`;
+  if (region) return region;
+  return '';
+}
+function getOutfitterPrimaryPhone(outfitter) {
+  return normalizeListValues(outfitter.phone)[0] || '';
+}
+function getOutfitterSummaryTags(outfitter) {
+  const tags = [];
+  const listingType = firstNonEmpty(outfitter.verificationStatus, outfitter.certLevel, outfitter.listingType);
+  if (listingType) tags.push(listingType);
+  if (outfitter.guidedHunts) tags.push('Guided Hunts');
+  if (outfitter.packTrips) tags.push('Pack Trips');
+  if (outfitter.lodgingIncluded) tags.push('Lodging');
+  if (outfitter.archery) tags.push('Archery');
+  if (outfitter.muzzleloader) tags.push('Muzzleloader');
+  return Array.from(new Set(tags));
+}
+function getOutfitterGeocodeQueries(outfitter) {
+  const address = safe(outfitter.address).trim();
+  const hometown = safe(outfitter.hometown).trim();
+  const city = safe(outfitter.city).trim();
+  const region = safe(outfitter.region).trim();
+  const state = safe(outfitter.state).trim() || 'Utah';
+  const queries = [];
+  const pushQuery = value => {
+    const text = safe(value).trim();
+    if (!text) return;
+    if (/^utah$/i.test(text)) return;
+    if (!queries.includes(text)) queries.push(text);
+  };
+
+  pushQuery(address);
+  if (address && !/utah/i.test(address)) pushQuery(`${address}, ${state}`);
+  if (hometown && city && hometown.toLowerCase() !== city.toLowerCase()) pushQuery(`${hometown}, ${city}, ${state}`);
+  pushQuery(hometown && !/utah/i.test(hometown) ? `${hometown}, ${state}` : hometown);
+  pushQuery(city ? `${city}, ${state}` : '');
+  pushQuery(region && !/utah/i.test(region) ? `${region}, ${state}` : region);
+  return queries;
 }
 
 function buildOutfitterPopupCard(outfitter) {
   const logo = safe(outfitter.logoUrl).trim();
   const name = safe(outfitter.listingName).trim() || 'Outfitter';
   const website = safe(outfitter.website).trim();
-  const phone = normalizeListValues(outfitter.phone)[0] || '';
+  const phone = getOutfitterPrimaryPhone(outfitter);
   const location = getOutfitterLocationText(outfitter);
+  const tags = getOutfitterSummaryTags(outfitter).slice(0, 4);
   return `
-    <div style="display:grid;gap:8px;min-width:260px;max-width:320px;">
-      <div style="display:flex;align-items:center;gap:10px;">
-        ${logo ? `<img src="${escapeHtml(logo)}" alt="${escapeHtml(name)} logo" style="width:46px;height:46px;object-fit:contain;border-radius:8px;background:#fff;padding:3px;border:1px solid #d6c1ae;">` : ''}
+    <div style="display:grid;gap:10px;min-width:280px;max-width:340px;">
+      <div style="display:grid;grid-template-columns:58px minmax(0,1fr);align-items:center;gap:12px;">
+        ${logo ? `<img src="${escapeHtml(logo)}" alt="${escapeHtml(name)} logo" style="width:58px;height:58px;object-fit:cover;object-position:center;border-radius:12px;background:#fff;padding:3px;border:1px solid #d6c1ae;box-shadow:0 6px 14px rgba(0,0,0,.14);">` : ''}
         <div>
-          <div style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#bf6b34;">Vetted Outfitter</div>
-          <div style="font-size:16px;font-weight:900;color:#2b1c12;">${escapeHtml(name)}</div>
+          <div style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:${DNR_ORANGE};">Vetted Outfitter</div>
+          <div style="font-size:17px;font-weight:900;color:#2b1c12;line-height:1.15;">${escapeHtml(name)}</div>
         </div>
       </div>
+      ${tags.length ? `<div style="display:flex;flex-wrap:wrap;gap:6px;">${tags.map(tag => `<span style="display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;background:rgba(214,106,31,.11);border:1px solid rgba(214,106,31,.2);font-size:12px;font-weight:800;color:#3b2417;">${escapeHtml(tag)}</span>`).join('')}</div>` : ''}
       ${location ? `<div style="font-size:13px;color:#6b5646;line-height:1.35;">${escapeHtml(location)}</div>` : ''}
       ${phone ? `<div style="font-size:13px;color:#6b5646;">${escapeHtml(phone)}</div>` : ''}
       ${website ? `<a href="${escapeHtml(website)}" target="_blank" rel="noopener noreferrer" style="color:#2f7fd1;font-weight:800;text-decoration:none;">Visit website</a>` : ''}
@@ -1155,8 +1202,8 @@ function createOutfitterLogoMarker(position, outfitter) {
     const point = projection.fromLatLngToDivPixel(position);
     if (!point) return;
     this.div.style.position = 'absolute';
-    this.div.style.left = `${point.x - 24}px`;
-    this.div.style.top = `${point.y - 64}px`;
+    this.div.style.left = `${point.x - 29}px`;
+    this.div.style.top = `${point.y - 78}px`;
   };
   marker.onRemove = function() {
     if (this.div?.parentNode) this.div.parentNode.removeChild(this.div);
@@ -1171,15 +1218,28 @@ function geocodeOutfitter(outfitter) {
     return Promise.resolve(outfitterGeocodeCache.get(key));
   }
   if (!google.maps?.Geocoder) return Promise.resolve(null);
-  const query = getOutfitterLocationText(outfitter);
-  if (!query || query.toLowerCase() === 'utah') return Promise.resolve(null);
+  const queries = getOutfitterGeocodeQueries(outfitter);
+  if (!queries.length) return Promise.resolve(null);
   const geocoder = new google.maps.Geocoder();
-  return new Promise(resolve => {
-    geocoder.geocode({ address: query }, (results, status) => {
-      const loc = status === 'OK' && results?.[0]?.geometry?.location ? results[0].geometry.location : null;
-      outfitterGeocodeCache.set(key, loc);
-      resolve(loc);
-    });
+  return new Promise(async resolve => {
+    for (const query of queries) {
+      const loc = await new Promise(done => {
+        geocoder.geocode({
+          address: query,
+          componentRestrictions: { country: 'US', administrativeArea: 'UT' }
+        }, (results, status) => {
+          const result = status === 'OK' && results?.[0]?.geometry?.location ? results[0].geometry.location : null;
+          done(result);
+        });
+      });
+      if (loc) {
+        outfitterGeocodeCache.set(key, loc);
+        resolve(loc);
+        return;
+      }
+    }
+    outfitterGeocodeCache.set(key, null);
+    resolve(null);
   });
 }
 
@@ -1279,7 +1339,7 @@ function buildPopupListForMatches(matches) {
       <div style="display:flex;align-items:center;gap:10px;">
         <img src="${LOGO_DNR}" alt="Utah DNR logo" style="width:48px;height:48px;object-fit:contain;border-radius:8px;background:#fff;padding:3px;border:1px solid #d6c1ae;">
         <div>
-          <div style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#bf6b34;">DWR Hunt Unit</div>
+          <div style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:${DNR_ORANGE};">DWR Hunt Unit</div>
           <div style="font-size:15px;font-weight:900;color:#2b1c12;">Multiple Matching Hunts</div>
         </div>
       </div>
