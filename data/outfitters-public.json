@@ -1,0 +1,1286 @@
+[
+  {
+    "id": "outfitter-albrecht-outfitters",
+    "slug": "albrecht-outfitters",
+    "displayName": "Albrecht Outfitters",
+    "legalBusinessName": "",
+    "listingType": "Outfitter",
+    "publicStatus": "active",
+    "verificationStatus": "Vetted",
+    "certLevel": "",
+    "memberStatus": "unknown",
+    "referralStatus": "eligible",
+    "referralPriority": "standard",
+    "referralRotationGroup": "utah-vetted-default",
+    "contact": {
+      "primaryName": "Taylor Albrecht",
+      "ownerNames": [
+        "Taylor Albrecht",
+        "Taylor Albrecht*"
+      ],
+      "phonePrimary": "(435) 979-7227",
+      "phoneNumbers": [
+        "(435) 979-7227",
+        "435-979-7227"
+      ],
+      "emailPrimary": "tayloralbrecht@hotmail.com",
+      "emailAddresses": [
+        "tayloralbrecht@hotmail.com"
+      ],
+      "website": "https://albrechtoutfitting.com",
+      "facebookUrl": "",
+      "instagramHandle": "",
+      "youtubeUrl": ""
+    },
+    "branding": {
+      "logoUrl": "https://albrechtoutfitting.com/cdn/shop/files/Albrecht_Gold_Logo_wide_180x.png?v=1613413486",
+      "heroImageUrl": "",
+      "cardImageUrl": ""
+    },
+    "headquarters": {
+      "city": "",
+      "region": "Utah",
+      "state": "Utah",
+      "mailingAddress": "",
+      "publicMeetingLocation": "",
+      "latitude": null,
+      "longitude": null
+    },
+    "serviceArea": {
+      "speciesServed": [
+        "Deer"
+      ],
+      "unitsServed": [
+        "Fishlake",
+        "Boulder/Kaiparowits",
+        "Henry Mtns",
+        "Fillmore",
+        "Mt Dutton",
+        "Monroe",
+        "Beaver, East"
+      ],
+      "usfsForests": [
+        "Fishlake"
+      ],
+      "blmDistricts": [],
+      "countiesServed": [],
+      "wmasServed": [],
+      "statewide": false
+    },
+    "services": {
+      "guidedHunts": true,
+      "diySupport": false,
+      "trespassAccess": false,
+      "lodgingIncluded": false,
+      "mealsIncluded": false,
+      "packTrips": false,
+      "airportPickup": false,
+      "youthHunts": false,
+      "archery": false,
+      "muzzleloader": false,
+      "rifle": false,
+      "hamss": false,
+      "otherServices": []
+    },
+    "huntFit": {
+      "trophyFocus": false,
+      "generalSeasonFocus": false,
+      "limitedEntryFocus": false,
+      "oilFocus": false,
+      "speciesSummary": "Deer specialist",
+      "terrainSummary": "",
+      "publicLandStrength": "",
+      "accessSummary": ""
+    },
+    "compliance": {
+      "stateLicenseNumber": "",
+      "guideLicenseNumber": "",
+      "outfitterLicenseNumber": "",
+      "insuranceVerified": false,
+      "contractOnFile": false,
+      "vettingReviewedAt": "",
+      "vettingReviewedBy": "",
+      "nextReviewDue": ""
+    },
+    "publication": {
+      "shortDescription": "",
+      "longDescription": "",
+      "whyListed": "",
+      "featuredRank": 0,
+      "showOnPlanner": true,
+      "showOnPublicList": true,
+      "showOnHomepage": false
+    },
+    "internal": {
+      "sourceNotes": [
+        "First-pass normalization only",
+        "Spreadsheet import row 87",
+        "Column G parsed from outfitters_cleaned.xlsx row 87",
+        "Wix CSV compare merge",
+        "Google contacts CSV compare merge",
+        "Logo sourcing applied"
+      ],
+      "dataCompleteness": "medium",
+      "lastNormalizedAt": "2026-03-26",
+      "lastEditedBy": "Codex",
+      "migrationSource": "data/outfitters.json",
+      "reviewNotes": [
+        "First-pass normalization only",
+        "Spreadsheet import row 87",
+        "Column G parsed from row 87"
+      ]
+    },
+    "businessName": "Albrecht Outfitters"
+  },
+  {
+    "id": "outfitter-all-out-outfitters",
+    "slug": "all-out-outfitters",
+    "displayName": "All Out Outfitters",
+    "legalBusinessName": "",
+    "listingType": "Outfitter",
+    "publicStatus": "active",
+    "verificationStatus": "Vetted",
+    "certLevel": "",
+    "memberStatus": "unknown",
+    "referralStatus": "eligible",
+    "referralPriority": "standard",
+    "referralRotationGroup": "utah-vetted-default",
+    "contact": {
+      "primaryName": "Alan Wood",
+      "ownerNames": [
+        "Alan Wood",
+        "J.T. Robbins",
+        "Breanna Robbins",
+        "J.T. and Breanna Robbins",
+        "J.T. & Breanna Robbins",
+        "Jacob Robins",
+        "Alan Wood*",
+        "Jacob Robins*"
+      ],
+      "phonePrimary": "(970) 773-4898",
+      "phoneNumbers": [
+        "(970) 773-4898"
+      ],
+      "emailPrimary": "alloutoutfitters@gmail.com",
+      "emailAddresses": [
+        "alloutoutfitters@gmail.com",
+        "alan.wood@ipsc.com"
+      ],
+      "website": "https://alloutoutfitters.net",
+      "facebookUrl": "",
+      "instagramHandle": "",
+      "youtubeUrl": ""
+    },
+    "branding": {
+      "logoUrl": "",
+      "heroImageUrl": "",
+      "cardImageUrl": ""
+    },
+    "headquarters": {
+      "city": "RD, PO",
+      "region": "Utah",
+      "state": "Utah",
+      "mailingAddress": "1960 10 RD, PO BOX 523, Mack, CO, 81525, USA",
+      "publicMeetingLocation": "",
+      "latitude": null,
+      "longitude": null
+    },
+    "serviceArea": {
+      "speciesServed": [
+        "Deer"
+      ],
+      "unitsServed": [
+        "Fishlake",
+        "Boulder/Kaiparowits",
+        "Henry Mtns",
+        "Fillmore, Oak Creek LE",
+        "Mt Dutton",
+        "Monroe",
+        "Beaver, East"
+      ],
+      "usfsForests": [
+        "Fishlake"
+      ],
+      "blmDistricts": [],
+      "countiesServed": [],
+      "wmasServed": [],
+      "statewide": false
+    },
+    "services": {
+      "guidedHunts": true,
+      "diySupport": false,
+      "trespassAccess": false,
+      "lodgingIncluded": false,
+      "mealsIncluded": false,
+      "packTrips": false,
+      "airportPickup": false,
+      "youthHunts": false,
+      "archery": false,
+      "muzzleloader": false,
+      "rifle": false,
+      "hamss": false,
+      "otherServices": []
+    },
+    "huntFit": {
+      "trophyFocus": false,
+      "generalSeasonFocus": false,
+      "limitedEntryFocus": false,
+      "oilFocus": false,
+      "speciesSummary": "Deer specialist",
+      "terrainSummary": "",
+      "publicLandStrength": "",
+      "accessSummary": ""
+    },
+    "compliance": {
+      "stateLicenseNumber": "",
+      "guideLicenseNumber": "",
+      "outfitterLicenseNumber": "",
+      "insuranceVerified": false,
+      "contractOnFile": false,
+      "vettingReviewedAt": "",
+      "vettingReviewedBy": "",
+      "nextReviewDue": ""
+    },
+    "publication": {
+      "shortDescription": "",
+      "longDescription": "",
+      "whyListed": "",
+      "featuredRank": 0,
+      "showOnPlanner": true,
+      "showOnPublicList": true,
+      "showOnHomepage": false
+    },
+    "internal": {
+      "sourceNotes": [
+        "First-pass normalization only",
+        "Spreadsheet import row 3",
+        "Spreadsheet import row 36",
+        "Column G parsed from outfitters_cleaned.xlsx row 36",
+        "Wix CSV compare merge",
+        "Google contacts CSV compare merge"
+      ],
+      "dataCompleteness": "medium",
+      "lastNormalizedAt": "2026-03-26",
+      "lastEditedBy": "Codex",
+      "migrationSource": "data/outfitters.json",
+      "reviewNotes": [
+        "First-pass normalization only",
+        "Spreadsheet import row 3",
+        "Spreadsheet import row 36",
+        "Column G parsed from row 36"
+      ]
+    },
+    "businessName": "All Out Outfitters"
+  },
+  {
+    "id": "outfitter-alpha-outfitters",
+    "slug": "alpha-outfitters",
+    "displayName": "Garrett Smith Hunting",
+    "legalBusinessName": "ALPHA OUTFITTERS G.S. HUNTING",
+    "listingType": "Outfitter",
+    "publicStatus": "active",
+    "verificationStatus": "Vetted",
+    "certLevel": "",
+    "memberStatus": "unknown",
+    "referralStatus": "eligible",
+    "referralPriority": "standard",
+    "referralRotationGroup": "utah-vetted-default",
+    "contact": {
+      "primaryName": "Garrett Smith",
+      "ownerNames": [
+        "Garrett Smith"
+      ],
+      "phonePrimary": "huntalphaoutfitters@gmail.com",
+      "phoneNumbers": [
+        "huntalphaoutfitters@gmail.com"
+      ],
+      "emailPrimary": "thealphaoutfitter@gmail.com",
+      "emailAddresses": [
+        "thealphaoutfitter@gmail.com",
+        "huntalphaoutfitters@gmail.com",
+        "thealphaout?tter@gmail.com"
+      ],
+      "website": "",
+      "facebookUrl": "",
+      "instagramHandle": "",
+      "youtubeUrl": ""
+    },
+    "branding": {
+      "logoUrl": "",
+      "heroImageUrl": "",
+      "cardImageUrl": ""
+    },
+    "headquarters": {
+      "city": "Spanish Fork",
+      "region": "Utah",
+      "state": "Utah",
+      "mailingAddress": "7620 S 2200 W, Spanish Fork, UT, 84660",
+      "publicMeetingLocation": "",
+      "latitude": null,
+      "longitude": null
+    },
+    "serviceArea": {
+      "speciesServed": [
+        "Deer"
+      ],
+      "unitsServed": [
+        "Fishlake",
+        "Thousand Lakes",
+        "Boulder/Kaiparowits",
+        "Henry Mtns",
+        "Fillmore, Oak Creek LE",
+        "Mt Dutton",
+        "Monroe",
+        "Beaver, East",
+        "Manti/San Rafael"
+      ],
+      "usfsForests": [
+        "Duschene",
+        "Dixie - Lake Powell",
+        "Manti LaSal",
+        "Fishlake",
+        "Duschene\nDixie – Lake Powell Manti LaSal     Fishlake"
+      ],
+      "blmDistricts": [
+        "Grand Staircase",
+        "Kanab",
+        "Grand Staircase   Kanab"
+      ],
+      "countiesServed": [],
+      "wmasServed": [],
+      "statewide": false
+    },
+    "services": {
+      "guidedHunts": true,
+      "diySupport": false,
+      "trespassAccess": false,
+      "lodgingIncluded": false,
+      "mealsIncluded": false,
+      "packTrips": false,
+      "airportPickup": false,
+      "youthHunts": false,
+      "archery": false,
+      "muzzleloader": false,
+      "rifle": false,
+      "hamss": false,
+      "otherServices": []
+    },
+    "huntFit": {
+      "trophyFocus": false,
+      "generalSeasonFocus": false,
+      "limitedEntryFocus": false,
+      "oilFocus": false,
+      "speciesSummary": "Deer specialist",
+      "terrainSummary": "",
+      "publicLandStrength": "",
+      "accessSummary": ""
+    },
+    "compliance": {
+      "stateLicenseNumber": "",
+      "guideLicenseNumber": "",
+      "outfitterLicenseNumber": "",
+      "insuranceVerified": false,
+      "contractOnFile": false,
+      "vettingReviewedAt": "",
+      "vettingReviewedBy": "",
+      "nextReviewDue": ""
+    },
+    "publication": {
+      "shortDescription": "",
+      "longDescription": "",
+      "whyListed": "",
+      "featuredRank": 0,
+      "showOnPlanner": true,
+      "showOnPublicList": true,
+      "showOnHomepage": false
+    },
+    "internal": {
+      "sourceNotes": [
+        "First-pass normalization only",
+        "Google contacts CSV compare merge",
+        "2026-03-26 cleanup: business renamed from Alpha Outfitters to Garrett Smith Hunting",
+        "Wix CSV compare merge"
+      ],
+      "dataCompleteness": "partial",
+      "lastNormalizedAt": "2026-03-26",
+      "lastEditedBy": "Codex",
+      "migrationSource": "data/outfitters.json",
+      "reviewNotes": [
+        "First-pass normalization only",
+        "2026-03-26 cleanup: business renamed from Alpha Outfitters to Garrett Smith Hunting"
+      ]
+    },
+    "businessName": "Garrett Smith Hunting"
+  },
+  {
+    "id": "outfitter-apex-outfitters",
+    "slug": "apex-outfitters",
+    "displayName": "Apex Outfitters",
+    "legalBusinessName": "",
+    "listingType": "Outfitter",
+    "publicStatus": "active",
+    "verificationStatus": "Vetted",
+    "certLevel": "",
+    "memberStatus": "unknown",
+    "referralStatus": "eligible",
+    "referralPriority": "standard",
+    "referralRotationGroup": "utah-vetted-default",
+    "contact": {
+      "primaryName": "Brett Guymon",
+      "ownerNames": [
+        "Brett Guymon",
+        "Brett Guymon*"
+      ],
+      "phonePrimary": "(435) 749-0060",
+      "phoneNumbers": [
+        "(435) 749-0060",
+        "435-749-0060",
+        "'+1 435-749-0060",
+        "+1 435-749-0060 ::: 435-749-0060"
+      ],
+      "emailPrimary": "brettguymon77@gmail.com",
+      "emailAddresses": [
+        "brettguymon77@gmail.com"
+      ],
+      "website": "https://apexoutfitters.net",
+      "facebookUrl": "",
+      "instagramHandle": "",
+      "youtubeUrl": ""
+    },
+    "branding": {
+      "logoUrl": "",
+      "heroImageUrl": "",
+      "cardImageUrl": ""
+    },
+    "headquarters": {
+      "city": "CLAWSON",
+      "region": "Utah",
+      "state": "Utah",
+      "mailingAddress": "785 NORTH HWY 10, PO Box 125, CLAWSON, UT, 84516",
+      "publicMeetingLocation": "",
+      "latitude": null,
+      "longitude": null
+    },
+    "serviceArea": {
+      "speciesServed": [
+        "Deer",
+        "Elk"
+      ],
+      "unitsServed": [
+        "Manti/San Rafael",
+        "La Sal Mtns",
+        "Dolores Triangle",
+        "Manti",
+        "San Juan",
+        "La Sal, Dolores Triangle"
+      ],
+      "usfsForests": [
+        "Manti LaSal",
+        "Manti Lasal"
+      ],
+      "blmDistricts": [],
+      "countiesServed": [],
+      "wmasServed": [],
+      "statewide": false
+    },
+    "services": {
+      "guidedHunts": true,
+      "diySupport": false,
+      "trespassAccess": false,
+      "lodgingIncluded": false,
+      "mealsIncluded": false,
+      "packTrips": false,
+      "airportPickup": false,
+      "youthHunts": false,
+      "archery": false,
+      "muzzleloader": false,
+      "rifle": false,
+      "hamss": false,
+      "otherServices": []
+    },
+    "huntFit": {
+      "trophyFocus": false,
+      "generalSeasonFocus": false,
+      "limitedEntryFocus": false,
+      "oilFocus": false,
+      "speciesSummary": "Deer and Elk",
+      "terrainSummary": "",
+      "publicLandStrength": "",
+      "accessSummary": ""
+    },
+    "compliance": {
+      "stateLicenseNumber": "",
+      "guideLicenseNumber": "",
+      "outfitterLicenseNumber": "",
+      "insuranceVerified": false,
+      "contractOnFile": false,
+      "vettingReviewedAt": "",
+      "vettingReviewedBy": "",
+      "nextReviewDue": ""
+    },
+    "publication": {
+      "shortDescription": "",
+      "longDescription": "",
+      "whyListed": "",
+      "featuredRank": 0,
+      "showOnPlanner": true,
+      "showOnPublicList": true,
+      "showOnHomepage": false
+    },
+    "internal": {
+      "sourceNotes": [
+        "First-pass normalization only",
+        "Spreadsheet import row 8",
+        "Column G parsed from outfitters_cleaned.xlsx row 8",
+        "Wix CSV compare merge",
+        "Google contacts CSV compare merge"
+      ],
+      "dataCompleteness": "medium",
+      "lastNormalizedAt": "2026-03-26",
+      "lastEditedBy": "Codex",
+      "migrationSource": "data/outfitters.json",
+      "reviewNotes": [
+        "First-pass normalization only",
+        "Spreadsheet import row 8",
+        "Column G parsed from row 8"
+      ]
+    },
+    "businessName": "Apex Outfitters"
+  },
+  {
+    "id": "outfitter-battleground-g-o",
+    "slug": "battleground-g-o",
+    "displayName": "Battleground G/O",
+    "legalBusinessName": "",
+    "listingType": "Outfitter",
+    "publicStatus": "active",
+    "verificationStatus": "Vetted",
+    "certLevel": "",
+    "memberStatus": "unknown",
+    "referralStatus": "eligible",
+    "referralPriority": "standard",
+    "referralRotationGroup": "utah-vetted-default",
+    "contact": {
+      "primaryName": "JL Larsen",
+      "ownerNames": [
+        "JL Larsen",
+        "JL and Sarah Larsen",
+        "Jonathan Loveless",
+        "Brady Loveless",
+        "Kelly Churchill",
+        "Kevin Palmer",
+        "Mike Bybee",
+        "Shane Scott",
+        "Wade R. Oakden",
+        "Richard Oakden",
+        "JL Larsen*  SARAH LARSEN",
+        "Jonathan Loveless*",
+        "Shane Scott*",
+        "Kevin Palmer*",
+        "Richard Oakden*"
+      ],
+      "phonePrimary": "(801) 647-5661",
+      "phoneNumbers": [
+        "(801) 647-5661",
+        "(801) 319-3226",
+        "(435) 691-2179",
+        "(801) 540-4152",
+        "(435) 201-4088",
+        "(435) 421-1668",
+        "801-319-3226",
+        "(435)-201-4088",
+        "801-540-4152"
+      ],
+      "emailPrimary": "freedomrv@hotmail.com",
+      "emailAddresses": [
+        "freedomrv@hotmail.com",
+        "lonetreeoutfitters@hotmail.com",
+        "k_j_churchill@hotmail.com",
+        "silversageoutfitters@hotmail.com",
+        "mikby1@hotmail.com",
+        "shanescottoutfitting@hotmail.com",
+        "wkoakden@hotmail.com"
+      ],
+      "website": "https://www.lonetreeoutfitters.com/",
+      "facebookUrl": "",
+      "instagramHandle": "",
+      "youtubeUrl": ""
+    },
+    "branding": {
+      "logoUrl": "https://www.lonetreeoutfitters.com/assets/images/LT_full_344.png",
+      "heroImageUrl": "",
+      "cardImageUrl": ""
+    },
+    "headquarters": {
+      "city": "Mayfield",
+      "region": "Utah",
+      "state": "Utah",
+      "mailingAddress": "780 N 20 W, Mayfield, UT, 8464",
+      "publicMeetingLocation": "",
+      "latitude": null,
+      "longitude": null
+    },
+    "serviceArea": {
+      "speciesServed": [
+        "Deer"
+      ],
+      "unitsServed": [
+        "Fishlake",
+        "Thousand Lakes",
+        "Boulder/Kaiparowits",
+        "Henry Mtns",
+        "Fillmore, Oak Creek LE",
+        "Mt Dutton",
+        "Monroe"
+      ],
+      "usfsForests": [
+        "Fishlake",
+        "UWC",
+        "Manti LaSal",
+        "Spanish Fork",
+        "Dixie - Lake Powell",
+        "UWC\n Manti LaSal Fishlake",
+        "Spanish Fork Manti LaSal Fishlake",
+        "Dixie – Lake Powell"
+      ],
+      "blmDistricts": [
+        "Grand Staircase",
+        "Kanab",
+        "Cedar City",
+        "Grand Staircase Kanab Cedar City"
+      ],
+      "countiesServed": [],
+      "wmasServed": [],
+      "statewide": false
+    },
+    "services": {
+      "guidedHunts": true,
+      "diySupport": false,
+      "trespassAccess": false,
+      "lodgingIncluded": false,
+      "mealsIncluded": false,
+      "packTrips": false,
+      "airportPickup": false,
+      "youthHunts": false,
+      "archery": false,
+      "muzzleloader": false,
+      "rifle": false,
+      "hamss": false,
+      "otherServices": []
+    },
+    "huntFit": {
+      "trophyFocus": false,
+      "generalSeasonFocus": false,
+      "limitedEntryFocus": false,
+      "oilFocus": false,
+      "speciesSummary": "Deer specialist",
+      "terrainSummary": "",
+      "publicLandStrength": "",
+      "accessSummary": ""
+    },
+    "compliance": {
+      "stateLicenseNumber": "",
+      "guideLicenseNumber": "",
+      "outfitterLicenseNumber": "",
+      "insuranceVerified": false,
+      "contractOnFile": false,
+      "vettingReviewedAt": "",
+      "vettingReviewedBy": "",
+      "nextReviewDue": ""
+    },
+    "publication": {
+      "shortDescription": "",
+      "longDescription": "",
+      "whyListed": "",
+      "featuredRank": 0,
+      "showOnPlanner": true,
+      "showOnPublicList": true,
+      "showOnHomepage": false
+    },
+    "internal": {
+      "sourceNotes": [
+        "First-pass normalization only",
+        "Spreadsheet import row 47",
+        "Spreadsheet import row 51",
+        "Email 1: k_j_churchill@hotmail.com\nAddress 1 - Street: Cheyenne\nAddress 2 - Street: Wyoming\nCreated At (UTC+0): 2026-02-23 16:12\nEmail subscriber status: Never subscribed\nLast Activity: Submitted a form\nLast Activity Date (UTC+0): 2026-02-23 16:12\nSource: Form Submission\nLanguage: en",
+        "Spreadsheet import row 54",
+        "Spreadsheet import row 55",
+        "Spreadsheet import row 62",
+        "Spreadsheet import row 81",
+        "Spreadsheet import row 106",
+        "Wix CSV compare merge",
+        "Google contacts CSV compare merge",
+        "Logo sourcing applied"
+      ],
+      "dataCompleteness": "medium",
+      "lastNormalizedAt": "2026-03-26",
+      "lastEditedBy": "Codex",
+      "migrationSource": "data/outfitters.json",
+      "reviewNotes": [
+        "First-pass normalization only",
+        "Spreadsheet import row 47",
+        "Spreadsheet import row 51",
+        "Spreadsheet import row 54",
+        "Spreadsheet import row 55",
+        "Spreadsheet import row 62",
+        "Spreadsheet import row 81",
+        "Spreadsheet import row 106"
+      ]
+    },
+    "businessName": "Battleground G/O"
+  },
+  {
+    "id": "outfitter-beaver-mountain-outfitters",
+    "slug": "beaver-mountain-outfitters",
+    "displayName": "Beaver Mountain Outfitters",
+    "legalBusinessName": "",
+    "listingType": "Outfitter",
+    "publicStatus": "active",
+    "verificationStatus": "Vetted",
+    "certLevel": "",
+    "memberStatus": "unknown",
+    "referralStatus": "eligible",
+    "referralPriority": "standard",
+    "referralRotationGroup": "utah-vetted-default",
+    "contact": {
+      "primaryName": "Slade Edwards",
+      "ownerNames": [
+        "Slade Edwards",
+        "Edwards Slade",
+        "Mitchell Carter",
+        "Mitchell Carter*"
+      ],
+      "phonePrimary": "(435) 421-1850",
+      "phoneNumbers": [
+        "(435) 421-1850"
+      ],
+      "emailPrimary": "edwardsslade@gmail.com",
+      "emailAddresses": [
+        "edwardsslade@gmail.com",
+        "aust4.ab@gmail.com"
+      ],
+      "website": "https://www.facebook.com/profile.php?id=61576620110758#",
+      "facebookUrl": "",
+      "instagramHandle": "",
+      "youtubeUrl": ""
+    },
+    "branding": {
+      "logoUrl": "",
+      "heroImageUrl": "",
+      "cardImageUrl": ""
+    },
+    "headquarters": {
+      "city": "Beaver",
+      "region": "Utah",
+      "state": "Utah",
+      "mailingAddress": "2218 N HWY 357, Beaver, UT, 84713",
+      "publicMeetingLocation": "",
+      "latitude": null,
+      "longitude": null
+    },
+    "serviceArea": {
+      "speciesServed": [
+        "Deer"
+      ],
+      "unitsServed": [
+        "Fishlake",
+        "Thousand Lakes",
+        "Boulder/Kaiparowits",
+        "Henry Mtns",
+        "Fillmore, Oak Creek LE",
+        "Mt Dutton",
+        "Monroe",
+        "Beaver, East"
+      ],
+      "usfsForests": [
+        "Fishlake Dixie-Lake Powell",
+        "Fishlake",
+        "Dixie - Lake Powell",
+        "Fishlake Dixie-lake Powell",
+        "Fishlake                 Dixie-Lake Powell"
+      ],
+      "blmDistricts": [],
+      "countiesServed": [],
+      "wmasServed": [],
+      "statewide": false
+    },
+    "services": {
+      "guidedHunts": true,
+      "diySupport": false,
+      "trespassAccess": false,
+      "lodgingIncluded": false,
+      "mealsIncluded": false,
+      "packTrips": false,
+      "airportPickup": false,
+      "youthHunts": false,
+      "archery": false,
+      "muzzleloader": false,
+      "rifle": false,
+      "hamss": false,
+      "otherServices": []
+    },
+    "huntFit": {
+      "trophyFocus": false,
+      "generalSeasonFocus": false,
+      "limitedEntryFocus": false,
+      "oilFocus": false,
+      "speciesSummary": "Deer specialist",
+      "terrainSummary": "",
+      "publicLandStrength": "",
+      "accessSummary": ""
+    },
+    "compliance": {
+      "stateLicenseNumber": "",
+      "guideLicenseNumber": "",
+      "outfitterLicenseNumber": "",
+      "insuranceVerified": false,
+      "contractOnFile": false,
+      "vettingReviewedAt": "",
+      "vettingReviewedBy": "",
+      "nextReviewDue": ""
+    },
+    "publication": {
+      "shortDescription": "",
+      "longDescription": "",
+      "whyListed": "",
+      "featuredRank": 0,
+      "showOnPlanner": true,
+      "showOnPublicList": true,
+      "showOnHomepage": false
+    },
+    "internal": {
+      "sourceNotes": [
+        "First-pass normalization only",
+        "Spreadsheet import row 28",
+        "Column G parsed from outfitters_cleaned.xlsx row 28",
+        "Wix CSV compare merge",
+        "Google contacts CSV compare merge"
+      ],
+      "dataCompleteness": "medium",
+      "lastNormalizedAt": "2026-03-26",
+      "lastEditedBy": "Codex",
+      "migrationSource": "data/outfitters.json",
+      "reviewNotes": [
+        "First-pass normalization only",
+        "Spreadsheet import row 28",
+        "Column G parsed from row 28"
+      ]
+    },
+    "businessName": "Beaver Mountain Outfitters"
+  },
+  {
+    "id": "outfitter-book-cliff-outfitters",
+    "slug": "book-cliff-outfitters",
+    "displayName": "Book Cliff Outfitters",
+    "legalBusinessName": "",
+    "listingType": "Outfitter",
+    "publicStatus": "active",
+    "verificationStatus": "Vetted",
+    "certLevel": "",
+    "memberStatus": "unknown",
+    "referralStatus": "eligible",
+    "referralPriority": "standard",
+    "referralRotationGroup": "utah-vetted-default",
+    "contact": {
+      "primaryName": "Tim Pilling",
+      "ownerNames": [
+        "Tim Pilling",
+        "Tim Pilling*"
+      ],
+      "phonePrimary": "(970) 327-4787",
+      "phoneNumbers": [
+        "(970) 327-4787",
+        "970.327.4787"
+      ],
+      "emailPrimary": "tjpilling@gmail.com",
+      "emailAddresses": [
+        "tjpilling@gmail.com",
+        "bookcliffoutfitters77@gmail.com"
+      ],
+      "website": "https://www.bookcliffoutfitters.com",
+      "facebookUrl": "",
+      "instagramHandle": "",
+      "youtubeUrl": ""
+    },
+    "branding": {
+      "logoUrl": "https://static.wixstatic.com/media/7d9f06_6f01f903e0044592b7dd0bb4fc719adc.png/v1/fill/w_454,h_104,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/7d9f06_6f01f903e0044592b7dd0bb4fc719adc.png",
+      "heroImageUrl": "",
+      "cardImageUrl": ""
+    },
+    "headquarters": {
+      "city": "",
+      "region": "Utah",
+      "state": "Utah",
+      "mailingAddress": "927 MILLSTREAM WY, Bountiful, UT, 84010",
+      "publicMeetingLocation": "",
+      "latitude": null,
+      "longitude": null
+    },
+    "serviceArea": {
+      "speciesServed": [
+        "Deer"
+      ],
+      "unitsServed": [],
+      "usfsForests": [
+        "UWC"
+      ],
+      "blmDistricts": [
+        "Grand Staircase Kanab",
+        "Grand Staircase   Kanab"
+      ],
+      "countiesServed": [],
+      "wmasServed": [],
+      "statewide": false
+    },
+    "services": {
+      "guidedHunts": true,
+      "diySupport": false,
+      "trespassAccess": false,
+      "lodgingIncluded": false,
+      "mealsIncluded": false,
+      "packTrips": false,
+      "airportPickup": false,
+      "youthHunts": false,
+      "archery": false,
+      "muzzleloader": false,
+      "rifle": false,
+      "hamss": false,
+      "otherServices": []
+    },
+    "huntFit": {
+      "trophyFocus": false,
+      "generalSeasonFocus": false,
+      "limitedEntryFocus": false,
+      "oilFocus": false,
+      "speciesSummary": "Deer specialist",
+      "terrainSummary": "",
+      "publicLandStrength": "",
+      "accessSummary": ""
+    },
+    "compliance": {
+      "stateLicenseNumber": "",
+      "guideLicenseNumber": "",
+      "outfitterLicenseNumber": "",
+      "insuranceVerified": false,
+      "contractOnFile": false,
+      "vettingReviewedAt": "",
+      "vettingReviewedBy": "",
+      "nextReviewDue": ""
+    },
+    "publication": {
+      "shortDescription": "",
+      "longDescription": "",
+      "whyListed": "",
+      "featuredRank": 0,
+      "showOnPlanner": true,
+      "showOnPublicList": true,
+      "showOnHomepage": false
+    },
+    "internal": {
+      "sourceNotes": [
+        "First-pass normalization only",
+        "Wix CSV compare merge",
+        "Google contacts CSV compare merge",
+        "Logo sourcing applied"
+      ],
+      "dataCompleteness": "partial",
+      "lastNormalizedAt": "2026-03-26",
+      "lastEditedBy": "Codex",
+      "migrationSource": "data/outfitters.json",
+      "reviewNotes": [
+        "First-pass normalization only"
+      ]
+    },
+    "businessName": "Book Cliff Outfitters"
+  },
+  {
+    "id": "outfitter-cisco-outfitting-travis-kruckenberg-outfitting",
+    "slug": "cisco-outfitting-travis-kruckenberg-outfitting",
+    "displayName": "Cisco Outfitting Travis Kruckenberg Outfitting",
+    "legalBusinessName": "",
+    "listingType": "Outfitter",
+    "publicStatus": "active",
+    "verificationStatus": "Vetted",
+    "certLevel": "",
+    "memberStatus": "unknown",
+    "referralStatus": "eligible",
+    "referralPriority": "standard",
+    "referralRotationGroup": "utah-vetted-default",
+    "contact": {
+      "primaryName": "Travis Kruckenberg",
+      "ownerNames": [
+        "Travis Kruckenberg"
+      ],
+      "phonePrimary": "(970) 216-9694",
+      "phoneNumbers": [
+        "(970) 216-9694"
+      ],
+      "emailPrimary": "traviskruckenberg@live.com",
+      "emailAddresses": [
+        "traviskruckenberg@live.com"
+      ],
+      "website": "https://www.traviskruckenbergoutfitting.com",
+      "facebookUrl": "",
+      "instagramHandle": "",
+      "youtubeUrl": ""
+    },
+    "branding": {
+      "logoUrl": "https://static.wixstatic.com/media/2bb04c_393d7cebc97d4140944dfd56c8d34d09~mv2.png/v1/fill/w_181,h_185,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/logo%20TKO_edited.png",
+      "heroImageUrl": "",
+      "cardImageUrl": ""
+    },
+    "headquarters": {
+      "city": "",
+      "region": "Utah",
+      "state": "Utah",
+      "mailingAddress": "",
+      "publicMeetingLocation": "",
+      "latitude": null,
+      "longitude": null
+    },
+    "serviceArea": {
+      "speciesServed": [
+        "Deer",
+        "Elk"
+      ],
+      "unitsServed": [
+        "Manti/San Rafael",
+        "La Sal Mtns",
+        "Dolores Triangle",
+        "Manti",
+        "San Juan",
+        "La Sal, Dolores Triangle"
+      ],
+      "usfsForests": [
+        "Manti LaSal"
+      ],
+      "blmDistricts": [],
+      "countiesServed": [],
+      "wmasServed": [],
+      "statewide": false
+    },
+    "services": {
+      "guidedHunts": true,
+      "diySupport": false,
+      "trespassAccess": false,
+      "lodgingIncluded": false,
+      "mealsIncluded": false,
+      "packTrips": false,
+      "airportPickup": false,
+      "youthHunts": false,
+      "archery": false,
+      "muzzleloader": false,
+      "rifle": false,
+      "hamss": false,
+      "otherServices": []
+    },
+    "huntFit": {
+      "trophyFocus": false,
+      "generalSeasonFocus": false,
+      "limitedEntryFocus": false,
+      "oilFocus": false,
+      "speciesSummary": "Deer and Elk",
+      "terrainSummary": "",
+      "publicLandStrength": "",
+      "accessSummary": ""
+    },
+    "compliance": {
+      "stateLicenseNumber": "",
+      "guideLicenseNumber": "",
+      "outfitterLicenseNumber": "",
+      "insuranceVerified": false,
+      "contractOnFile": false,
+      "vettingReviewedAt": "",
+      "vettingReviewedBy": "",
+      "nextReviewDue": ""
+    },
+    "publication": {
+      "shortDescription": "",
+      "longDescription": "",
+      "whyListed": "",
+      "featuredRank": 0,
+      "showOnPlanner": true,
+      "showOnPublicList": true,
+      "showOnHomepage": false
+    },
+    "internal": {
+      "sourceNotes": [
+        "First-pass normalization only",
+        "Spreadsheet import row 94",
+        "Wix CSV compare merge",
+        "Google contacts CSV compare merge",
+        "Logo sourcing applied"
+      ],
+      "dataCompleteness": "medium",
+      "lastNormalizedAt": "2026-03-26",
+      "lastEditedBy": "Codex",
+      "migrationSource": "data/outfitters.json",
+      "reviewNotes": [
+        "First-pass normalization only",
+        "Spreadsheet import row 94"
+      ]
+    },
+    "businessName": "Cisco Outfitting Travis Kruckenberg Outfitting"
+  },
+  {
+    "id": "outfitter-wild-eyez-outfitters",
+    "slug": "wild-eyez-outfitters",
+    "displayName": "Wild Eyez Outfitters",
+    "legalBusinessName": "",
+    "listingType": "Outfitter",
+    "publicStatus": "active",
+    "verificationStatus": "Vetted",
+    "certLevel": "CPO",
+    "memberStatus": "member",
+    "referralStatus": "eligible",
+    "referralPriority": "standard",
+    "referralRotationGroup": "utah-vetted-default",
+    "contact": {
+      "primaryName": "Tyler Miller",
+      "ownerNames": [
+        "Tyler Miller",
+        "Stacey Miller",
+        "Tyler Miller*"
+      ],
+      "phonePrimary": "(435) 851-6480",
+      "phoneNumbers": [
+        "(435) 851-6480",
+        "(435) 340-0474",
+        "'+1 435-340-0474",
+        "340-0474",
+        "435-851-6480",
+        "'+1 435-851-6480"
+      ],
+      "emailPrimary": "tyler@wildeyez.net",
+      "emailAddresses": [
+        "tyler@wildeyez.net",
+        "stacey.miller@ssanpete.org",
+        "millerstacey18@gmail.com",
+        "tyler@uoga.org",
+        "millertyler18@gmail.com",
+        "millertyler18@gmail.com ::: https://www.wildeyez.net"
+      ],
+      "website": "https://www.wildeyez.net",
+      "facebookUrl": "",
+      "instagramHandle": "",
+      "youtubeUrl": ""
+    },
+    "branding": {
+      "logoUrl": "https://static.wixstatic.com/media/43f827_182f1744babc4ce393b4d1d2358018a3~mv2.png",
+      "heroImageUrl": "",
+      "cardImageUrl": ""
+    },
+    "headquarters": {
+      "city": "Manti",
+      "region": "Utah",
+      "state": "Utah",
+      "mailingAddress": "Manti, 84642, 242 North 300 East, 242 N 300 E, MANTI, UT. 84642, MANTI",
+      "publicMeetingLocation": "",
+      "latitude": null,
+      "longitude": null
+    },
+    "serviceArea": {
+      "speciesServed": [
+        "Elk",
+        "Deer"
+      ],
+      "unitsServed": [
+        "Beaver, East",
+        "Fishlake/Thousand Lakes",
+        "Fillmore, Pahvant",
+        "Manti",
+        "Manti/San Rafael",
+        "Monroe",
+        "Nebo",
+        "Nebo/San Pitch Mtns"
+      ],
+      "usfsForests": [
+        "Fishlake NF - Richfield",
+        "Manti-La Sal NF - Sanpete",
+        "Spanish Fork",
+        "Manti LaSal",
+        "Fishlake",
+        "Spanish Fork Manti Lasal Fishlake"
+      ],
+      "blmDistricts": [
+        "Richfield"
+      ],
+      "countiesServed": [],
+      "wmasServed": [],
+      "statewide": false
+    },
+    "services": {
+      "guidedHunts": true,
+      "diySupport": false,
+      "trespassAccess": false,
+      "lodgingIncluded": false,
+      "mealsIncluded": false,
+      "packTrips": false,
+      "airportPickup": false,
+      "youthHunts": false,
+      "archery": false,
+      "muzzleloader": false,
+      "rifle": false,
+      "hamss": false,
+      "otherServices": []
+    },
+    "huntFit": {
+      "trophyFocus": false,
+      "generalSeasonFocus": false,
+      "limitedEntryFocus": false,
+      "oilFocus": false,
+      "speciesSummary": "Elk and Deer",
+      "terrainSummary": "",
+      "publicLandStrength": "",
+      "accessSummary": ""
+    },
+    "compliance": {
+      "stateLicenseNumber": "",
+      "guideLicenseNumber": "",
+      "outfitterLicenseNumber": "",
+      "insuranceVerified": false,
+      "contractOnFile": false,
+      "vettingReviewedAt": "",
+      "vettingReviewedBy": "",
+      "nextReviewDue": ""
+    },
+    "publication": {
+      "shortDescription": "",
+      "longDescription": "",
+      "whyListed": "",
+      "featuredRank": 0,
+      "showOnPlanner": true,
+      "showOnPublicList": true,
+      "showOnHomepage": false
+    },
+    "internal": {
+      "sourceNotes": [
+        "Known-good trial row",
+        "Spreadsheet import row 84",
+        "Spreadsheet import row 102",
+        "Column G parsed from outfitters_cleaned.xlsx row 84",
+        "Column G parsed from outfitters_cleaned.xlsx row 102",
+        "Wix CSV compare merge",
+        "Google contacts CSV compare merge"
+      ],
+      "dataCompleteness": "medium",
+      "lastNormalizedAt": "2026-03-26",
+      "lastEditedBy": "Codex",
+      "migrationSource": "data/outfitters.json",
+      "reviewNotes": [
+        "Known-good trial row",
+        "Spreadsheet import row 84",
+        "Spreadsheet import row 102",
+        "Address 1 - Type: HOME",
+        "Address 1 - City: Manti",
+        "Address 1 - State/Region: Utah",
+        "Address 1 - Zip: 84642",
+        "Address 1 - Country: United States",
+        "Column G parsed from row 84",
+        "Address 2 - City: 5/25/2025 15:51",
+        "Column G parsed from row 102"
+      ]
+    },
+    "businessName": "Wild Eyez Outfitters"
+  }
+]

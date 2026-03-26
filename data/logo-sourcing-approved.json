@@ -1,0 +1,274 @@
+[
+  {
+    "id": "outfitter-5k-outfitters",
+    "selectedLogoUrl": "https://scontent-den2-1.xx.fbcdn.net/v/t39.30808-1/594628893_25476438041989389_3764497688639800521_n.jpg?stp=dst-jpg_tt6&cstp=mx1110x1110&ctp=s720x720&_nc_cat=105&ccb=1-7&_nc_sid=3ab345&_nc_ohc=V_OnBOJvKtAQ7kNvwGLjUXJ&_nc_oc=Ado5fKuzDn1qFI5XwGd6PlB9XCma30tn38Kkg22Nb4Ck0kye_cNsD6ClN3py4ndk8vs&_nc_zt=24&_nc_ht=scontent-den2-1.xx&_nc_gid=DjWJ01yBg-f4cc5NYzEsow&_nc_ss=7a30f&oh=00_AfxohZGPCwri8AMgCrcoozN-6LKTy1aMPEqxnA9CxxCxQA&oe=69CB4C24",
+    "sourcePageUrl": "https://www.facebook.com/kenzie.kylerbowden",
+    "sourceMethod": "facebook-profile-image",
+    "confidence": "medium",
+    "notes": "Official Facebook profile image used as primary public-facing logo"
+  },
+  {
+    "id": "outfitter-adam-bronson",
+    "selectedLogoUrl": "https://static.wixstatic.com/media/74116b_f8ddb975590abc2a63be82f51b0f25c7.png/v1/fill/w_469,h_197,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/74116b_f8ddb975590abc2a63be82f51b0f25c7.png",
+    "sourcePageUrl": "https://www.bronsonoutfitting.com/",
+    "sourceMethod": "header-logo",
+    "confidence": "high",
+    "notes": "Wix header logo"
+  },
+  {
+    "id": "outfitter-albrecht-outfitters",
+    "selectedLogoUrl": "https://albrechtoutfitting.com/cdn/shop/files/Albrecht_Gold_Logo_wide_180x.png?v=1613413486",
+    "sourcePageUrl": "https://albrechtoutfitting.com",
+    "sourceMethod": "header-logo",
+    "confidence": "high",
+    "notes": "Shopify header logo"
+  },
+  {
+    "id": "outfitter-all-seasons-adventures",
+    "selectedLogoUrl": "https://allseasonsadventures.com/wp-content/themes/allseasonsadventures/dist/svg/header-logo.svg",
+    "sourcePageUrl": "https://allseasonsadventures.com",
+    "sourceMethod": "header-logo",
+    "confidence": "high",
+    "notes": "Header SVG logo"
+  },
+  {
+    "id": "outfitter-battleground-g-o",
+    "selectedLogoUrl": "https://www.lonetreeoutfitters.com/assets/images/LT_full_344.png",
+    "sourcePageUrl": "https://www.lonetreeoutfitters.com/",
+    "sourceMethod": "header-logo",
+    "confidence": "high",
+    "notes": "Direct site logo asset"
+  },
+  {
+    "id": "outfitter-black-timber-outfitters",
+    "selectedLogoUrl": "https://www.blacktimberoutfitters.com/wp-content/uploads/2020/03/bto-horizontal-logo-dark.png",
+    "sourcePageUrl": "https://blacktimberoutfitters.com",
+    "sourceMethod": "header-logo",
+    "confidence": "high",
+    "notes": "Horizontal header logo"
+  },
+  {
+    "id": "outfitter-book-cliff-outfitters",
+    "selectedLogoUrl": "https://static.wixstatic.com/media/7d9f06_6f01f903e0044592b7dd0bb4fc719adc.png/v1/fill/w_454,h_104,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/7d9f06_6f01f903e0044592b7dd0bb4fc719adc.png",
+    "sourcePageUrl": "https://www.bookcliffoutfitters.com",
+    "sourceMethod": "header-logo",
+    "confidence": "high",
+    "notes": "Wix header wordmark"
+  },
+  {
+    "id": "outfitter-brandon-wicks-hunting",
+    "selectedLogoUrl": "https://scontent-den2-1.xx.fbcdn.net/v/t39.30808-1/313930360_10158886496902344_1096541434087439594_n.jpg?stp=dst-jpg_tt6&cstp=mx520x520&ctp=s520x520&_nc_cat=108&ccb=1-7&_nc_sid=3ab345&_nc_ohc=IHdV6fD7qrUQ7kNvwHYvssS&_nc_oc=AdqltDP3-Rymm7HkiSVfGqi3nIDYyW7yEczJ5At7axrt8i44auS0xkCIYSB5DG2w4GM&_nc_zt=24&_nc_ht=scontent-den2-1.xx&_nc_gid=okbCXfFVTh7xKzmVaoTFMA&_nc_ss=7a30f&oh=00_AfyBAblRS23ltw5jLNX8zq0ug8EqrWo4jjBtcqclAwXo3g&oe=69CB6E93",
+    "sourcePageUrl": "https://www.facebook.com/brandon.wicks1",
+    "sourceMethod": "facebook-profile-image",
+    "confidence": "medium",
+    "notes": "Official Facebook profile image used as primary public-facing logo"
+  },
+  {
+    "id": "outfitter-bull-mountain-outfiitters",
+    "selectedLogoUrl": "https://henrymtnbisonhunts.com/wp-content/uploads/2016/02/MenuLogo1.png",
+    "sourcePageUrl": "https://henrymtnbisonhunts.com",
+    "sourceMethod": "header-logo",
+    "confidence": "high",
+    "notes": "Menu logo asset"
+  },
+  {
+    "id": "outfitter-bullrush-outfitters",
+    "selectedLogoUrl": "https://bullrushoutfitters.com/wp-content/uploads/go-x/u/45ef12cd-eb9e-4bd4-863f-781e0dd2eb1a/w192,h192,rtfit,bg,el1,ex1,fpng/image.png?v=1753933448522",
+    "sourcePageUrl": "https://bullrushoutfitters.com",
+    "sourceMethod": "site-app-icon",
+    "confidence": "medium",
+    "notes": "Repeated custom site icon asset; no cleaner header logo surfaced"
+  },
+  {
+    "id": "outfitter-cisco-outfitting-travis-kruckenberg-outfitting",
+    "selectedLogoUrl": "https://static.wixstatic.com/media/2bb04c_393d7cebc97d4140944dfd56c8d34d09~mv2.png/v1/fill/w_181,h_185,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/logo%20TKO_edited.png",
+    "sourcePageUrl": "https://www.traviskruckenbergoutfitting.com",
+    "sourceMethod": "header-logo",
+    "confidence": "medium",
+    "notes": "Logo asset surfaced from Wix page imagery"
+  },
+  {
+    "id": "outfitter-color-country-outfitters",
+    "selectedLogoUrl": "https://colorcountryoutfitters.com/wp-content/uploads/2023/03/Color-Country-Outfitters-2023-white-230x150.png",
+    "sourcePageUrl": "https://colorcountryoutfitters.com/",
+    "sourceMethod": "header-logo",
+    "confidence": "high",
+    "notes": "Header logo image"
+  },
+  {
+    "id": "outfitter-daniel-richins",
+    "selectedLogoUrl": "https://thehuntingcompany.com/wp-content/uploads/2021/07/Header-Logo.png",
+    "sourcePageUrl": "https://thehuntingcompany.com/",
+    "sourceMethod": "header-logo",
+    "confidence": "high",
+    "notes": "Header logo png; corrected to actual master record id"
+  },
+  {
+    "id": "outfitter-dc-outfitters-llc",
+    "selectedLogoUrl": "https://images.squarespace-cdn.com/content/v1/6786d52138470b0d57fdeb48/ef014b3a-c141-48cb-93fd-11a348027aa3/DC+Outfitter+Logo+Tan.png?format=1500w",
+    "sourcePageUrl": "https://dcoutah.com",
+    "sourceMethod": "header-logo",
+    "confidence": "high",
+    "notes": "Squarespace logo image"
+  },
+  {
+    "id": "outfitter-deerbedead-outfitters",
+    "selectedLogoUrl": "https://scontent-den2-1.xx.fbcdn.net/v/t39.30808-1/441513726_7541169609297142_2254480369365114071_n.jpg?stp=dst-jpg_tt6&cstp=mx1080x1080&ctp=s720x720&_nc_cat=104&ccb=1-7&_nc_sid=3ab345&_nc_ohc=ELgMyQ7zmQMQ7kNvwGM5olC&_nc_oc=AdoHNJOLjlFrWpzZBc_PqO3kr1pJAkRR-EheKcmrDIuwUSU_pcAyUrTM5Md8gt8eW_c&_nc_zt=24&_nc_ht=scontent-den2-1.xx&_nc_gid=DjALp6nAfdAt7AvBIvf-tA&_nc_ss=7a30f&oh=00_AfxM8sm-KaeN3aByHg7q4cPYjqJnCfPycCS7dVutexKZSA&oe=69CB795C",
+    "sourcePageUrl": "https://www.facebook.com/travisroundytaxidermy/",
+    "sourceMethod": "facebook-profile-image",
+    "confidence": "medium",
+    "notes": "Official Facebook profile image used as primary public-facing logo"
+  },
+  {
+    "id": "outfitter-diamond-outfitters-llc",
+    "selectedLogoUrl": "https://diamondoutfitters.com/wp-content/uploads/2021/04/DO-Logo-Header.png",
+    "sourcePageUrl": "https://diamondoutfitters.com",
+    "sourceMethod": "header-logo",
+    "confidence": "high",
+    "notes": "Header logo png"
+  },
+  {
+    "id": "outfitter-dirtnap-outfitters-llc",
+    "selectedLogoUrl": "https://dirtnapoutfitter.com/wp-content/uploads/2023/12/DIRTNAP-LOGO2.png",
+    "sourcePageUrl": "https://dirtnapoutfitter.com/",
+    "sourceMethod": "header-logo",
+    "confidence": "high",
+    "notes": "Header logo png"
+  },
+  {
+    "id": "outfitter-double-c-guides",
+    "selectedLogoUrl": "https://doublecguides.com/i/11862doublec.jpg",
+    "sourcePageUrl": "https://doublecguides.com",
+    "sourceMethod": "site-primary-brand-image",
+    "confidence": "medium",
+    "notes": "Top-of-page brand image on site home page"
+  },
+  {
+    "id": "outfitter-f-n-h-outfitters",
+    "selectedLogoUrl": "https://fnhoutfitters.com/white-logo.svg",
+    "sourcePageUrl": "https://fnhoutfitters.com",
+    "sourceMethod": "header-logo",
+    "confidence": "medium",
+    "notes": "SVG site logo"
+  },
+  {
+    "id": "outfitter-gunner-steele-hunting",
+    "selectedLogoUrl": "https://img1.wsimg.com/isteam/ip/24f92a46-f6c4-4453-8369-24dc0d025bd1/blob-1b4a921.png",
+    "sourcePageUrl": "https://rustyfarnsworthoutfitting.com/",
+    "sourceMethod": "og-image",
+    "confidence": "medium",
+    "notes": "Site brand image from GoDaddy metadata"
+  },
+  {
+    "id": "outfitter-guy-or-trudy-webster",
+    "selectedLogoUrl": "https://www.jakebesshunting.com/uploads/4/1/8/2/41823713/1433997967.png",
+    "sourcePageUrl": "https://www.jakebesshunting.com/",
+    "sourceMethod": "header-logo",
+    "confidence": "medium",
+    "notes": "Main brand image from site"
+  },
+  {
+    "id": "outfitter-offgrid-outdoors",
+    "selectedLogoUrl": "https://static.wixstatic.com/media/fb5240_f773f79300324e269675c678f266af4b~mv2.png/v1/fill/w_240,h_99,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/fb5240_f773f79300324e269675c678f266af4b~mv2.png",
+    "sourcePageUrl": "https://offgridoutdoors.com",
+    "sourceMethod": "header-logo",
+    "confidence": "high",
+    "notes": "Wix header wordmark/logo"
+  },
+  {
+    "id": "outfitter-pine-creek-outfitters",
+    "selectedLogoUrl": "https://scontent-den2-1.xx.fbcdn.net/v/t39.30808-1/295356881_503629574904202_3787552848650373633_n.jpg?stp=dst-jpg_tt6&cstp=mx1926x1630&ctp=s720x720&_nc_cat=100&ccb=1-7&_nc_sid=3ab345&_nc_ohc=py_gyIT0mjQQ7kNvwGUvHT3&_nc_oc=Adqir-h3JM3eKXZBoo3GQqjqEZYK0M27Ym_1rcVcUTjmNk5jspYxlCBSEd6tP71TYfs&_nc_zt=24&_nc_ht=scontent-den2-1.xx&_nc_gid=hBrQr8RVdjOlORzydxbAOA&_nc_ss=7a30f&oh=00_Afwx2C0b1rfGD3GN8O5S6aoSZsUbCYOY8QrkwUR59v3YtQ&oe=69CB4F01",
+    "sourcePageUrl": "https://www.facebook.com/PineCreekOutfitters/",
+    "sourceMethod": "facebook-profile-image",
+    "confidence": "medium",
+    "notes": "Official Facebook profile image used as primary public-facing logo"
+  },
+  {
+    "id": "outfitter-r-and-k-hunting-company-private-ranch",
+    "selectedLogoUrl": "https://thehuntingcompany.com/wp-content/uploads/2021/07/Header-Logo.png",
+    "sourcePageUrl": "https://thehuntingcompany.com/",
+    "sourceMethod": "header-logo",
+    "confidence": "high",
+    "notes": "Header logo png"
+  },
+  {
+    "id": "outfitter-rim-rock-outfitters",
+    "selectedLogoUrl": "https://static.wixstatic.com/media/9e36d9_b748d041308c4664aa702550d2a4ad55~mv2_d_3840_2000_s_2.png/v1/fill/w_122,h_64,al_c,q_85,usm_0.66_1.00_0.01,blur_2,enc_avif,quality_auto/9e36d9_b748d041308c4664aa702550d2a4ad55~mv2_d_3840_2000_s_2.png",
+    "sourcePageUrl": "https://www.rimrockoutfitters.com",
+    "sourceMethod": "wix-header-logo",
+    "confidence": "medium",
+    "notes": "Only clear logo-like PNG surfaced among Wix page assets"
+  },
+  {
+    "id": "outfitter-sportsman-s-hunting-adventures",
+    "selectedLogoUrl": "https://img1.wsimg.com/isteam/ip/e21e5985-0b62-46ee-9fdd-dc0ae1ef005f/IMG_8051.PNG/:/rs=w:180,h:180,m",
+    "sourcePageUrl": "https://mtn-outfitters.com/",
+    "sourceMethod": "site-icon",
+    "confidence": "medium",
+    "notes": "Repeated branded site icon asset; no cleaner header logo surfaced"
+  },
+  {
+    "id": "outfitter-strawberry-bay-outfitters",
+    "selectedLogoUrl": "https://strawberrybay.com/wp-content/uploads/2024/09/strawberry-bay-primary-full-color-rgb-900px-w-72ppi.png",
+    "sourcePageUrl": "https://strawberrybay.com",
+    "sourceMethod": "og-image",
+    "confidence": "high",
+    "notes": "Primary branded logo surfaced in metadata and site images"
+  },
+  {
+    "id": "outfitter-trailhead-outdoors",
+    "selectedLogoUrl": "https://hunterstrailhead.com/i/681HuntersTrailhead-blk-Logo.png",
+    "sourcePageUrl": "https://hunterstrailhead.com",
+    "sourceMethod": "site-logo",
+    "confidence": "high",
+    "notes": "Direct Hunters Trailhead logo image"
+  },
+  {
+    "id": "outfitter-utah-premier-outfitters",
+    "selectedLogoUrl": "https://scontent-den2-1.cdninstagram.com/v/t51.2885-19/280199416_514990877002774_6185714153451405852_n.jpg?stp=dst-jpg_s100x100_tt6&_nc_cat=104&ccb=7-5&_nc_sid=bf7eb4&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLnd3dy4xMDgwLkMzIn0%3D&_nc_ohc=R4ub8HP39YoQ7kNvwGlPZLh&_nc_oc=Adp2F99roWmA5ys5KxwvS-wIqdotMiR9bkWYNq5FBBwRmTS7Kj9ltrGh5F1XIDC2H5k&_nc_zt=24&_nc_ht=scontent-den2-1.cdninstagram.com&_nc_ss=7a30f&oh=00_AfyrenZMPJjbBahzF9S45POV2XbtG7flSv5glN1_pYQ36A&oe=69CB6CCC",
+    "sourcePageUrl": "https://www.instagram.com/utah_premier_outfitters/?hl=en",
+    "sourceMethod": "instagram-profile-image",
+    "confidence": "medium",
+    "notes": "Official Instagram profile image used as primary public-facing logo"
+  },
+  {
+    "id": "outfitter-utah-s-best-guides",
+    "selectedLogoUrl": "https://scontent-den2-1.xx.fbcdn.net/v/t39.30808-1/308469327_394951746177512_8570235024672474302_n.png?stp=dst-png&cstp=mx650x336&ctp=s650x336&_nc_cat=103&ccb=1-7&_nc_sid=3ab345&_nc_ohc=fKTpiy93yhcQ7kNvwF8iICl&_nc_oc=Adr0sTVvGiKFuGQU1tSv191Eg-JAIAVrUdsLr9RR7g6FUHqZS1-pXngLeKxoJC9-L9o&_nc_zt=24&_nc_ht=scontent-den2-1.xx&_nc_gid=HyFVReqmRFBxvLjp8Ox-eg&_nc_ss=7a30f&oh=00_Afxa_6YyWAUWXE1DSF1PZnskUPsFryDUwrFq-2zbga_tpw&oe=69CB66CE",
+    "sourcePageUrl": "https://www.facebook.com/p/Utahs-Best-Guides-100069880705092/",
+    "sourceMethod": "facebook-profile-image",
+    "confidence": "medium",
+    "notes": "Official Facebook profile image used as primary public-facing logo"
+  },
+  {
+    "id": "outfitter-wasatch-guide-service",
+    "selectedLogoUrl": "https://wasatchguideservice.com/wp-content/uploads/2022/05/2022-LOGO_250.png",
+    "sourcePageUrl": "https://wasatchguideservice.com",
+    "sourceMethod": "header-logo",
+    "confidence": "high",
+    "notes": "Explicit logo image from site header assets"
+  },
+  {
+    "id": "outfitter-wild-west-outfitters",
+    "selectedLogoUrl": "https://scontent-den2-1.xx.fbcdn.net/v/t39.30808-1/305840901_617831836714015_8612990443419019014_n.jpg?stp=dst-jpg_tt6&cstp=mx350x240&ctp=s350x240&_nc_cat=101&ccb=1-7&_nc_sid=3ab345&_nc_ohc=aAuZq7YdjvQQ7kNvwHMN2EK&_nc_oc=AdpdxtXmrra1_QPJYM2ozsouJ8Ar7WJ-dYKOm58xmSxrCmN1yJhrST7kxABM05mM9HY&_nc_zt=24&_nc_ht=scontent-den2-1.xx&_nc_gid=rAV5oiU_aC1Lf0Ey1FVHrw&_nc_ss=7a30f&oh=00_Afy527plnrGCRHV-c_40dCW1Tf604rNO7KFFdSPkF-_AbA&oe=69CB775C",
+    "sourcePageUrl": "https://www.facebook.com/wildwestoutfitters2/",
+    "sourceMethod": "facebook-profile-image",
+    "confidence": "medium",
+    "notes": "Official Facebook profile image used as primary public-facing logo"
+  },
+  {
+    "id": "outfitter-willow-springs-outfitters",
+    "selectedLogoUrl": "https://scontent-den2-1.xx.fbcdn.net/v/t39.30808-1/460070901_122187658880085295_816655756184979229_n.jpg?stp=dst-jpg_tt6&cstp=mx1536x2048&ctp=s960x960&_nc_cat=100&ccb=1-7&_nc_sid=3ab345&_nc_ohc=iZt4QdcIeb8Q7kNvwGekXPM&_nc_oc=AdrKGNtk5g4SQ-f12GyQBsvNqYgyMEmENT-Wp1B8sEd05LN9wyuAeM4nAXsvzNDWWvg&_nc_zt=24&_nc_ht=scontent-den2-1.xx&_nc_gid=k3M7bj50CWZYhIZH45LnWg&_nc_ss=7a30f&oh=00_AfyTtJ0aSAqDJJmD6onlYOpgIk1stdTkKADAwvnVi8O5WQ&oe=69CB5E4E",
+    "sourcePageUrl": "https://www.facebook.com/p/Willow-Springs-Outfitters-61565435117969/",
+    "sourceMethod": "facebook-profile-image",
+    "confidence": "medium",
+    "notes": "Official Facebook profile image used as primary public-facing logo"
+  },
+  {
+    "id": "outfitter-x-factor-outfitters",
+    "selectedLogoUrl": "https://xfactoroutfitters.com/wp-content/uploads/2025/02/white-logo.png",
+    "sourcePageUrl": "https://xfactoroutfitters.com/",
+    "sourceMethod": "header-logo",
+    "confidence": "high",
+    "notes": "Explicit white-logo asset from site"
+  }
+]
