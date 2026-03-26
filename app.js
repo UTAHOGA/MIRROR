@@ -85,6 +85,7 @@ const searchInput = document.getElementById('searchInput'),
   toggleDwrUnits = document.getElementById('toggleDwrUnits'),
   toggleUSFS = document.getElementById('toggleUSFS'),
   toggleBLM = document.getElementById('toggleBLM'),
+  federalLayersSummary = document.getElementById('federalLayersSummary'),
   toggleSITLA = document.getElementById('toggleSITLA'),
   toggleStateParks = document.getElementById('toggleStateParks'),
   toggleWma = document.getElementById('toggleWma'),
@@ -350,6 +351,12 @@ function getDisplayHunts() {
   if (!hasActiveMatrixSelections() && !selectedHunt) return [];
   return getFilteredHunts();
 }
+function shouldShowHuntBoundaries() {
+  return hasActiveMatrixSelections() || !!selectedHunt || !!toggleDwrUnits?.checked;
+}
+function shouldShowAllHuntUnits() {
+  return !!toggleDwrUnits?.checked && !hasActiveMatrixSelections() && !selectedHunt;
+}
 function normalizeListValues(values) {
   if (Array.isArray(values)) return values.map(v => safe(v).trim()).filter(Boolean);
   const one = safe(values).trim();
@@ -551,6 +558,9 @@ function handleFilterChange(event) {
     if (huntCategoryFilter) huntCategoryFilter.value = 'All';
     if (unitFilter) unitFilter.value = '';
   }
+  if (toggleDwrUnits && hasActiveMatrixSelections()) {
+    toggleDwrUnits.checked = true;
+  }
   refreshSelectionMatrix();
   styleBoundaryLayer();
   renderMatchingHunts();
@@ -678,6 +688,68 @@ function closeSelectedHuntFloat(zoomToUnit = false) {
     zoomToSelectedBoundary();
   }
 }
+function getSelectedUnitGroups() {
+  const groups = new Map();
+  getDisplayHunts().forEach(hunt => {
+    const key = firstNonEmpty(getBoundaryId(hunt), getUnitValue(hunt), getUnitName(hunt), getHuntCode(hunt));
+    if (!key) return;
+    if (!groups.has(key)) {
+      groups.set(key, {
+        key,
+        unitValue: getUnitValue(hunt),
+        unitName: getUnitName(hunt) || getHuntTitle(hunt),
+        hunts: []
+      });
+    }
+    groups.get(key).hunts.push(hunt);
+  });
+  return Array.from(groups.values()).sort((a, b) => safe(a.unitName).localeCompare(safe(b.unitName)));
+}
+function openSelectedUnitsChooser() {
+  if (!mapChooser || !mapChooserBody || !mapChooserTitle || !mapChooserKicker) return;
+  const groups = getSelectedUnitGroups();
+  if (groups.length <= 1) {
+    closeSelectedHuntPopup();
+    return;
+  }
+  closeSelectedHuntFloat();
+  closeSelectionInfoWindow();
+  selectedBoundaryMatches = [];
+  mapChooserKicker.textContent = 'Selected Units';
+  mapChooserTitle.textContent = `${groups.length} Units Selected`;
+  mapChooserBody.innerHTML = groups.map(group => `
+    <div class="map-chooser-card" data-selected-unit="${escapeHtml(group.unitValue || group.key)}" role="button" tabindex="0">
+      <div class="hunt-card-title">${escapeHtml(group.unitName)}</div>
+      <div class="map-chooser-meta">${group.hunts.length} matching hunt${group.hunts.length === 1 ? '' : 's'}</div>
+      <div class="map-chooser-meta">${escapeHtml(getSpeciesDisplay(group.hunts[0]))} | ${escapeHtml(getHuntType(group.hunts[0]))}</div>
+    </div>
+  `).join('');
+  mapChooser.classList.add('is-open');
+  mapChooser.setAttribute('aria-hidden', 'false');
+  mapChooserBody.querySelectorAll('[data-selected-unit]').forEach(card => {
+    const select = () => {
+      const unitValue = safe(card.getAttribute('data-selected-unit'));
+      if (unitFilter) unitFilter.value = unitValue;
+      refreshSelectionMatrix();
+      styleBoundaryLayer();
+      renderMatchingHunts();
+      renderSelectedHunt();
+      renderOutfitters();
+      const hunts = getDisplayHunts().filter(h => getUnitValue(h) === unitValue);
+      closeSelectedHuntPopup();
+      if (hunts.length) {
+        window.selectHuntByCode(getHuntCode(hunts[0]));
+      }
+    };
+    card.addEventListener('click', select);
+    card.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        select();
+      }
+    });
+  });
+}
 
 function openSelectedHuntFloat() {
   if (!selectedHuntFloat || !selectedHunt) {
@@ -695,6 +767,10 @@ function openSelectedHuntFloat() {
   selectedHuntFloat.scrollTop = 0;
   selectedHuntFloat.querySelector('[data-close-selected-hunt-float]')?.addEventListener('click', () => {
     closeSelectedHuntFloat(true);
+  });
+  selectedHuntFloat.querySelector('[data-inline-hunt-details]')?.addEventListener('click', event => {
+    event.preventDefault();
+    openInlineHuntDetails(selectedHunt);
   });
 }
 
@@ -726,6 +802,29 @@ function openLandInfoWindow(card, position) {
     maxWidth: 340
   });
   selectionInfoWindow.open(googleBaselineMap);
+}
+function openInlineHuntDetails(hunt) {
+  const section = document.getElementById('huntDetailsSection');
+  const frame = document.getElementById('huntDetailsFrame');
+  const title = document.getElementById('huntDetailsTitle');
+  const meta = document.getElementById('huntDetailsMeta');
+  const fallback = document.getElementById('huntDetailsFallbackLink');
+  const link = getBoundaryLink(hunt);
+  if (!section || !frame || !link || !hunt) return;
+  if (title) title.textContent = `${getHuntCode(hunt)} | ${getUnitName(hunt) || getHuntTitle(hunt)}`;
+  if (meta) meta.textContent = `${getSpeciesDisplay(hunt)} | ${getNormalizedSex(hunt)} | ${getHuntType(hunt)} | ${getWeapon(hunt)}`;
+  if (fallback) fallback.href = link;
+  frame.src = link;
+  section.hidden = false;
+  section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  updateStatus('Official Utah DWR hunt details loaded below the map.');
+}
+function closeInlineHuntDetails() {
+  const section = document.getElementById('huntDetailsSection');
+  const frame = document.getElementById('huntDetailsFrame');
+  if (!section || !frame) return;
+  section.hidden = true;
+  frame.src = 'about:blank';
 }
 
 function createGlobeImageryProvider(key) {
@@ -859,7 +958,8 @@ function getCesiumEntityMatches(entity) {
 
 function updateCesiumBoundaryStyles() {
   if (!cesiumHuntDataSource?.entities?.values || typeof Cesium === 'undefined') return;
-  const showBoundaries = !!toggleDwrUnits?.checked && (hasActiveMatrixSelections() || !!selectedHunt);
+  const showBoundaries = shouldShowHuntBoundaries();
+  const showAllUnits = shouldShowAllHuntUnits();
   const filtered = getDisplayHunts();
   const boundaryIds = new Set(filtered.map(h => safe(getBoundaryId(h))).filter(Boolean));
   const unitCodes = new Set(filtered.map(h => normalizeBoundaryKey(getUnitCode(h))).filter(Boolean));
@@ -872,7 +972,7 @@ function updateCesiumBoundaryStyles() {
       ?? properties?.BOUNDARY_NAME?.getValue?.()
       ?? properties?.BoundaryName?.getValue?.()
     );
-    const isMatch = boundaryIds.has(id) || unitCodes.has(name) || unitNames.has(name);
+    const isMatch = showAllUnits || boundaryIds.has(id) || unitCodes.has(name) || unitNames.has(name);
     const isSelected = !!selectedHunt && (
       id === safe(getBoundaryId(selectedHunt))
       || name === normalizeBoundaryKey(getUnitCode(selectedHunt))
@@ -880,8 +980,8 @@ function updateCesiumBoundaryStyles() {
     );
     const visible = showBoundaries && isMatch;
     entity.show = visible;
-    const strokeColor = Cesium.Color.fromCssColorString(isSelected ? '#8b1e3f' : '#3653b3');
-    const fillColor = Cesium.Color.fromCssColorString(isSelected ? '#8b1e3f' : '#3653b3').withAlpha(isSelected ? 0.16 : 0.08);
+    const strokeColor = Cesium.Color.fromCssColorString(isSelected ? DNR_ORANGE : '#3653b3');
+    const fillColor = Cesium.Color.fromCssColorString(isSelected ? DNR_ORANGE : '#3653b3').withAlpha(isSelected ? 0.18 : 0.08);
     if (entity.polygon) {
       entity.polygon.outlineColor = strokeColor;
       entity.polygon.material = fillColor;
@@ -939,7 +1039,7 @@ function buildDnrPlate(hunt, compact = false, roomy = false) {
             <div><strong>Weapon:</strong> ${weapon}</div>
             <div><strong>Dates:</strong> ${dates}</div>
           </div>
-          ${boundaryLink ? `<a href="${escapeHtml(boundaryLink)}" target="_blank" rel="noopener noreferrer" style="margin-top:4px;color:#2f7fd1;font-size:18px;font-weight:800;text-decoration:none;">Official Utah DWR Hunt Details</a>` : ''}
+          ${boundaryLink ? `<button type="button" data-inline-hunt-details style="margin-top:4px;padding:0;border:0;background:transparent;color:#2f7fd1;font-size:18px;font-weight:800;text-decoration:none;text-align:left;cursor:pointer;">Official Utah DWR Hunt Details</button>` : ''}
         </div>
       </div>`;
   }
@@ -960,7 +1060,7 @@ function buildDnrPlate(hunt, compact = false, roomy = false) {
           <div><strong>Weapon:</strong> ${weapon}</div>
           <div><strong>Dates:</strong> ${dates}</div>
         </div>
-        ${boundaryLink ? `<a href="${escapeHtml(boundaryLink)}" target="_blank" rel="noopener noreferrer" style="margin-top:2px;color:#2f7fd1;font-size:${linkSize};font-weight:800;text-decoration:none;">Official Utah DWR Hunt Details</a>` : ''}
+        ${boundaryLink ? `<button type="button" data-inline-hunt-details style="margin-top:2px;padding:0;border:0;background:transparent;color:#2f7fd1;font-size:${linkSize};font-weight:800;text-decoration:none;text-align:left;cursor:pointer;">Official Utah DWR Hunt Details</button>` : ''}
       </div>
     </div>`;
 }
@@ -1315,7 +1415,12 @@ async function updateOutfitterMarkers(matches) {
 function updateStateLayersSummary() {
   if (!stateLayersSummary) return;
   const count = [toggleStateParks, toggleWma].filter(el => !!el?.checked).length;
-  stateLayersSummary.textContent = count ? `State Access (${count})` : 'State Access';
+  stateLayersSummary.textContent = count ? `State Lands (${count})` : 'State Lands';
+}
+function updateFederalLayersSummary() {
+  if (!federalLayersSummary) return;
+  const count = [toggleUSFS, toggleBLM].filter(el => !!el?.checked).length;
+  federalLayersSummary.textContent = count ? `Federal Lands (${count})` : 'Federal Lands';
 }
 
 function openSelectedHuntPopup() {
@@ -1712,12 +1817,14 @@ function applyMapMode() {
         }
       }
     }
+    updateCesiumBoundaryStyles();
     return;
   }
 
   mapWrap.classList.remove('is-globe-mode');
   googleBaselineMap.setMapTypeId(value);
   googleBaselineMap.getStreetView()?.setVisible(false);
+  styleBoundaryLayer();
   if (selectedHunt) {
     updateOutfitterMarkers(getMatchingOutfittersForHunt(selectedHunt));
   }
@@ -1815,6 +1922,7 @@ function initGoogleBaseline() {
   if (toggleWma?.checked) ensureWmaLayer().catch(err => console.error('WMA layer failed', err));
   if (togglePrivate?.checked) ensurePrivateLayer().catch(err => console.error('Private layer failed', err));
   updateStateLayersSummary();
+  updateFederalLayersSummary();
   updateStatus('Map ready. Select filters or click a hunt unit.');
   bindControls();
 }
@@ -1839,7 +1947,8 @@ function buildBoundaryLayer() {
 
 function styleBoundaryLayer() {
     if (!huntUnitsLayer) return;
-    const showBoundaries = !!toggleDwrUnits?.checked && (hasActiveMatrixSelections() || !!selectedHunt);
+    const showBoundaries = shouldShowHuntBoundaries();
+    const showAllUnits = shouldShowAllHuntUnits();
     const filtered = getDisplayHunts();
     const boundaryIds = new Set(filtered.map(h => safe(getBoundaryId(h))).filter(Boolean));
     const unitCodes = new Set(filtered.map(h => normalizeBoundaryKey(getUnitCode(h))).filter(Boolean));
@@ -1847,11 +1956,11 @@ function styleBoundaryLayer() {
     huntUnitsLayer.setStyle(f => {
         const id = safe(f.getProperty('BoundaryID'));
         const name = normalizeBoundaryKey(f.getProperty('Boundary_Name'));
-        const isMatch = boundaryIds.has(id) || unitCodes.has(name) || unitNames.has(name);
+        const isMatch = showAllUnits || boundaryIds.has(id) || unitCodes.has(name) || unitNames.has(name);
         const isSelected = selectedHunt && (id === safe(getBoundaryId(selectedHunt)) || name === normalizeBoundaryKey(getUnitCode(selectedHunt)) || name === normalizeBoundaryKey(getUnitName(selectedHunt)));
         return {
           visible: showBoundaries && isMatch,
-          strokeColor: isSelected ? '#8b1e3f' : '#3653b3',
+          strokeColor: isSelected ? DNR_ORANGE : '#3653b3',
           strokeWeight: isSelected ? 3 : 1.5,
           fillOpacity: showBoundaries && isMatch ? (isSelected ? 0.16 : 0.08) : 0
         };
@@ -1870,6 +1979,9 @@ function bindControls() {
     closeSelectionInfoWindow();
     selectedHunt = null;
     selectedBoundaryFeature = null;
+    if (toggleDwrUnits && hasActiveMatrixSelections()) {
+      toggleDwrUnits.checked = true;
+    }
     refreshSelectionMatrix();
     styleBoundaryLayer();
     renderMatchingHunts();
@@ -1883,6 +1995,9 @@ function bindControls() {
     if (count === 1) {
       window.selectHuntByCode(getHuntCode(results[0]));
       updateStatus('1 matching hunt applied and selected.');
+    } else if (getSelectedUnitGroups().length > 1 && !safe(unitFilter?.value).trim()) {
+      openSelectedUnitsChooser();
+      updateStatus(`${count} matching hunts across ${getSelectedUnitGroups().length} selected units.`);
     } else {
       updateStatus(`${count} matching hunt${count === 1 ? '' : 's'} applied.`);
     }
@@ -1901,6 +2016,7 @@ function bindControls() {
     window.selectHuntByCode(card.getAttribute('data-hunt-code'));
   });
   document.getElementById('closeMapChooserBtn')?.addEventListener('click', closeSelectedHuntPopup);
+  document.getElementById('closeHuntDetailsBtn')?.addEventListener('click', closeInlineHuntDetails);
   mapTypeSelect?.addEventListener('change', applyMapMode);
   globeBasemapSelect?.addEventListener('change', () => {
     currentGlobeBasemap = safe(globeBasemapSelect.value || 'osm');
@@ -1939,6 +2055,7 @@ function bindControls() {
   toggleUSFS?.addEventListener('change', async () => {
     if (toggleUSFS.checked) await ensureUsfsLayer().catch(err => console.error('USFS layer failed', err));
     setLayerVisibility(usfsLayer, !!toggleUSFS.checked);
+    updateFederalLayersSummary();
   });
   toggleBLM?.addEventListener('change', async () => {
     if (toggleBLM.checked) await ensureBlmLayer().catch(err => console.error('BLM layer failed', err));
@@ -1947,6 +2064,7 @@ function bindControls() {
       setLayerVisibility(usfsLayer, false);
       setLayerVisibility(usfsLayer, true);
     }
+    updateFederalLayersSummary();
   });
   toggleSITLA?.addEventListener('change', async () => {
     if (toggleSITLA.checked) await ensureSitlaLayer().catch(err => console.error('SITLA layer failed', err));
