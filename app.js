@@ -6,7 +6,12 @@ const GOOGLE_BASELINE_DEFAULT_ZOOM = 7;
 const CLOUDFLARE_BASE = 'https://json.uoga.workers.dev';
 const HUNT_DATA_VERSION = '20260324-master-1733';
 const LOCAL_HUNT_BOUNDARIES_PATH = `${CLOUDFLARE_BASE}/hunt_boundaries.geojson`;
-const OUTFITTERS_DATA_SOURCES = [`${CLOUDFLARE_BASE}/outfitters.json`];
+const OUTFITTERS_DATA_SOURCES = [
+  `${CLOUDFLARE_BASE}/outfitters-public.json`,
+  `${CLOUDFLARE_BASE}/outfitters.json`,
+  './data/outfitters-public.json',
+  './data/outfitters.json'
+];
 const LOGO_DNR = 'https://static.wixstatic.com/media/43f827_34cd9f26f53f4b9ebcb200f6d878bea2~mv2.jpg';
 const LOGO_DNR_ROOMY = './assets/logos/HUNT PANEL.jpg';
 const LOGO_DWR_WMA = './assets/logos/dwr-wma.jpg';
@@ -101,6 +106,9 @@ function assetUrl(path) {
   } catch {
     return path;
   }
+}
+function isMobileViewport() {
+  return typeof window !== 'undefined' && window.matchMedia('(max-width: 900px)').matches;
 }
 
 // --- DATA NORMALIZATION ---
@@ -595,13 +603,15 @@ function openSelectedHuntFloat() {
     closeSelectedHuntFloat();
     return;
   }
+  const compactFloat = isMobileViewport();
   selectedHuntFloat.innerHTML = `
-    <div style="position:relative;width:max-content;max-width:100%;">
+    <div style="position:relative;width:100%;max-width:100%;">
       <button type="button" data-close-selected-hunt-float aria-label="Close selected hunt" style="position:absolute;top:18px;right:20px;z-index:2;border:0;background:transparent;color:#5b3a24;padding:0;cursor:pointer;font-weight:900;font-size:24px;line-height:1;">X</button>
-      ${buildDnrPlate(selectedHunt, false, true)}
+      ${buildDnrPlate(selectedHunt, compactFloat, !compactFloat)}
     </div>`;
   selectedHuntFloat.classList.add('is-open');
   selectedHuntFloat.setAttribute('aria-hidden', 'false');
+  selectedHuntFloat.scrollTop = 0;
   selectedHuntFloat.querySelector('[data-close-selected-hunt-float]')?.addEventListener('click', () => {
     closeSelectedHuntFloat(true);
   });
@@ -898,7 +908,11 @@ function renderSelectedHunt() {
   if (p) {
     p.innerHTML = `
       <div style="display:grid;gap:12px;">
-        ${buildDnrPlate(selectedHunt, false)}
+        <div style="display:grid;gap:8px;padding:12px;border:1px solid #d6c1ae;border-radius:12px;background:var(--panel);">
+          <div style="font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:${DNR_ORANGE};">${escapeHtml(getPanelHeading(selectedHunt))}</div>
+          <div style="font-size:28px;font-weight:900;line-height:0.95;color:${DNR_BROWN};">${escapeHtml(getHuntCode(selectedHunt))}</div>
+          <div style="font-size:18px;font-weight:800;line-height:1.1;color:var(--text);">${escapeHtml(getUnitName(selectedHunt) || getHuntTitle(selectedHunt))}</div>
+        </div>
         <div class="detail-grid">
           <div><strong>Species</strong>${escapeHtml(getSpeciesDisplay(selectedHunt))}</div>
           <div><strong>Sex</strong>${escapeHtml(getNormalizedSex(selectedHunt))}</div>
@@ -1014,12 +1028,17 @@ function createOutfitterLogoMarker(position, outfitter) {
   marker.onAdd = function() {
     const div = document.createElement('div');
     div.className = 'outfitter-logo-pin-shell';
+    const initials = (safe(outfitter.listingName).trim().match(/[A-Z0-9]/ig) || ['O']).slice(0, 2).join('').toUpperCase();
+    const logoMarkup = safe(outfitter.logoUrl).trim()
+      ? `<img src="${escapeHtml(outfitter.logoUrl)}" alt="${escapeHtml(outfitter.listingName || 'Outfitter')}">`
+      : `<span class="outfitter-logo-pin-fallback">${escapeHtml(initials)}</span>`;
     div.innerHTML = `
       <div class="outfitter-logo-pin-base"></div>
       <div class="outfitter-logo-pin-center">
-        ${safe(outfitter.logoUrl).trim() ? `<img src="${escapeHtml(outfitter.logoUrl)}" alt="${escapeHtml(outfitter.listingName || 'Outfitter')}">` : ''}
+        ${logoMarkup}
       </div>`;
     div.title = safe(outfitter.listingName).trim() || 'Outfitter';
+    div.style.pointerEvents = 'auto';
     div.addEventListener('click', () => {
       closeSelectionInfoWindow();
       selectionInfoWindow = new google.maps.InfoWindow({
@@ -1039,8 +1058,8 @@ function createOutfitterLogoMarker(position, outfitter) {
     const point = projection.fromLatLngToDivPixel(position);
     if (!point) return;
     this.div.style.position = 'absolute';
-    this.div.style.left = `${point.x - 22}px`;
-    this.div.style.top = `${point.y - 58}px`;
+    this.div.style.left = `${point.x - 24}px`;
+    this.div.style.top = `${point.y - 64}px`;
   };
   marker.onRemove = function() {
     if (this.div?.parentNode) this.div.parentNode.removeChild(this.div);
@@ -1700,6 +1719,11 @@ function bindControls() {
   });
   streetViewBtn?.addEventListener('click', openStreetViewAtFocus);
   resetViewBtn?.addEventListener('click', resetMapView);
+  window.addEventListener('resize', () => {
+    if (selectedHunt && selectedHuntFloat?.classList.contains('is-open')) {
+      openSelectedHuntFloat();
+    }
+  });
   toggleDwrUnits?.addEventListener('change', () => {
     if (!toggleDwrUnits.checked) {
       closeSelectionInfoWindow();
@@ -1758,32 +1782,6 @@ function zoomToSelectedBoundary() {
   if (found) googleBaselineMap.fitBounds(bounds);
 }
 
-// --- UPDATED LOADER LOGIC ---
-function hideLoadingOverlay() {
-  const overlay = document.getElementById('loadingOverlay');
-  const video = document.getElementById('loaderVideo');
-  
-  if (!overlay) return;
-
-  // Listen for the elk to finish its bugle (end of video)
-  if (video) {
-    video.addEventListener('ended', () => {
-      overlay.style.transition = 'opacity 1s ease';
-      overlay.style.opacity = '0';
-      setTimeout(() => {
-        overlay.classList.add('hidden');
-      }, 1000);
-    }, { once: true });
-    
-    // Safety fallback: Hide after 8 seconds if video fails to signal 'ended'
-    setTimeout(() => {
-        overlay.classList.add('hidden');
-    }, 8000);
-  } else {
-    overlay.classList.add('hidden');
-  }
-}
-
 // --- BOOTSTRAP ---
 document.addEventListener('DOMContentLoaded', async () => {
   // Load Map
@@ -1802,9 +1800,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   refreshSelectionMatrix();
   renderMatchingHunts();
-  
-  // Trigger cinematic fade-out linked to RUNNING_ELK.MP4
-  hideLoadingOverlay();
 });
 
 function sortWithPreferredOrder(arr, pref) {
