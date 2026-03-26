@@ -345,6 +345,14 @@
     .map-chooser-title { margin: 0; font-family: var(--font-display); font-size: 24px; line-height: 1.05; }
     .map-chooser-body { padding: 16px; overflow: auto; display: grid; gap: 12px; background: var(--panel2); }
     .map-chooser-empty { color: var(--muted); font-size: 15px; line-height: 1.5; text-align: center; padding: 20px; }
+    .hunt-details-section { margin: 0 18px 18px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); box-shadow: var(--shadow); overflow: hidden; }
+    .hunt-details-head { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 18px; background: linear-gradient(180deg, var(--accent), var(--accent-dark)); color:#fff6ed; }
+    .hunt-details-kicker { font-size:12px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; margin:0 0 4px; color:rgba(255,255,255,.8); }
+    .hunt-details-title { margin:0; font-family:var(--font-display); font-size:22px; line-height:1.05; }
+    .hunt-details-meta { margin:6px 0 0; font-size:13px; color:rgba(255,255,255,.88); }
+    .hunt-details-body { display:grid; gap:10px; padding:16px; background:var(--panel2); }
+    .hunt-details-frame { width:100%; min-height:720px; border:1px solid var(--line); border-radius:12px; background:#fff; }
+    .hunt-details-note { margin:0; font-size:13px; line-height:1.45; color:var(--muted); }
 
     /* Form Styles */
     .field { display: grid; gap: 6px; margin-bottom: 12px; }
@@ -567,11 +575,16 @@
       </div>
       <div class="toggle-row">
         <label class="toggle-chip"><input id="toggleDwrUnits" type="checkbox"><span class="toggle-chip-label">DWR<br>Hunt Units</span></label>
-        <label class="toggle-chip"><input id="toggleUSFS" type="checkbox" checked>USFS</label>
-        <label class="toggle-chip"><input id="toggleBLM" type="checkbox" checked>BLM</label>
+        <details class="toggle-menu">
+          <summary id="federalLayersSummary">Federal Lands</summary>
+          <div class="toggle-menu-panel">
+            <label class="toggle-chip"><input id="toggleUSFS" type="checkbox" checked><span class="toggle-chip-label">USFS<br>Lands</span></label>
+            <label class="toggle-chip"><input id="toggleBLM" type="checkbox" checked><span class="toggle-chip-label">BLM<br>Lands</span></label>
+          </div>
+        </details>
         <label class="toggle-chip"><input id="toggleSITLA" type="checkbox">SITLA</label>
         <details class="toggle-menu">
-          <summary id="stateLayersSummary">State Access</summary>
+          <summary id="stateLayersSummary">State Lands</summary>
           <div class="toggle-menu-panel">
             <label class="toggle-chip"><input id="toggleStateParks" type="checkbox"><span class="toggle-chip-label">State<br>Parks</span></label>
             <label class="toggle-chip"><input id="toggleWma" type="checkbox"><span class="toggle-chip-label">UT. DWR<br>W.M.A.'s</span></label>
@@ -708,6 +721,24 @@
       </section>
     </aside>
   </main>
+
+  <section id="huntDetailsSection" class="hunt-details-section" hidden>
+    <div class="hunt-details-head">
+      <div>
+        <p class="hunt-details-kicker">Official Utah DWR Hunt Details</p>
+        <h2 id="huntDetailsTitle" class="hunt-details-title">Selected Hunt Details</h2>
+        <p id="huntDetailsMeta" class="hunt-details-meta"></p>
+      </div>
+      <button id="closeHuntDetailsBtn" type="button" class="secondary">Close</button>
+    </div>
+    <div class="hunt-details-body">
+      <p class="hunt-details-note">
+        Official details are loaded below so visitors can stay on U.O.G.A. If the DWR page blocks embedding, use
+        <a id="huntDetailsFallbackLink" href="#" target="_blank" rel="noopener noreferrer">this fallback link</a>.
+      </p>
+      <iframe id="huntDetailsFrame" class="hunt-details-frame" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </section>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
