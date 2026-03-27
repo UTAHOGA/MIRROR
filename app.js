@@ -68,7 +68,7 @@ const huntPlannerMapStyle = [
 ];
 
 const HUNT_TYPE_ORDER = [ 'General', 'Youth', 'Limited Entry', 'Premium Limited Entry', 'Management', 'Dedicated Hunter', 'CWMU', 'Private Land Only', 'Conservation', 'Once-in-a-Lifetime', 'Antlerless' ];
-const HUNT_CLASS_ORDER = [ 'General Season', 'Limited Entry', 'Premium Limited Entry', 'Youth', 'Management', 'Antlerless', 'CWMU', 'Private Land Only', 'Conservation', 'Statewide Permit', 'Extended Archery' ];
+const HUNT_CLASS_ORDER = [ 'General Season', 'General Bull', 'Spike Only', 'Limited Entry', 'Premium Limited Entry', 'Youth', 'Management', 'Antlerless', 'CWMU', 'Private Land Only', 'Conservation', 'Statewide Permit', 'Extended Archery' ];
 const SEX_ORDER = ['Buck', 'Bull', 'Ram', 'Ewe', 'Bearded', 'Antlerless', 'Either Sex', "Hunter's Choice"];
 const WEAPON_ORDER = [ 'Any Legal Weapon', 'Archery', 'Extended Archery', 'Restricted Archery', 'Muzzleloader', 'Restricted Muzzleloader', 'Restricted Rifle', 'HAMSS', 'Multiseason', 'Restricted Multiseason' ];
 const DNR_ORANGE = '#ff6600';
@@ -281,6 +281,8 @@ function normalizeHuntCategoryLabel(raw) {
   if (lower.includes('youth')) return 'Youth';
   if (lower.includes('conservation')) return 'Conservation';
   if (lower.includes('management')) return 'Management';
+  if (lower.includes('spike')) return 'Spike Only';
+  if (lower.includes('general bull') || lower.includes('bull elk') || lower.includes('any bull')) return 'General Bull';
   if (lower.includes('antlerless')) return 'Antlerless';
   if (lower.includes('general')) return 'General Season';
   return value;
