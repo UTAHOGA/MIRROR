@@ -63,6 +63,10 @@ const SEX_ORDER = ['Buck', 'Bull', 'Ram', 'Ewe', 'Bearded', 'Antlerless', 'Eithe
 const WEAPON_ORDER = [ 'Any Legal Weapon', 'Archery', 'Extended Archery', 'Restricted Archery', 'Muzzleloader', 'Restricted Muzzleloader', 'Restricted Rifle', 'HAMSS', 'Multiseason', 'Restricted Multiseason' ];
 const DNR_ORANGE = '#ff6600';
 const DNR_BROWN = '#4f2b14';
+const KNOWN_OUTFITTER_COORDS = new Map([
+  ['outfitter-wild-eyez-outfitters', { lat: 39.2574155, lng: -111.631482 }],
+  ['wild eyez outfitters', { lat: 39.2574155, lng: -111.631482 }]
+]);
 
 let googleBaselineMap = null, cesiumViewer = null, huntUnitsLayer = null, cesiumHuntDataSource = null, googleApiReady = false, huntHoverFeature = null, selectedBoundaryFeature = null, huntData = [], huntBoundaryGeoJson = null, selectedBoundaryMatches = [], selectedHunt = null, selectionInfoWindow = null, usfsLayer = null, blmLayer = null, sitlaLayer = null, stateLandsLayer = null, stateParksLayer = null, wmaLayer = null, privateLayer = null, outfitters = [], outfitterMarkers = [], activeLoads = 0, currentGlobeBasemap = 'esriImagery', outfitterMarkerRunId = 0, suppressLandClickUntil = 0;
 const outfitterGeocodeCache = new Map();
@@ -1225,6 +1229,18 @@ function getOutfitterSummaryTags(outfitter) {
   if (outfitter.muzzleloader) tags.push('Muzzleloader');
   return Array.from(new Set(tags));
 }
+function getKnownOutfitterCoords(outfitter) {
+  const keys = [
+    firstNonEmpty(outfitter?.id),
+    firstNonEmpty(outfitter?.slug),
+    safe(firstNonEmpty(outfitter?.listingName, outfitter?.displayName, outfitter?.businessName)).toLowerCase().trim()
+  ].filter(Boolean);
+  for (const key of keys) {
+    const coords = KNOWN_OUTFITTER_COORDS.get(key);
+    if (coords && Number.isFinite(coords.lat) && Number.isFinite(coords.lng)) return coords;
+  }
+  return null;
+}
 function formatUtahAddressPart(value) {
   return safe(value)
     .replace(/\bNorth\b/ig, 'N')
@@ -1422,6 +1438,12 @@ function geocodeOutfitter(outfitter) {
   const key = `${safe(outfitter.listingName)}|${getOutfitterLocationText(outfitter)}`;
   if (outfitterGeocodeCache.has(key)) {
     return Promise.resolve(outfitterGeocodeCache.get(key));
+  }
+  const knownCoords = getKnownOutfitterCoords(outfitter);
+  if (knownCoords) {
+    const knownLocation = new google.maps.LatLng(knownCoords.lat, knownCoords.lng);
+    outfitterGeocodeCache.set(key, knownLocation);
+    return Promise.resolve(knownLocation);
   }
   if (Number.isFinite(outfitter?.latitude) && Number.isFinite(outfitter?.longitude)) {
     const directLocation = new google.maps.LatLng(outfitter.latitude, outfitter.longitude);
