@@ -27,13 +27,13 @@ const LOGO_STATE_PARKS = './assets/logos/state-parks.png';
 const LOCAL_CWMU_BOUNDARIES_PATH = './data/cwmu-boundaries.geojson';
 const CWMU_BOUNDARY_IDS_PATH = './data/dwr-GetCWMUBoundaries.json';
 const PUBLIC_OWNERSHIP_LAYER_URL = 'https://services.arcgis.com/ZzrwjTRez6FJiOq4/ArcGIS/rest/services/SITLA_Ownership/FeatureServer/0';
+const BLM_SURFACE_OWNERSHIP_LAYER_URL = 'https://gis.blm.gov/utarcgis/rest/services/Lands/BLM_UT_SMA/FeatureServer/0';
 const CWMU_QUERY_URL = 'https://dwrmapserv.utah.gov/dwrarcgis/rest/services/hunt/CWMU_Tradelands_ver3/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson';
 const STATE_PARKS_QUERY_URL = 'https://services.arcgis.com/ZzrwjTRez6FJiOq4/ArcGIS/rest/services/Utah_State_Park_Management_Areas/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson';
 const WMA_QUERY_URL = 'https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/WMA/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson';
 const WILDERNESS_QUERY_URL = "https://services1.arcgis.com/ERdCHt0sNM6dENSD/ArcGIS/rest/services/Wilderness_Areas_in_the_United_States/FeatureServer/0/query?where=" + encodeURIComponent("STATE = 'UT' AND Agency IN ('BLM','FS')") + "&outFields=NAME,Agency,URL,Acreage&returnGeometry=true&outSR=4326&f=geojson";
 
 const USFS_QUERY_URL = "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_ForestSystemBoundaries_01/MapServer/0/query?where=" + encodeURIComponent("FORESTNAME IN ('Ashley National Forest','Dixie National Forest','Fishlake National Forest','Manti-La Sal National Forest','Uinta-Wasatch-Cache National Forest')") + "&outFields=FORESTNAME&returnGeometry=true&outSR=4326&f=geojson";
-const BLM_QUERY_URL = 'https://gis.blm.gov/utarcgis/rest/services/AdminBoundaries/BLM_UT_ADMU/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson';
 const WATERFOWL_WMA_NAMES = new Set([
   'bicknell bottoms', 'browns park', 'clear lake', 'desert lake', 'farmington bay',
   'harold crane', 'howard slough', 'locomotive springs', 'ogden bay',
@@ -649,6 +649,16 @@ function setLayerVisibility(layer, visible) {
 }
 function shouldShowWildernessOverlay() {
   return !!(toggleUSFS?.checked || toggleBLM?.checked);
+}
+function shouldDeprioritizeFederalClicks() {
+  return !!(
+    toggleCwmu?.checked ||
+    toggleWma?.checked ||
+    toggleStateParks?.checked ||
+    togglePrivate?.checked ||
+    toggleSITLA?.checked ||
+    shouldShowHuntBoundaries()
+  );
 }
 function updateWildernessOverlayVisibility() {
   setLayerVisibility(wildernessLayer, shouldShowWildernessOverlay());
@@ -2231,6 +2241,7 @@ async function ensureUsfsLayer() {
   usfsLayer.addListener('click', event => {
     if (shouldSuppressLandClick()) return;
     if (resolveOutfitterPriorityClick(event.latLng)) return;
+    if (shouldDeprioritizeFederalClicks()) return;
     openLandInfoWindow(buildLandInfoCard({
       logo: LOGO_USFS,
       title: firstNonEmpty(event.feature.getProperty('FORESTNAME'), 'National Forest'),
@@ -2244,7 +2255,10 @@ async function ensureUsfsLayer() {
 
 async function ensureBlmLayer() {
   if (blmLayer || !googleBaselineMap) return blmLayer;
-  const geojson = await fetchGeoJson(BLM_QUERY_URL);
+  const geojson = await fetchArcGisPagedGeoJson(
+    BLM_SURFACE_OWNERSHIP_LAYER_URL,
+    "UT_LGD IN ('Bureau of Land Management (BLM)','BLM Wilderness Area')"
+  );
   blmLayer = new google.maps.Data();
   blmLayer.addGeoJson(geojson);
   blmLayer.setStyle({
@@ -2257,15 +2271,32 @@ async function ensureBlmLayer() {
   blmLayer.addListener('click', event => {
     if (shouldSuppressLandClick()) return;
     if (resolveOutfitterPriorityClick(event.latLng)) return;
+    if (shouldDeprioritizeFederalClicks()) return;
+    const title = firstNonEmpty(
+      event.feature.getProperty('UT_LGD'),
+      event.feature.getProperty('ut_lgd'),
+      event.feature.getProperty('OWNER'),
+      event.feature.getProperty('owner'),
+      'Bureau of Land Management (BLM)'
+    );
+    const county = firstNonEmpty(
+      event.feature.getProperty('COUNTY'),
+      event.feature.getProperty('county'),
+      event.feature.getProperty('CO_NAME'),
+      event.feature.getProperty('co_name')
+    );
+    const acres = firstNonEmpty(
+      event.feature.getProperty('GIS_ACRES'),
+      event.feature.getProperty('gis_acres'),
+      event.feature.getProperty('ACRES'),
+      event.feature.getProperty('acres')
+    );
+    const detailText = [county ? `${county} County` : '', acres ? `${acres} acres` : ''].filter(Boolean).join(' | ');
     openLandInfoWindow(buildLandInfoCard({
       logo: LOGO_BLM,
-      title: firstNonEmpty(
-        event.feature.getProperty('ADMU_NAME'),
-        event.feature.getProperty('DISTRICT_NAME'),
-        event.feature.getProperty('FIELD_OFFICE'),
-        'BLM Land'
-      ),
+      title,
       subtitle: 'Bureau of Land Management',
+      detailText,
       logoSize: 68
     }), event.latLng);
   });
