@@ -622,6 +622,53 @@ function getFederalCoverageForHunt(hunt) {
   if (!hunt) return null;
   return outfitterFederalCoverageIndex.get(getOutfitterCoverageKey(getSpeciesDisplay(hunt), getUnitCode(hunt))) || null;
 }
+function deterministicHash(input) {
+  const text = safe(input);
+  let hash = 0;
+  for (let i = 0; i < text.length; i += 1) {
+    hash = ((hash << 5) - hash) + text.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+}
+function getOutfitterLocalityScore(outfitter, hunt, requiredUsfsForests = []) {
+  const unitName = normalizeBoundaryKey(getUnitName(hunt));
+  const unitCode = normalizeBoundaryKey(getUnitCode(hunt));
+  const city = normalizeBoundaryKey(outfitter.city);
+  const hometown = normalizeBoundaryKey(outfitter.hometown);
+  const region = normalizeBoundaryKey(outfitter.region);
+  const usfsForestIds = normalizeListValues(outfitter.usfsForestIds).map(normalizeBoundaryKey);
+  let score = 0;
+
+  [city, hometown, region].filter(Boolean).forEach(place => {
+    if (!place) return;
+    if (unitName && (unitName.includes(place) || place.includes(unitName))) score += 8;
+    if (unitCode && (unitCode.includes(place) || place.includes(unitCode))) score += 5;
+  });
+
+  if ((city === 'manti' || hometown === 'manti' || region === 'manti')
+    && requiredUsfsForests.includes('manti-la-sal')) {
+    score += 6;
+  }
+  if (requiredUsfsForests.some(required => usfsForestIds.includes(required))) {
+    score += 2;
+  }
+  return score;
+}
+function orderOutfitterMatchesForDisplay(hunt, matches, requiredUsfsForests = []) {
+  const huntSeed = `${normalizeBoundaryKey(getSpeciesDisplay(hunt))}|${normalizeBoundaryKey(getUnitCode(hunt))}|${normalizeBoundaryKey(getUnitName(hunt))}`;
+  return [...matches].sort((a, b) => {
+    const aLocal = getOutfitterLocalityScore(a, hunt, requiredUsfsForests);
+    const bLocal = getOutfitterLocalityScore(b, hunt, requiredUsfsForests);
+    if (bLocal !== aLocal) return bLocal - aLocal;
+    const aReasons = normalizeListValues(a.matchReasons).length;
+    const bReasons = normalizeListValues(b.matchReasons).length;
+    if (bReasons !== aReasons) return bReasons - aReasons;
+    const aRand = deterministicHash(`${huntSeed}|${safe(a.id || a.slug || a.listingName)}`);
+    const bRand = deterministicHash(`${huntSeed}|${safe(b.id || b.slug || b.listingName)}`);
+    return aRand - bRand;
+  });
+}
 function noteOutfitterInteraction() {
   suppressLandClickUntil = Date.now() + 800;
 }
@@ -1611,10 +1658,10 @@ function getMatchingOutfittersForHunt(hunt) {
       };
       publishedMatches.forEach(upsert);
       fallbackMatches.forEach(upsert);
-      if (merged.length) return merged.slice(0, 12);
+      if (merged.length) return orderOutfitterMatchesForDisplay(hunt, merged, requiredUsfsForests);
     }
   }
-  return fallbackMatches.slice(0, 12);
+  return orderOutfitterMatchesForDisplay(hunt, fallbackMatches, requiredUsfsForests);
 }
 
 function renderOutfitters() {
@@ -2024,7 +2071,7 @@ async function updateOutfitterMarkers(matches) {
   if (!googleBaselineMap || safe(mapTypeSelect?.value).toLowerCase() === 'globe') return;
   const unique = [];
   const seen = new Set();
-  for (const outfitter of matches.slice(0, 8)) {
+  for (const outfitter of matches) {
     const name = safe(outfitter.listingName).trim();
     if (!name || seen.has(name)) continue;
     seen.add(name);
