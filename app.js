@@ -28,10 +28,12 @@ const LOCAL_CWMU_BOUNDARIES_PATH = './data/cwmu-boundaries.geojson';
 const CWMU_BOUNDARY_IDS_PATH = './data/dwr-GetCWMUBoundaries.json';
 const PUBLIC_OWNERSHIP_LAYER_URL = 'https://services.arcgis.com/ZzrwjTRez6FJiOq4/ArcGIS/rest/services/SITLA_Ownership/FeatureServer/0';
 const BLM_SURFACE_OWNERSHIP_LAYER_URL = 'https://gis.blm.gov/utarcgis/rest/services/Lands/BLM_UT_SMA/FeatureServer/0';
+const BLM_ADMIN_QUERY_URL = 'https://gis.blm.gov/utarcgis/rest/services/AdminBoundaries/BLM_UT_ADMU/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson';
 const CWMU_QUERY_URL = 'https://dwrmapserv.utah.gov/dwrarcgis/rest/services/hunt/CWMU_Tradelands_ver3/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson';
 const STATE_PARKS_QUERY_URL = 'https://services.arcgis.com/ZzrwjTRez6FJiOq4/ArcGIS/rest/services/Utah_State_Park_Management_Areas/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson';
 const WMA_QUERY_URL = 'https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/WMA/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson';
 const WILDERNESS_QUERY_URL = "https://services1.arcgis.com/ERdCHt0sNM6dENSD/ArcGIS/rest/services/Wilderness_Areas_in_the_United_States/FeatureServer/0/query?where=" + encodeURIComponent("STATE = 'UT' AND Agency IN ('BLM','FS')") + "&outFields=NAME,Agency,URL,Acreage&returnGeometry=true&outSR=4326&f=geojson";
+const UTAH_OUTLINE_QUERY_URL = 'https://services5.arcgis.com/2ZRAaoTSJbQ20ceg/arcgis/rest/services/state_boundary/FeatureServer/0/query?where=STATE%20%3D%20%27UTAH%27%20OR%20NAME%20%3D%20%27Utah%27&outFields=NAME,STATE&returnGeometry=true&outSR=4326&f=geojson';
 
 const USFS_QUERY_URL = "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_ForestSystemBoundaries_01/MapServer/0/query?where=" + encodeURIComponent("FORESTNAME IN ('Ashley National Forest','Dixie National Forest','Fishlake National Forest','Manti-La Sal National Forest','Uinta-Wasatch-Cache National Forest')") + "&outFields=FORESTNAME&returnGeometry=true&outSR=4326&f=geojson";
 const WATERFOWL_WMA_NAMES = new Set([
@@ -91,7 +93,7 @@ const KNOWN_OUTFITTER_COORDS = new Map([
   ['wild eyez outfitters', { lat: 39.2574155, lng: -111.631482 }]
 ]);
 
-let googleBaselineMap = null, cesiumViewer = null, huntUnitsLayer = null, cesiumHuntDataSource = null, googleApiReady = false, huntHoverFeature = null, selectedBoundaryFeature = null, huntData = [], huntBoundaryGeoJson = null, selectedBoundaryMatches = [], selectedHunt = null, selectionInfoWindow = null, usfsLayer = null, blmLayer = null, wildernessLayer = null, sitlaLayer = null, stateLandsLayer = null, stateParksLayer = null, wmaLayer = null, cwmuLayer = null, privateLayer = null, outfitters = [], outfitterMarkers = [], activeLoads = 0, currentGlobeBasemap = 'esriImagery', outfitterMarkerRunId = 0, suppressLandClickUntil = 0;
+let googleBaselineMap = null, cesiumViewer = null, huntUnitsLayer = null, cesiumHuntDataSource = null, googleApiReady = false, huntHoverFeature = null, selectedBoundaryFeature = null, huntData = [], huntBoundaryGeoJson = null, selectedBoundaryMatches = [], selectedHunt = null, selectionInfoWindow = null, usfsLayer = null, blmLayer = null, blmDetailLayer = null, wildernessLayer = null, utahOutlineLayer = null, sitlaLayer = null, stateLandsLayer = null, stateParksLayer = null, wmaLayer = null, cwmuLayer = null, privateLayer = null, outfitters = [], outfitterMarkers = [], activeLoads = 0, currentGlobeBasemap = 'esriImagery', outfitterMarkerRunId = 0, suppressLandClickUntil = 0;
 const outfitterGeocodeCache = new Map();
 const outfitterMarkerIndex = new Map();
 
@@ -113,6 +115,7 @@ const searchInput = document.getElementById('searchInput'),
   toggleDwrUnits = document.getElementById('toggleDwrUnits'),
   toggleUSFS = document.getElementById('toggleUSFS'),
   toggleBLM = document.getElementById('toggleBLM'),
+  toggleBLMDetail = document.getElementById('toggleBLMDetail'),
   federalLayersSummary = document.getElementById('federalLayersSummary'),
   toggleSITLA = document.getElementById('toggleSITLA'),
   toggleStateParks = document.getElementById('toggleStateParks'),
@@ -1802,7 +1805,7 @@ function updateStateLayersSummary() {
 }
 function updateFederalLayersSummary() {
   if (!federalLayersSummary) return;
-  const count = [toggleUSFS, toggleBLM].filter(el => !!el?.checked).length;
+  const count = [toggleUSFS, toggleBLM, toggleBLMDetail].filter(el => !!el?.checked).length;
   federalLayersSummary.innerHTML = count ? `Federal <span class="toggle-menu-count">(${count})</span>` : 'Federal';
 }
 function updatePrivateLayersSummary() {
@@ -2255,10 +2258,7 @@ async function ensureUsfsLayer() {
 
 async function ensureBlmLayer() {
   if (blmLayer || !googleBaselineMap) return blmLayer;
-  const geojson = await fetchArcGisPagedGeoJson(
-    BLM_SURFACE_OWNERSHIP_LAYER_URL,
-    "UT_LGD IN ('Bureau of Land Management (BLM)','BLM Wilderness Area')"
-  );
+  const geojson = await fetchGeoJson(BLM_ADMIN_QUERY_URL);
   blmLayer = new google.maps.Data();
   blmLayer.addGeoJson(geojson);
   blmLayer.setStyle({
@@ -2269,6 +2269,41 @@ async function ensureBlmLayer() {
     zIndex: 12
   });
   blmLayer.addListener('click', event => {
+    if (shouldSuppressLandClick()) return;
+    if (resolveOutfitterPriorityClick(event.latLng)) return;
+    if (shouldDeprioritizeFederalClicks()) return;
+    openLandInfoWindow(buildLandInfoCard({
+      logo: LOGO_BLM,
+      title: firstNonEmpty(
+        event.feature.getProperty('ADMU_NAME'),
+        event.feature.getProperty('DISTRICT_NAME'),
+        event.feature.getProperty('FIELD_OFFICE'),
+        'BLM Land'
+      ),
+      subtitle: 'Bureau of Land Management',
+      logoSize: 68
+    }), event.latLng);
+  });
+  setLayerVisibility(blmLayer, !!toggleBLM?.checked);
+  return blmLayer;
+}
+
+async function ensureBlmDetailLayer() {
+  if (blmDetailLayer || !googleBaselineMap) return blmDetailLayer;
+  const geojson = await fetchArcGisPagedGeoJson(
+    BLM_SURFACE_OWNERSHIP_LAYER_URL,
+    "UT_LGD IN ('Bureau of Land Management (BLM)','BLM Wilderness Area')"
+  );
+  blmDetailLayer = new google.maps.Data();
+  blmDetailLayer.addGeoJson(geojson);
+  blmDetailLayer.setStyle({
+    strokeColor: '#b9722f',
+    strokeWeight: 1.25,
+    fillColor: '#d8af7b',
+    fillOpacity: 0.03,
+    zIndex: 11
+  });
+  blmDetailLayer.addListener('click', event => {
     if (shouldSuppressLandClick()) return;
     if (resolveOutfitterPriorityClick(event.latLng)) return;
     if (shouldDeprioritizeFederalClicks()) return;
@@ -2295,13 +2330,13 @@ async function ensureBlmLayer() {
     openLandInfoWindow(buildLandInfoCard({
       logo: LOGO_BLM,
       title,
-      subtitle: 'Bureau of Land Management',
+      subtitle: 'BLM Ownership Detail',
       detailText,
       logoSize: 68
     }), event.latLng);
   });
-  setLayerVisibility(blmLayer, !!toggleBLM?.checked);
-  return blmLayer;
+  setLayerVisibility(blmDetailLayer, !!toggleBLMDetail?.checked);
+  return blmDetailLayer;
 }
 async function ensureWildernessLayer() {
   if (wildernessLayer || !googleBaselineMap) return wildernessLayer;
@@ -2341,6 +2376,22 @@ async function ensureWildernessLayer() {
   });
   updateWildernessOverlayVisibility();
   return wildernessLayer;
+}
+async function ensureUtahOutlineLayer() {
+  if (utahOutlineLayer || !googleBaselineMap) return utahOutlineLayer;
+  const geojson = await fetchGeoJson(UTAH_OUTLINE_QUERY_URL);
+  utahOutlineLayer = new google.maps.Data();
+  utahOutlineLayer.addGeoJson(geojson);
+  utahOutlineLayer.setStyle({
+    strokeColor: '#c84f00',
+    strokeWeight: 3,
+    strokeOpacity: 0.95,
+    fillOpacity: 0,
+    clickable: false,
+    zIndex: 9
+  });
+  utahOutlineLayer.setMap(googleBaselineMap);
+  return utahOutlineLayer;
 }
 
 function ensureCesiumViewer() {
@@ -2553,7 +2604,9 @@ function initGoogleBaseline() {
   });
   googleApiReady = true;
   if (huntBoundaryGeoJson) buildBoundaryLayer();
+  ensureUtahOutlineLayer().catch(err => console.error('Utah outline failed', err));
   if (toggleBLM?.checked) ensureBlmLayer().catch(err => console.error('BLM layer failed', err));
+  if (toggleBLMDetail?.checked) ensureBlmDetailLayer().catch(err => console.error('BLM detail layer failed', err));
   if (toggleUSFS?.checked) ensureUsfsLayer().catch(err => console.error('USFS layer failed', err));
   if (shouldShowWildernessOverlay()) ensureWildernessLayer().catch(err => console.error('Wilderness layer failed', err));
   if (toggleSITLA?.checked) ensureSitlaLayer().catch(err => console.error('SITLA layer failed', err));
@@ -2718,6 +2771,11 @@ function bindControls() {
       setLayerVisibility(usfsLayer, false);
       setLayerVisibility(usfsLayer, true);
     }
+    updateFederalLayersSummary();
+  });
+  toggleBLMDetail?.addEventListener('change', async () => {
+    if (toggleBLMDetail.checked) await ensureBlmDetailLayer().catch(err => console.error('BLM detail layer failed', err));
+    setLayerVisibility(blmDetailLayer, !!toggleBLMDetail.checked);
     updateFederalLayersSummary();
   });
   toggleSITLA?.addEventListener('change', async () => {
