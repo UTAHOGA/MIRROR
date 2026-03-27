@@ -1,6 +1,12 @@
 const GOOGLE_MAPS_API_KEY = 'AIzaSyBlxyY6T31oqQ7sBvGGm-Q23QU5zInRo0I';
 const GOOGLE_BASELINE_DEFAULT_CENTER = { lat: 39.2672138, lng: -111.6346885 };
 const GOOGLE_BASELINE_DEFAULT_ZOOM = 7;
+const UTAH_LOCATION_BOUNDS = {
+  minLat: 36.7,
+  maxLat: 42.3,
+  minLng: -114.3,
+  maxLng: -108.8
+};
 
 // --- CLOUDFLARE JSON SOURCES ---
 const CLOUDFLARE_BASE = 'https://json.uoga.workers.dev';
@@ -1696,6 +1702,33 @@ function getKnownOutfitterCoords(outfitter) {
   }
   return null;
 }
+function isWithinUtahBounds(lat, lng) {
+  return Number.isFinite(lat) && Number.isFinite(lng)
+    && lat >= UTAH_LOCATION_BOUNDS.minLat
+    && lat <= UTAH_LOCATION_BOUNDS.maxLat
+    && lng >= UTAH_LOCATION_BOUNDS.minLng
+    && lng <= UTAH_LOCATION_BOUNDS.maxLng;
+}
+function getLatLngLiteral(value) {
+  if (!value) return null;
+  if (typeof value.lat === 'function' && typeof value.lng === 'function') {
+    return { lat: value.lat(), lng: value.lng() };
+  }
+  if (typeof value.lat === 'number' && typeof value.lng === 'number') {
+    return { lat: value.lat, lng: value.lng };
+  }
+  return null;
+}
+function isUtahGeocodeResult(result) {
+  const location = getLatLngLiteral(result?.geometry?.location);
+  if (!location || !isWithinUtahBounds(location.lat, location.lng)) return false;
+  const components = Array.isArray(result?.address_components) ? result.address_components : [];
+  const stateComponent = components.find(component => Array.isArray(component.types) && component.types.includes('administrative_area_level_1'));
+  if (!stateComponent) return true;
+  const shortName = safe(stateComponent.short_name).toUpperCase();
+  const longName = safe(stateComponent.long_name).toUpperCase();
+  return shortName === 'UT' || longName === 'UTAH';
+}
 function formatUtahAddressPart(value) {
   return safe(value)
     .replace(/\bNorth\b/ig, 'N')
@@ -1903,9 +1936,11 @@ function geocodeOutfitter(outfitter) {
     return Promise.resolve(knownLocation);
   }
   if (Number.isFinite(outfitter?.latitude) && Number.isFinite(outfitter?.longitude)) {
-    const directLocation = new google.maps.LatLng(outfitter.latitude, outfitter.longitude);
-    outfitterGeocodeCache.set(key, directLocation);
-    return Promise.resolve(directLocation);
+    if (isWithinUtahBounds(outfitter.latitude, outfitter.longitude)) {
+      const directLocation = new google.maps.LatLng(outfitter.latitude, outfitter.longitude);
+      outfitterGeocodeCache.set(key, directLocation);
+      return Promise.resolve(directLocation);
+    }
   }
   if (!google.maps?.Geocoder) return Promise.resolve(null);
   const queries = getOutfitterGeocodeQueries(outfitter);
@@ -1918,8 +1953,11 @@ function geocodeOutfitter(outfitter) {
           address: query,
           componentRestrictions: { country: 'US' }
         }, (results, status) => {
-          const result = status === 'OK' && results?.[0]?.geometry?.location ? results[0].geometry.location : null;
-          done(result);
+          const result = status === 'OK' && Array.isArray(results)
+            ? results.find(entry => isUtahGeocodeResult(entry))
+            : null;
+          const location = result?.geometry?.location || null;
+          done(location);
         });
       });
       if (loc) {
