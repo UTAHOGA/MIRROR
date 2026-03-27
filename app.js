@@ -48,8 +48,21 @@ const HUNT_DATA_SOURCES = [
       `${CLOUDFLARE_BASE}/utah-hunt-planner-master-all.json?v=${HUNT_DATA_VERSION}`,
       `./data/utah-hunt-planner-master-all.json?v=${HUNT_DATA_VERSION}`
     ]
+  },
+  {
+    label: 'Spike elk supplemental',
+    required: false,
+    candidates: [
+      `./data/Utah_Hunt_Planner_Master_SpikeElk.json?v=${HUNT_DATA_VERSION}`,
+      `${CLOUDFLARE_BASE}/Utah_Hunt_Planner_Master_SpikeElk.json?v=${HUNT_DATA_VERSION}`
+    ]
   }
 ];
+const ELK_BOUNDARY_TABLE_SOURCES = [
+  `./data/elk_hunt_table_official.json?v=${HUNT_DATA_VERSION}`,
+  `${CLOUDFLARE_BASE}/elk_hunt_table_official.json?v=${HUNT_DATA_VERSION}`
+];
+const SPIKE_ELK_HUNT_CODES = new Set(['EB1003', 'EB1004', 'EB1009']);
 
 const HUNT_BOUNDARY_NAME_OVERRIDES = {
   DB1503: ['Manti, San Rafael'], DB1533: ['Manti, San Rafael'], DB1504: ['Nebo'], DB1534: ['Nebo'],
@@ -232,6 +245,15 @@ function getRequiredUsfsForestsForHunt(hunt) {
 }
 function getUnitValue(h) { return firstNonEmpty(getUnitCode(h), getUnitName(h)); }
 function getBoundaryId(h) { return firstNonEmpty(h.boundaryId, h.boundaryID, h.BoundaryID); }
+function normalizeHuntCode(value) { return safe(value).trim().toUpperCase(); }
+function getHuntRecordKey(h) {
+  return [
+    normalizeHuntCode(getHuntCode(h)),
+    safe(getBoundaryId(h)).trim(),
+    safe(getWeapon(h)).trim().toLowerCase(),
+    normalizeBoundaryKey(getUnitName(h) || getUnitCode(h))
+  ].join('|');
+}
 function normalizeWeaponLabel(raw) {
   const value = safe(raw).trim();
   const lower = value.toLowerCase();
@@ -738,6 +760,7 @@ function refreshSelectionMatrix() {
 // --- CORE APP LOGIC ---
 async function loadHuntData() {
   let merged = [];
+  const seenKeys = new Set();
   updateStatus('Loading hunt data...');
   for (let s of HUNT_DATA_SOURCES) {
     for (const candidate of s.candidates) {
@@ -747,8 +770,16 @@ async function loadHuntData() {
         const json = await resp.json();
         const records = Array.isArray(json.records) ? json.records : (Array.isArray(json) ? json : []);
         if (records.length > 0) {
-          merged.push(...records);
-          console.log(`Successfully loaded ${records.length} hunts for ${s.label} from ${candidate}`);
+          let added = 0;
+          records.forEach(record => {
+            const key = getHuntRecordKey(record);
+            if (!seenKeys.has(key)) {
+              seenKeys.add(key);
+              merged.push(record);
+              added += 1;
+            }
+          });
+          console.log(`Successfully loaded ${records.length} hunts for ${s.label} from ${candidate} (${added} added after dedupe)`);
           break;
         }
       } catch (e) {
@@ -756,9 +787,121 @@ async function loadHuntData() {
       }
     }
   }
+  const derivedSpikeRecords = await loadDerivedSpikeElkRecords(merged);
+  if (derivedSpikeRecords.length) {
+    let added = 0;
+    derivedSpikeRecords.forEach(record => {
+      const key = getHuntRecordKey(record);
+      if (!seenKeys.has(key)) {
+        seenKeys.add(key);
+        merged.push(record);
+        added += 1;
+      }
+    });
+    console.log(`Derived ${derivedSpikeRecords.length} spike elk records from official elk table (${added} added after dedupe)`);
+  }
   huntData = merged;
   refreshSelectionMatrix();
   updateStatus(`Loaded ${huntData.length} hunts.`);
+}
+
+async function loadOfficialElkBoundaryFeatures() {
+  for (const candidate of ELK_BOUNDARY_TABLE_SOURCES) {
+    try {
+      const resp = await fetch(candidate, { cache: 'no-store' });
+      if (!resp.ok) continue;
+      const json = await resp.json();
+      const features = Array.isArray(json.features) ? json.features : [];
+      if (features.length) {
+        console.log(`Loaded ${features.length} official elk boundary rows from ${candidate}`);
+        return features;
+      }
+    } catch (error) {
+      console.error(`Failed to load official elk boundary rows from ${candidate}.`, error);
+    }
+  }
+  return [];
+}
+
+function getRepresentativeBoundaryRecord(records) {
+  const byBoundary = new Map();
+  records.forEach(record => {
+    const boundaryId = safe(getBoundaryId(record)).trim();
+    if (!boundaryId) return;
+    const existing = byBoundary.get(boundaryId);
+    const existingScore = existing ? getBoundaryRecordScore(existing) : -1;
+    const candidateScore = getBoundaryRecordScore(record);
+    if (!existing || candidateScore > existingScore) {
+      byBoundary.set(boundaryId, record);
+    }
+  });
+  return byBoundary;
+}
+
+function getBoundaryRecordScore(record) {
+  let score = 0;
+  if (getSpeciesDisplay(record) === 'Elk') score += 8;
+  if (getNormalizedSex(record) === 'Bull') score += 4;
+  if (getUnitName(record) && !/units?/i.test(getUnitName(record))) score += 3;
+  if (safe(record.sourceBoundaryName).trim()) score += 2;
+  if (safe(record.region).trim()) score += 1;
+  return score;
+}
+
+function buildDerivedSpikeElkRecord(template, boundaryRecord, boundaryId, officialFeature) {
+  const attrs = officialFeature?.attributes || {};
+  const officialName = firstNonEmpty(
+    boundaryRecord && getUnitName(boundaryRecord),
+    boundaryRecord && boundaryRecord.sourceBoundaryName,
+    attrs.UNIT_NAME,
+    attrs.BOUNDARY_LABEL,
+    attrs.BOUNDARY_NAME,
+    template.sourceBoundaryName,
+    template.unitName
+  );
+  const next = {
+    ...template,
+    boundaryId: Number(boundaryId),
+    sourceBoundaryName: officialName,
+    unitName: officialName,
+    unitCode: normalizeBoundaryKey(officialName || template.unitCode || template.huntCode),
+    boundaryLink: template.boundaryLink || `https://dwrapps.utah.gov/huntboundary/hbstart?HN=${encodeURIComponent(template.huntCode)}`,
+    derivedFromOfficialElkTable: true
+  };
+  if (boundaryRecord) {
+    next.region = firstNonEmpty(boundaryRecord.region, template.region);
+  }
+  return next;
+}
+
+async function loadDerivedSpikeElkRecords(existingRecords) {
+  const features = await loadOfficialElkBoundaryFeatures();
+  if (!features.length) return [];
+
+  const templatesByCode = new Map();
+  existingRecords.forEach(record => {
+    const code = normalizeHuntCode(getHuntCode(record));
+    if (!SPIKE_ELK_HUNT_CODES.has(code)) return;
+    if (!templatesByCode.has(code)) templatesByCode.set(code, record);
+  });
+  if (!templatesByCode.size) return [];
+
+  const boundaryRefs = getRepresentativeBoundaryRecord(existingRecords);
+  const derived = [];
+  const seen = new Set();
+  features.forEach(feature => {
+    const attrs = feature?.attributes || {};
+    const code = normalizeHuntCode(attrs.HUNT_NUMBER);
+    const boundaryId = safe(attrs.BOUNDARYID).trim();
+    const template = templatesByCode.get(code);
+    if (!template || !boundaryId) return;
+    const dedupeKey = `${code}|${boundaryId}`;
+    if (seen.has(dedupeKey)) return;
+    seen.add(dedupeKey);
+    const boundaryRecord = boundaryRefs.get(boundaryId);
+    derived.push(buildDerivedSpikeElkRecord(template, boundaryRecord, boundaryId, feature));
+  });
+  return derived;
 }
 
 function renderMatchingHunts() {
