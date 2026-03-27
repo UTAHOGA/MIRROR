@@ -254,6 +254,9 @@ function getHuntRecordKey(h) {
     normalizeBoundaryKey(getUnitName(h) || getUnitCode(h))
   ].join('|');
 }
+function getSelectedHuntKey() {
+  return selectedHunt ? getHuntRecordKey(selectedHunt) : '';
+}
 function normalizeWeaponLabel(raw) {
   const value = safe(raw).trim();
   const lower = value.toLowerCase();
@@ -912,13 +915,14 @@ function renderMatchingHunts() {
   const container = document.getElementById('matchingHunts');
   if (!container) return;
   const list = getDisplayHunts();
+  const selectedKey = getSelectedHuntKey();
   updateStatus(
     !hasActiveMatrixSelections() && !selectedHunt
       ? 'Select filters or click a hunt unit to begin.'
       : `${list.length} matching hunt${list.length === 1 ? '' : 's'}`
   );
   container.innerHTML = list.length ? list.map(h => `
-    <div class="hunt-card ${selectedHunt && getHuntCode(selectedHunt) === getHuntCode(h) ? 'is-selected' : ''}" data-hunt-code="${escapeHtml(getHuntCode(h))}" role="button" tabindex="0">
+    <div class="hunt-card ${selectedKey && selectedKey === getHuntRecordKey(h) ? 'is-selected' : ''}" data-hunt-key="${escapeHtml(getHuntRecordKey(h))}" role="button" tabindex="0">
       <div class="hunt-card-title">${getHuntTitle(h)}</div>
       <div class="hunt-card-meta">${getUnitName(h)} | ${getWeapon(h)}</div>
       <div class="hunt-card-meta">${getDates(h)}</div>
@@ -991,7 +995,7 @@ function openSelectedUnitsChooser() {
       const hunts = getDisplayHunts().filter(h => getUnitValue(h) === unitValue);
       closeSelectedHuntPopup();
       if (hunts.length) {
-        window.selectHuntByCode(getHuntCode(hunts[0]));
+        window.selectHuntByKey(getHuntRecordKey(hunts[0]));
       }
     };
     card.addEventListener('click', select);
@@ -1317,8 +1321,8 @@ function buildDnrPlate(hunt, compact = false, roomy = false) {
     </div>`;
 }
 
-window.selectHuntByCode = (code) => {
-  const h = huntData.find(x => getHuntCode(x) === code);
+window.selectHuntByKey = (key) => {
+  const h = huntData.find(x => getHuntRecordKey(x) === key);
   if (h) { 
     selectedHunt = h; 
     renderSelectedHunt(); 
@@ -1328,6 +1332,10 @@ window.selectHuntByCode = (code) => {
     styleBoundaryLayer(); 
     zoomToSelectedBoundary(); 
   }
+};
+window.selectHuntByCode = (code) => {
+  const h = huntData.find(x => getHuntCode(x) === code);
+  if (h) window.selectHuntByKey(getHuntRecordKey(h));
 };
 
 function renderSelectedHunt() {
@@ -1862,7 +1870,7 @@ function buildPopupListForMatches(matches) {
         </div>
       </div>
       ${matches.slice(0, 8).map(h => `
-        <button type="button" data-popup-hunt-code="${escapeHtml(getHuntCode(h))}" style="text-align:left;border:1px solid #d6c1ae;border-radius:10px;background:#fffdf8;padding:10px;cursor:pointer;color:#2b1c12;">
+        <button type="button" data-popup-hunt-key="${escapeHtml(getHuntRecordKey(h))}" style="text-align:left;border:1px solid #d6c1ae;border-radius:10px;background:#fffdf8;padding:10px;cursor:pointer;color:#2b1c12;">
           <div style="font-weight:900;">${escapeHtml(getHuntCode(h))} | ${escapeHtml(getUnitName(h) || getHuntTitle(h))}</div>
           <div style="font-size:12px;color:#6b5646;">${escapeHtml(getSpeciesDisplay(h))} | ${escapeHtml(getNormalizedSex(h))} | ${escapeHtml(getWeapon(h))}</div>
         </button>
@@ -1878,7 +1886,7 @@ function openMapChooser(feature, matches) {
   mapChooserKicker.textContent = 'Selected Unit';
   mapChooserTitle.textContent = boundaryName;
   mapChooserBody.innerHTML = matches.length ? matches.slice(0, 12).map(h => `
-    <div class="map-chooser-card" data-popup-hunt-code="${escapeHtml(getHuntCode(h))}" role="button" tabindex="0">
+    <div class="map-chooser-card" data-popup-hunt-key="${escapeHtml(getHuntRecordKey(h))}" role="button" tabindex="0">
       <div class="hunt-card-title">${escapeHtml(getHuntCode(h))} | ${escapeHtml(getUnitName(h) || getHuntTitle(h))}</div>
       <div class="map-chooser-meta">${escapeHtml(getSpeciesDisplay(h))} | ${escapeHtml(getNormalizedSex(h))} | ${escapeHtml(getHuntType(h))}</div>
       <div class="map-chooser-meta">${escapeHtml(getWeapon(h))} | ${escapeHtml(getDates(h) || 'See official hunt details')}</div>
@@ -1886,10 +1894,10 @@ function openMapChooser(feature, matches) {
   `).join('') : '<div class="map-chooser-empty">No matching hunts found for this boundary.</div>';
   mapChooser.classList.add('is-open');
   mapChooser.setAttribute('aria-hidden', 'false');
-  mapChooserBody.querySelectorAll('[data-popup-hunt-code]').forEach(card => {
+  mapChooserBody.querySelectorAll('[data-popup-hunt-key]').forEach(card => {
     const select = () => {
       closeSelectedHuntPopup();
-      window.selectHuntByCode(card.getAttribute('data-popup-hunt-code'));
+      window.selectHuntByKey(card.getAttribute('data-popup-hunt-key'));
     };
     card.addEventListener('click', select);
     card.addEventListener('keydown', evt => {
@@ -2138,10 +2146,10 @@ async function ensureWmaLayer() {
   wmaLayer = new google.maps.Data();
   wmaLayer.addGeoJson(geojson);
   wmaLayer.setStyle({
-    strokeColor: '#7a2cb8',
+    strokeColor: '#b38a00',
     strokeWeight: 2.5,
-    fillColor: '#be8cff',
-    fillOpacity: 0.1,
+    fillColor: '#ffd84d',
+    fillOpacity: 0.12,
     zIndex: 20
   });
   wmaLayer.addListener('click', event => {
@@ -2171,10 +2179,10 @@ async function ensureCwmuLayer() {
   cwmuLayer = new google.maps.Data();
   cwmuLayer.addGeoJson({ type: 'FeatureCollection', features });
   cwmuLayer.setStyle({
-    strokeColor: '#7c2fa1',
+    strokeColor: '#b11f1f',
     strokeWeight: 2,
-    fillColor: '#b47ad2',
-    fillOpacity: 0.08,
+    fillColor: '#ff6b6b',
+    fillOpacity: 0.1,
     zIndex: 18
   });
   cwmuLayer.addListener('click', event => {
@@ -2344,7 +2352,7 @@ function ensureCesiumViewer() {
     const matches = getCesiumEntityMatches(entity);
     if (!matches.length) return;
     if (matches.length === 1) {
-      window.selectHuntByCode(getHuntCode(matches[0]));
+      window.selectHuntByKey(getHuntRecordKey(matches[0]));
       return;
     }
     selectedBoundaryMatches = matches.slice();
@@ -2356,7 +2364,7 @@ function ensureCesiumViewer() {
         'Selected Unit'
       );
       mapChooserBody.innerHTML = matches.slice(0, 12).map(h => `
-        <div class="map-chooser-card" data-popup-hunt-code="${escapeHtml(getHuntCode(h))}" role="button" tabindex="0">
+        <div class="map-chooser-card" data-popup-hunt-key="${escapeHtml(getHuntRecordKey(h))}" role="button" tabindex="0">
           <div class="hunt-card-title">${escapeHtml(getHuntCode(h))} | ${escapeHtml(getUnitName(h) || getHuntTitle(h))}</div>
           <div class="map-chooser-meta">${escapeHtml(getSpeciesDisplay(h))} | ${escapeHtml(getNormalizedSex(h))} | ${escapeHtml(getHuntType(h))}</div>
           <div class="map-chooser-meta">${escapeHtml(getWeapon(h))} | ${escapeHtml(getDates(h) || 'See official hunt details')}</div>
@@ -2364,10 +2372,10 @@ function ensureCesiumViewer() {
       `).join('');
       mapChooser.classList.add('is-open');
       mapChooser.setAttribute('aria-hidden', 'false');
-      mapChooserBody.querySelectorAll('[data-popup-hunt-code]').forEach(card => {
+      mapChooserBody.querySelectorAll('[data-popup-hunt-key]').forEach(card => {
         const select = () => {
           closeSelectedHuntPopup();
-          window.selectHuntByCode(card.getAttribute('data-popup-hunt-code'));
+          window.selectHuntByKey(card.getAttribute('data-popup-hunt-key'));
         };
         card.addEventListener('click', select);
         card.addEventListener('keydown', evt => {
@@ -2538,7 +2546,7 @@ function buildBoundaryLayer() {
         const matches = getFeatureMatches(event.feature);
         if (!matches.length) return;
         if (matches.length === 1) {
-          window.selectHuntByCode(getHuntCode(matches[0]));
+          window.selectHuntByKey(getHuntRecordKey(matches[0]));
         } else {
           openBoundaryPopup(event.feature, event.latLng);
         }
@@ -2596,7 +2604,7 @@ function bindControls() {
       document.getElementById('matchingHunts').scrollTop = 0;
     }
     if (count === 1) {
-      window.selectHuntByCode(getHuntCode(results[0]));
+      window.selectHuntByKey(getHuntRecordKey(results[0]));
       updateStatus('1 matching hunt applied and selected.');
     } else if (getSelectedUnitGroups().length > 1 && !safe(unitFilter?.value).trim()) {
       zoomToDisplayHuntsBounds();
@@ -2615,16 +2623,16 @@ function bindControls() {
   });
   clearFiltersBtn?.addEventListener('click', resetAllFilters);
   document.getElementById('matchingHunts')?.addEventListener('click', event => {
-    const card = event.target.closest('[data-hunt-code]');
+    const card = event.target.closest('[data-hunt-key]');
     if (!card) return;
-    window.selectHuntByCode(card.getAttribute('data-hunt-code'));
+    window.selectHuntByKey(card.getAttribute('data-hunt-key'));
   });
   document.getElementById('matchingHunts')?.addEventListener('keydown', event => {
     if (event.key !== 'Enter' && event.key !== ' ') return;
-    const card = event.target.closest('[data-hunt-code]');
+    const card = event.target.closest('[data-hunt-key]');
     if (!card) return;
     event.preventDefault();
-    window.selectHuntByCode(card.getAttribute('data-hunt-code'));
+    window.selectHuntByKey(card.getAttribute('data-hunt-key'));
   });
   document.getElementById('closeMapChooserBtn')?.addEventListener('click', closeSelectedHuntPopup);
   document.getElementById('closeHuntDetailsBtn')?.addEventListener('click', closeInlineHuntDetails);
