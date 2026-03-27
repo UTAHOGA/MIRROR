@@ -6,7 +6,10 @@ const GOOGLE_BASELINE_DEFAULT_ZOOM = 7;
 const CLOUDFLARE_BASE = 'https://json.uoga.workers.dev';
 const HUNT_DATA_VERSION = '20260324-master-1733';
 const OUTFITTERS_DATA_VERSION = '20260326-outfitters-geo-1';
-const LOCAL_HUNT_BOUNDARIES_PATH = `${CLOUDFLARE_BASE}/hunt_boundaries.geojson`;
+const HUNT_BOUNDARY_SOURCES = [
+  `./data/hunt_boundaries.geojson?v=${HUNT_DATA_VERSION}`,
+  `${CLOUDFLARE_BASE}/hunt_boundaries.geojson?v=${HUNT_DATA_VERSION}`
+];
 const OUTFITTERS_DATA_SOURCES = [
   `./data/outfitters-public.json?v=${OUTFITTERS_DATA_VERSION}`,
   `./data/outfitters.json?v=${OUTFITTERS_DATA_VERSION}`,
@@ -20,10 +23,13 @@ const LOGO_USFS = './assets/logos/usfs.png';
 const LOGO_BLM = './assets/logos/blm.png';
 const LOGO_SITLA = './assets/logos/sitla.png';
 const LOGO_STATE_PARKS = './assets/logos/state-parks.png';
+const LOCAL_CWMU_BOUNDARIES_PATH = './data/cwmu-boundaries.geojson';
 const CWMU_BOUNDARY_IDS_PATH = './data/dwr-GetCWMUBoundaries.json';
-const LAND_OWNERSHIP_QUERY_URL = 'https://dwrmapserv.utah.gov/arcgis/rest/services/Local_File_GDBs/AGRC_Landownership_opensgid/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson';
+const PUBLIC_OWNERSHIP_LAYER_URL = 'https://services.arcgis.com/ZzrwjTRez6FJiOq4/ArcGIS/rest/services/SITLA_Ownership/FeatureServer/0';
+const CWMU_QUERY_URL = 'https://dwrmapserv.utah.gov/dwrarcgis/rest/services/hunt/CWMU_Tradelands_ver3/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson';
 const STATE_PARKS_QUERY_URL = 'https://services.arcgis.com/ZzrwjTRez6FJiOq4/ArcGIS/rest/services/Utah_State_Park_Management_Areas/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson';
 const WMA_QUERY_URL = 'https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/WMA/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson';
+const WILDERNESS_QUERY_URL = "https://services1.arcgis.com/ERdCHt0sNM6dENSD/ArcGIS/rest/services/Wilderness_Areas_in_the_United_States/FeatureServer/0/query?where=" + encodeURIComponent("STATE = 'UT' AND Agency IN ('BLM','FS')") + "&outFields=NAME,Agency,URL,Acreage&returnGeometry=true&outSR=4326&f=geojson";
 
 const USFS_QUERY_URL = "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_ForestSystemBoundaries_01/MapServer/0/query?where=" + encodeURIComponent("FORESTNAME IN ('Ashley National Forest','Dixie National Forest','Fishlake National Forest','Manti-La Sal National Forest','Uinta-Wasatch-Cache National Forest')") + "&outFields=FORESTNAME&returnGeometry=true&outSR=4326&f=geojson";
 const BLM_QUERY_URL = 'https://gis.blm.gov/utarcgis/rest/services/AdminBoundaries/BLM_UT_ADMU/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson';
@@ -71,7 +77,7 @@ const KNOWN_OUTFITTER_COORDS = new Map([
   ['wild eyez outfitters', { lat: 39.2574155, lng: -111.631482 }]
 ]);
 
-let googleBaselineMap = null, cesiumViewer = null, huntUnitsLayer = null, cesiumHuntDataSource = null, googleApiReady = false, huntHoverFeature = null, selectedBoundaryFeature = null, huntData = [], huntBoundaryGeoJson = null, selectedBoundaryMatches = [], selectedHunt = null, selectionInfoWindow = null, usfsLayer = null, blmLayer = null, sitlaLayer = null, stateLandsLayer = null, stateParksLayer = null, wmaLayer = null, cwmuLayer = null, privateLayer = null, outfitters = [], outfitterMarkers = [], activeLoads = 0, currentGlobeBasemap = 'esriImagery', outfitterMarkerRunId = 0, suppressLandClickUntil = 0;
+let googleBaselineMap = null, cesiumViewer = null, huntUnitsLayer = null, cesiumHuntDataSource = null, googleApiReady = false, huntHoverFeature = null, selectedBoundaryFeature = null, huntData = [], huntBoundaryGeoJson = null, selectedBoundaryMatches = [], selectedHunt = null, selectionInfoWindow = null, usfsLayer = null, blmLayer = null, wildernessLayer = null, sitlaLayer = null, stateLandsLayer = null, stateParksLayer = null, wmaLayer = null, cwmuLayer = null, privateLayer = null, outfitters = [], outfitterMarkers = [], activeLoads = 0, currentGlobeBasemap = 'esriImagery', outfitterMarkerRunId = 0, suppressLandClickUntil = 0;
 const outfitterGeocodeCache = new Map();
 const outfitterMarkerIndex = new Map();
 
@@ -577,6 +583,12 @@ function buildOwnershipDetails(bucket, props) {
 function setLayerVisibility(layer, visible) {
   if (!layer) return;
   layer.setMap(visible ? googleBaselineMap : null);
+}
+function shouldShowWildernessOverlay() {
+  return !!(toggleUSFS?.checked || toggleBLM?.checked);
+}
+function updateWildernessOverlayVisibility() {
+  setLayerVisibility(wildernessLayer, shouldShowWildernessOverlay());
 }
 function updateStatus(message) {
   if (statusEl) statusEl.textContent = message;
@@ -1747,41 +1759,93 @@ async function fetchGeoJson(url) {
   if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
   return resp.json();
 }
+async function fetchFirstGeoJson(urls) {
+  let lastError = null;
+  for (const url of urls) {
+    try {
+      return await fetchGeoJson(url);
+    } catch (error) {
+      lastError = error;
+      console.error('Failed to load GeoJSON from', url, error);
+    }
+  }
+  throw lastError || new Error('No GeoJSON source succeeded');
+}
 async function fetchJson(url) {
   const resp = await fetch(url, { cache: 'no-store' });
   if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
   return resp.json();
 }
-let ownershipGeoJsonPromise = null;
-function getOwnershipGeoJson() {
-  if (!ownershipGeoJsonPromise) {
-    ownershipGeoJsonPromise = fetchGeoJson(LAND_OWNERSHIP_QUERY_URL);
+async function fetchArcGisPagedGeoJson(layerUrl, where, pageSize = 2000) {
+  const allFeatures = [];
+  let offset = 0;
+  while (true) {
+    const url = `${layerUrl}/query?where=${encodeURIComponent(where)}&outFields=*&returnGeometry=true&outSR=4326&f=geojson&resultRecordCount=${pageSize}&resultOffset=${offset}`;
+    const geojson = await fetchGeoJson(url);
+    const features = Array.isArray(geojson?.features) ? geojson.features : [];
+    allFeatures.push(...features);
+    if (features.length < pageSize) break;
+    offset += pageSize;
   }
-  return ownershipGeoJsonPromise;
+  return {
+    type: 'FeatureCollection',
+    features: allFeatures
+  };
 }
-let cwmuBoundaryIdsPromise = null;
-function getCwmuBoundaryIds() {
-  if (!cwmuBoundaryIdsPromise) {
-    cwmuBoundaryIdsPromise = fetchJson(CWMU_BOUNDARY_IDS_PATH).then(ids => Array.isArray(ids) ? ids.map(id => String(id)) : []);
+const OWNERSHIP_BUCKET_QUERIES = {
+  sitla: "state_lgd = 'State Trust Lands'",
+  private: "state_lgd = 'Private'",
+  stateLands: "state_lgd IN ('Other State','State Sovereign Land')"
+};
+const ownershipBucketGeoJsonPromises = new Map();
+function getOwnershipBucketGeoJson(bucket) {
+  if (!ownershipBucketGeoJsonPromises.has(bucket)) {
+    const where = OWNERSHIP_BUCKET_QUERIES[bucket] || '1=0';
+    ownershipBucketGeoJsonPromises.set(bucket, fetchArcGisPagedGeoJson(PUBLIC_OWNERSHIP_LAYER_URL, where));
   }
-  return cwmuBoundaryIdsPromise;
+  return ownershipBucketGeoJsonPromises.get(bucket);
+}
+let cwmuGeoJsonPromise = null;
+async function getCwmuGeoJson() {
+  if (!cwmuGeoJsonPromise) {
+    cwmuGeoJsonPromise = fetchGeoJson(CWMU_QUERY_URL).catch(async error => {
+      console.error('Live CWMU service failed, falling back to local CWMU GeoJSON', error);
+      try {
+        return await fetchGeoJson(LOCAL_CWMU_BOUNDARIES_PATH);
+      } catch (localError) {
+        console.error('Local CWMU GeoJSON failed, falling back to cached IDs', localError);
+      }
+      const [boundaryIds, boundaryGeoJson] = await Promise.all([
+        fetchJson(CWMU_BOUNDARY_IDS_PATH).then(ids => Array.isArray(ids) ? ids.map(id => String(id)) : []),
+        getHuntBoundaryGeoJson()
+      ]);
+      const allowedIds = new Set(boundaryIds);
+      const features = Array.isArray(boundaryGeoJson?.features)
+        ? boundaryGeoJson.features.filter(feature => allowedIds.has(String(feature?.properties?.BoundaryID ?? '')))
+        : [];
+      return { type: 'FeatureCollection', features };
+    }).catch(async error => {
+      cwmuGeoJsonPromise = null;
+      throw error;
+    });
+  }
+  return cwmuGeoJsonPromise;
 }
 let huntBoundaryGeoJsonPromise = null;
 function getHuntBoundaryGeoJson() {
   if (huntBoundaryGeoJson) return Promise.resolve(huntBoundaryGeoJson);
   if (!huntBoundaryGeoJsonPromise) {
-    huntBoundaryGeoJsonPromise = fetchGeoJson(LOCAL_HUNT_BOUNDARIES_PATH).then(geojson => {
+    huntBoundaryGeoJsonPromise = fetchFirstGeoJson(HUNT_BOUNDARY_SOURCES).then(geojson => {
       huntBoundaryGeoJson = geojson;
       return geojson;
     });
   }
   return huntBoundaryGeoJsonPromise;
 }
-function createOwnershipLayer(filterFn, style, clickBuilder) {
+function createOwnershipLayer(bucket, style, clickBuilder) {
   const layer = new google.maps.Data();
-  getOwnershipGeoJson().then(geojson => {
-    const features = Array.isArray(geojson?.features) ? geojson.features.filter(f => filterFn(f.properties || {})) : [];
-    layer.addGeoJson({ type: 'FeatureCollection', features });
+  getOwnershipBucketGeoJson(bucket).then(geojson => {
+    layer.addGeoJson(geojson);
   }).catch(err => console.error('Ownership layer failed', err));
   layer.setStyle(style);
   layer.addListener('click', event => {
@@ -1812,7 +1876,7 @@ function fitDataFeatureBounds(feature, maxZoom = 12) {
 async function ensureSitlaLayer() {
   if (sitlaLayer || !googleBaselineMap) return sitlaLayer;
   sitlaLayer = createOwnershipLayer(
-    props => getOwnershipBucket(props) === 'sitla',
+    'sitla',
     { strokeColor: '#2a78d2', strokeWeight: 2, fillColor: '#6fb3ff', fillOpacity: 0.08, zIndex: 18 },
     feature => buildLandInfoCard(buildOwnershipDetails('sitla', featureProps(feature)))
   );
@@ -1828,7 +1892,7 @@ function featureProps(feature) {
 async function ensureStateLandsLayer() {
   if (stateLandsLayer || !googleBaselineMap) return stateLandsLayer;
   stateLandsLayer = createOwnershipLayer(
-    props => getOwnershipBucket(props) === 'stateLands',
+    'stateLands',
     { strokeColor: '#2f8f9a', strokeWeight: 2, fillColor: '#6ac7d2', fillOpacity: 0.08, zIndex: 17 },
     feature => buildLandInfoCard(buildOwnershipDetails('stateLands', featureProps(feature)))
   );
@@ -1917,11 +1981,8 @@ async function ensureWmaLayer() {
 }
 async function ensureCwmuLayer() {
   if (cwmuLayer || !googleBaselineMap) return cwmuLayer;
-  const [boundaryIds, boundaryGeoJson] = await Promise.all([getCwmuBoundaryIds(), getHuntBoundaryGeoJson()]);
-  const allowedIds = new Set(boundaryIds);
-  const features = Array.isArray(boundaryGeoJson?.features)
-    ? boundaryGeoJson.features.filter(feature => allowedIds.has(String(feature?.properties?.BoundaryID ?? '')))
-    : [];
+  const geojson = await getCwmuGeoJson();
+  const features = Array.isArray(geojson?.features) ? geojson.features : [];
   cwmuLayer = new google.maps.Data();
   cwmuLayer.addGeoJson({ type: 'FeatureCollection', features });
   cwmuLayer.setStyle({
@@ -1934,11 +1995,18 @@ async function ensureCwmuLayer() {
   cwmuLayer.addListener('click', event => {
     if (shouldSuppressLandClick()) return;
     if (resolveOutfitterPriorityClick(event.latLng)) return;
+    fitDataFeatureBounds(event.feature, 12);
     openLandInfoWindow(buildLandInfoCard({
       logo: LOGO_DNR,
-      title: firstNonEmpty(event.feature.getProperty('Boundary_Name'), 'CWMU Area'),
+      title: firstNonEmpty(
+        event.feature.getProperty('Boundary_Name'),
+        event.feature.getProperty('NAME'),
+        event.feature.getProperty('Name'),
+        'CWMU Area'
+      ),
       subtitle: 'Cooperative Wildlife Management Unit',
-      note: 'No access without the appropriate CWMU permit.'
+      logoSize: 68,
+      noticeText: 'No access without the appropriate CWMU permit.'
     }), event.latLng);
   });
   setLayerVisibility(cwmuLayer, !!toggleCwmu?.checked);
@@ -1947,7 +2015,7 @@ async function ensureCwmuLayer() {
 async function ensurePrivateLayer() {
   if (privateLayer || !googleBaselineMap) return privateLayer;
   privateLayer = createOwnershipLayer(
-    props => getOwnershipBucket(props) === 'private',
+    'private',
     { strokeColor: '#8f4a3a', strokeWeight: 1.5, fillColor: '#c99284', fillOpacity: 0.05, zIndex: 16 },
     feature => buildLandInfoCard(buildOwnershipDetails('private', featureProps(feature)))
   );
@@ -2010,6 +2078,45 @@ async function ensureBlmLayer() {
   });
   setLayerVisibility(blmLayer, !!toggleBLM?.checked);
   return blmLayer;
+}
+async function ensureWildernessLayer() {
+  if (wildernessLayer || !googleBaselineMap) return wildernessLayer;
+  const geojson = await fetchGeoJson(WILDERNESS_QUERY_URL);
+  wildernessLayer = new google.maps.Data();
+  wildernessLayer.addGeoJson(geojson);
+  wildernessLayer.setStyle(feature => {
+    const agency = safe(feature.getProperty('Agency')).toUpperCase();
+    const isUsfs = agency === 'FS';
+    return {
+      strokeColor: isUsfs ? '#1f5130' : '#8a611d',
+      strokeWeight: 2,
+      strokeOpacity: 0.9,
+      fillColor: isUsfs ? '#7f9f74' : '#c8a76f',
+      fillOpacity: 0.12,
+      zIndex: 31
+    };
+  });
+  wildernessLayer.addListener('click', event => {
+    if (shouldSuppressLandClick()) return;
+    if (resolveOutfitterPriorityClick(event.latLng)) return;
+    fitDataFeatureBounds(event.feature, 11);
+    const agency = safe(event.feature.getProperty('Agency')).toUpperCase();
+    const subtitle = agency === 'FS' ? 'USFS Wilderness' : 'BLM Wilderness';
+    const detailBits = [];
+    const acreage = event.feature.getProperty('Acreage');
+    if (acreage) detailBits.push(`${Number(acreage).toLocaleString()} acres`);
+    openLandInfoWindow(buildLandInfoCard({
+      logo: agency === 'FS' ? LOGO_USFS : LOGO_BLM,
+      title: firstNonEmpty(event.feature.getProperty('NAME'), 'Wilderness Area'),
+      subtitle,
+      detailText: detailBits.join(' | '),
+      detailsLinkText: event.feature.getProperty('URL') ? 'Area Details' : '',
+      detailsLink: firstNonEmpty(event.feature.getProperty('URL')),
+      logoSize: 68
+    }), event.latLng);
+  });
+  updateWildernessOverlayVisibility();
+  return wildernessLayer;
 }
 
 function ensureCesiumViewer() {
@@ -2224,6 +2331,7 @@ function initGoogleBaseline() {
   if (huntBoundaryGeoJson) buildBoundaryLayer();
   if (toggleBLM?.checked) ensureBlmLayer().catch(err => console.error('BLM layer failed', err));
   if (toggleUSFS?.checked) ensureUsfsLayer().catch(err => console.error('USFS layer failed', err));
+  if (shouldShowWildernessOverlay()) ensureWildernessLayer().catch(err => console.error('Wilderness layer failed', err));
   if (toggleSITLA?.checked) ensureSitlaLayer().catch(err => console.error('SITLA layer failed', err));
   if (toggleStateParks?.checked) ensureStateParksLayer().catch(err => console.error('State parks layer failed', err));
   if (toggleWma?.checked) ensureWmaLayer().catch(err => console.error('WMA layer failed', err));
@@ -2365,11 +2473,15 @@ function bindControls() {
   toggleUSFS?.addEventListener('change', async () => {
     if (toggleUSFS.checked) await ensureUsfsLayer().catch(err => console.error('USFS layer failed', err));
     setLayerVisibility(usfsLayer, !!toggleUSFS.checked);
+    if (shouldShowWildernessOverlay()) await ensureWildernessLayer().catch(err => console.error('Wilderness layer failed', err));
+    updateWildernessOverlayVisibility();
     updateFederalLayersSummary();
   });
   toggleBLM?.addEventListener('change', async () => {
     if (toggleBLM.checked) await ensureBlmLayer().catch(err => console.error('BLM layer failed', err));
     setLayerVisibility(blmLayer, !!toggleBLM.checked);
+    if (shouldShowWildernessOverlay()) await ensureWildernessLayer().catch(err => console.error('Wilderness layer failed', err));
+    updateWildernessOverlayVisibility();
     if (toggleUSFS?.checked) {
       setLayerVisibility(usfsLayer, false);
       setLayerVisibility(usfsLayer, true);
@@ -2432,8 +2544,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadHuntData();
   await loadOutfitters();
   try {
-      const resp = await fetch(LOCAL_HUNT_BOUNDARIES_PATH);
-      huntBoundaryGeoJson = await resp.json();
+      huntBoundaryGeoJson = await fetchFirstGeoJson(HUNT_BOUNDARY_SOURCES);
       if (googleApiReady) buildBoundaryLayer();
   } catch(e) { console.error("GeoJSON load failed", e); }
 
