@@ -104,21 +104,26 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 52px;
-      height: 52px;
       padding: 0;
-      border-radius: 14px;
-      overflow: hidden;
-      background: #fff;
-      border: 1px solid var(--line);
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      text-decoration: none;
+      cursor: pointer;
     }
     .nav-icon-link img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
       display: block;
+      width: auto;
+      height: 54px;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.22);
+      transition: transform 0.14s ease, box-shadow 0.14s ease;
+    }
+    .nav-icon-link:hover img,
+    .nav-icon-link:focus-visible img {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.28);
     }
     .hero {
       margin-top: 18px;
@@ -131,20 +136,11 @@
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
     }
-    .eyebrow {
-      margin: 0 0 10px;
-      color: var(--accent);
-      font-size: 18px;
-      font-weight: 900;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      text-align: center;
-    }
     .hero h2 {
       margin: 0;
       max-width: 1040px;
       font-family: var(--font-display);
-      font-size: clamp(30px, 4.4vw, 50px);
+      font-size: clamp(32px, 4.6vw, 54px);
       line-height: 1.04;
       color: var(--accent);
       text-align: center;
@@ -371,12 +367,10 @@
         <a href="./hunt-research.html">Hunt Research</a>
         <a href="./vetting.html" class="active">Professional Operator Validation</a>
         <a
-          href="https://wildlife.utah.gov/licenses/guides.html"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="#dwr-registration-floor"
           class="nav-icon-link"
-          title="Open Utah DWR guides, outfitters and spotters page"
-          aria-label="Open Utah DWR guides, outfitters and spotters page"
+          title="Jump to Utah DWR registration note"
+          aria-label="Jump to Utah DWR registration note"
         >
           <img src="./assets/logos/DWR-CWMU-LOGO.png" alt="Utah DWR" />
         </a>
@@ -384,8 +378,7 @@
     </header>
 
     <section class="hero">
-      <p class="eyebrow">Standards Of The Professional Operator Validation</p>
-      <h2>What Public Trusted Publication Means, When and Why Being a Professional Operator Matters, and the Value Added to Operators and Their Clients.</h2>
+      <h2>Professional validation should create stronger public trust, clearer operator distinction, and visible value for both outfitters and their clients.</h2>
       <p>
         U.O.G.A. exists to strengthen trust, professionalism, and long-term credibility in the outfitting industry.
         Public designation is intended to create real value for both hunters and operators by identifying outfitters
@@ -538,7 +531,7 @@
           <li>Federal or state permit-reference information where available</li>
           <li>Professional completeness and responsiveness</li>
         </ul>
-        <div class="callout" style="margin-top:16px;">
+        <div class="callout" id="dwr-registration-floor" style="margin-top:16px;">
           <p>
             <strong>Utah DWR registration matters.</strong> Where public-land compensated operation requires Utah DWR
             registration, that status forms part of the baseline regulatory floor considered in U.O.G.A.'s review.
