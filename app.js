@@ -1,116 +1,63 @@
-const GOOGLE_MAPS_API_KEY = 'AIzaSyBlxyY6T31oqQ7sBvGGm-Q23QU5zInRo0I';
-const GOOGLE_BASELINE_DEFAULT_CENTER = { lat: 39.2672138, lng: -111.6346885 };
-const GOOGLE_BASELINE_DEFAULT_ZOOM = 7;
-const UTAH_LOCATION_BOUNDS = {
-  minLat: 36.7,
-  maxLat: 42.3,
-  minLng: -114.3,
-  maxLng: -108.8
-};
+const {
+  GOOGLE_MAPS_API_KEY,
+  GOOGLE_BASELINE_DEFAULT_CENTER,
+  GOOGLE_BASELINE_DEFAULT_ZOOM,
+  UTAH_LOCATION_BOUNDS,
+  CLOUDFLARE_BASE,
+  HUNT_DATA_VERSION,
+  OUTFITTERS_DATA_VERSION,
+  OUTFITTER_COVERAGE_VERSION,
+  HUNT_BOUNDARY_SOURCES,
+  OUTFITTERS_DATA_SOURCES,
+  OUTFITTER_FEDERAL_COVERAGE_SOURCES,
+  LOGO_DNR,
+  LOGO_DNR_ROOMY,
+  LOGO_CWMU,
+  LOGO_DWR_WMA,
+  LOGO_USFS,
+  LOGO_BLM,
+  LOGO_SITLA,
+  LOGO_STATE_PARKS,
+  LOCAL_CWMU_BOUNDARIES_PATH,
+  CWMU_BOUNDARY_IDS_PATH,
+  PUBLIC_OWNERSHIP_LAYER_URL,
+  BLM_SURFACE_OWNERSHIP_LAYER_URL,
+  BLM_ADMIN_LAYER_URL,
+  BLM_ADMIN_QUERY_URL,
+  CWMU_QUERY_URL,
+  STATE_PARKS_QUERY_URL,
+  WMA_QUERY_URL,
+  WILDERNESS_QUERY_URL,
+  UTAH_OUTLINE_QUERY_URL,
+  USFS_QUERY_URL,
+  WATERFOWL_WMA_NAMES,
+  HUNT_DATA_SOURCES,
+  ELK_BOUNDARY_TABLE_SOURCES,
+  OFFICIAL_HUNT_BOUNDARY_TABLE_SOURCES,
+  SPIKE_ELK_HUNT_CODES,
+  HUNT_BOUNDARY_NAME_OVERRIDES,
+  huntPlannerMapStyle,
+  HUNT_TYPE_ORDER,
+  HUNT_CLASS_ORDER,
+  SEX_ORDER,
+  WEAPON_ORDER,
+  DNR_ORANGE,
+  DNR_BROWN,
+  KNOWN_OUTFITTER_COORDS
+} = window.UOGA_CONFIG;
 
-// --- CLOUDFLARE JSON SOURCES ---
-const CLOUDFLARE_BASE = 'https://json.uoga.workers.dev';
-const HUNT_DATA_VERSION = '20260324-master-1733';
-const OUTFITTERS_DATA_VERSION = '20260327-city-logo-refresh-1';
-const OUTFITTER_COVERAGE_VERSION = '20260327-federal-coverage-demo-1';
-const HUNT_BOUNDARY_SOURCES = [
-  `./data/hunt_boundaries.geojson?v=${HUNT_DATA_VERSION}`,
-  `${CLOUDFLARE_BASE}/hunt_boundaries.geojson?v=${HUNT_DATA_VERSION}`
-];
-const OUTFITTERS_DATA_SOURCES = [
-  `./data/outfitters-public.json?v=${OUTFITTERS_DATA_VERSION}`,
-  `./data/outfitters.json?v=${OUTFITTERS_DATA_VERSION}`,
-  `${CLOUDFLARE_BASE}/outfitters-public.json?v=${OUTFITTERS_DATA_VERSION}`,
-  `${CLOUDFLARE_BASE}/outfitters.json?v=${OUTFITTERS_DATA_VERSION}`
-];
-const OUTFITTER_FEDERAL_COVERAGE_SOURCES = [
-  `./data/outfitter-federal-unit-coverage-review.json?v=${OUTFITTER_COVERAGE_VERSION}`,
-  `${CLOUDFLARE_BASE}/outfitter-federal-unit-coverage-review.json?v=${OUTFITTER_COVERAGE_VERSION}`
-];
-const LOGO_DNR = 'https://static.wixstatic.com/media/43f827_34cd9f26f53f4b9ebcb200f6d878bea2~mv2.jpg';
-const LOGO_DNR_ROOMY = 'https://static.wixstatic.com/media/43f827_28020dbfc9b9434c91dc6d92d9a07cd4~mv2.png';
-const LOGO_CWMU = './assets/logos/DWR-CWMU-LOGO.png';
-const LOGO_DWR_WMA = './assets/logos/DWR-WMA.LOGO.png';
-const LOGO_USFS = './assets/logos/usfs.png';
-const LOGO_BLM = './assets/logos/blm.png';
-const LOGO_SITLA = './assets/logos/sitla.png';
-const LOGO_STATE_PARKS = './assets/logos/state-parks.png';
-const LOCAL_CWMU_BOUNDARIES_PATH = './data/cwmu-boundaries.geojson';
-const CWMU_BOUNDARY_IDS_PATH = './data/dwr-GetCWMUBoundaries.json';
-const PUBLIC_OWNERSHIP_LAYER_URL = 'https://services.arcgis.com/ZzrwjTRez6FJiOq4/ArcGIS/rest/services/SITLA_Ownership/FeatureServer/0';
-const BLM_SURFACE_OWNERSHIP_LAYER_URL = 'https://gis.blm.gov/utarcgis/rest/services/Lands/BLM_UT_SMA/FeatureServer/0';
-const BLM_ADMIN_LAYER_URL = 'https://gis.blm.gov/utarcgis/rest/services/AdminBoundaries/BLM_UT_ADMU/FeatureServer/0';
-const BLM_ADMIN_QUERY_URL = `${BLM_ADMIN_LAYER_URL}/query?where=${encodeURIComponent("BLM_ORG_TYPE IN ('District','Field')")}&outFields=*&returnGeometry=true&outSR=4326&f=geojson`;
-const CWMU_QUERY_URL = 'https://dwrmapserv.utah.gov/dwrarcgis/rest/services/hunt/CWMU_Tradelands_ver3/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson';
-const STATE_PARKS_QUERY_URL = 'https://services.arcgis.com/ZzrwjTRez6FJiOq4/ArcGIS/rest/services/Utah_State_Park_Management_Areas/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson';
-const WMA_QUERY_URL = 'https://services.arcgis.com/ZzrwjTRez6FJiOq4/arcgis/rest/services/WMA/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson';
-const WILDERNESS_QUERY_URL = "https://services1.arcgis.com/ERdCHt0sNM6dENSD/ArcGIS/rest/services/Wilderness_Areas_in_the_United_States/FeatureServer/0/query?where=" + encodeURIComponent("STATE = 'UT' AND Agency IN ('BLM','FS')") + "&outFields=NAME,Agency,URL,Acreage&returnGeometry=true&outSR=4326&f=geojson";
-const UTAH_OUTLINE_QUERY_URL = 'https://services1.arcgis.com/99lidPhWCzftIe9K/ArcGIS/rest/services/UtahStateBoundary/FeatureServer/0/query?where=NAME%20%3D%20%27Utah%27&outFields=NAME&returnGeometry=true&outSR=4326&f=geojson';
-
-const USFS_QUERY_URL = "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_ForestSystemBoundaries_01/MapServer/0/query?where=" + encodeURIComponent("FORESTNAME IN ('Ashley National Forest','Dixie National Forest','Fishlake National Forest','Manti-La Sal National Forest','Uinta-Wasatch-Cache National Forest')") + "&outFields=FORESTNAME&returnGeometry=true&outSR=4326&f=geojson";
-const WATERFOWL_WMA_NAMES = new Set([
-  'bicknell bottoms', 'browns park', 'clear lake', 'desert lake', 'farmington bay',
-  'harold crane', 'howard slough', 'locomotive springs', 'ogden bay',
-  'public shooting grounds', 'salt creek', 'timpie springs', 'topaz', 'willard spur'
-]);
-
-const HUNT_DATA_SOURCES = [
-  {
-    label: 'Combined master',
-    required: true,
-    candidates: [
-      `${CLOUDFLARE_BASE}/utah-hunt-planner-master-all.json?v=${HUNT_DATA_VERSION}`,
-      `./data/utah-hunt-planner-master-all.json?v=${HUNT_DATA_VERSION}`
-    ]
-  },
-  {
-    label: 'Spike elk supplemental',
-    required: false,
-    candidates: [
-      `./data/Utah_Hunt_Planner_Master_SpikeElk.json?v=${HUNT_DATA_VERSION}`,
-      `${CLOUDFLARE_BASE}/Utah_Hunt_Planner_Master_SpikeElk.json?v=${HUNT_DATA_VERSION}`
-    ]
-  }
-];
-const ELK_BOUNDARY_TABLE_SOURCES = [
-  `./data/elk_hunt_table_official.json?v=${HUNT_DATA_VERSION}`,
-  `${CLOUDFLARE_BASE}/elk_hunt_table_official.json?v=${HUNT_DATA_VERSION}`
-];
-const SPIKE_ELK_HUNT_CODES = new Set(['EB1003', 'EB1004', 'EB1009']);
-
-const HUNT_BOUNDARY_NAME_OVERRIDES = {
-  DB1503: ['Manti, San Rafael'], DB1533: ['Manti, San Rafael'], DB1504: ['Nebo'], DB1534: ['Nebo'],
-  DB1510: ['Monroe'], DB1540: ['Monroe'], DB1506: ['Fillmore'], DB1536: ['Fillmore'],
-  EA1220: ['Manti, North', 'Manti, South', 'Manti, West', 'Manti, Central', 'Manti, Mohrland-Stump Flat', 'Manti, Horn Mtn', 'Manti, Gordon Creek-Price Canyon', 'Manti, Ferron Canyon'],
-  EA1221: ['Fishlake/Thousand Lakes', 'Fishlake/Thousand Lakes East', 'Fishlake/Thousand Lakes West'],
-  EA1258: ['La Sal Mtns', 'Dolores Triangle', 'La Sal, La Sal Mtns-North'],
-  'la-sal-conservation': ['La Sal'],
-  'fishlake-conservation': ['Fishlake'],
-  'manti-conservation': ['Manti, North', 'Manti, South', 'Manti, West', 'Manti, Central', 'Manti, Mohrland-Stump Flat', 'Manti, Horn Mtn', 'Manti, Gordon Creek-Price Canyon', 'Manti, Ferron Canyon', 'South Manti', 'Manti, Northeast', 'Manti, Northwest', 'Manti, Southeast', 'Manti, Southwest'],
-  'cache-conservation': ['Cache'],
-  'wasatch-mtns-conservation': ['Wasatch Mtns, West', 'Wasatch Mtns, East', 'Wasatch Mtns, Cascade', 'Wasatch Mtns, Currant Creek', 'Wasatch Mtns, Timpanogos A', 'Wasatch Mtns, Box Elder Peak', 'Wasatch Mtns, Lone Peak', 'Wasatch Mtns, Provo Peak', 'Wasatch Mtns, Alpine'],
-  'antelope-island-conservation-expo': ['Antelope Island'],
-  'book-cliffs-north-and-south': ['Book Cliffs, North', 'Book Cliffs, South']
-};
-
-const huntPlannerMapStyle = [
-  { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#f2f2f2' }] },
-  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#aadaff' }] },
-  { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#c8e6c9' }] },
-  { featureType: 'poi.business', stylers: [{ visibility: 'off' }] },
-  { featureType: 'transit', stylers: [{ visibility: 'off' }] }
-];
-
-const HUNT_TYPE_ORDER = [ 'General Season', 'Youth', 'Limited Entry', 'Premium Limited Entry', 'Management', 'Dedicated Hunter', 'CWMU', 'Private Land Only', 'Conservation', 'Once-in-a-Lifetime', 'Antlerless' ];
-const HUNT_CLASS_ORDER = [ 'General Season', 'General Bull', 'Spike Only', 'Mature Bull', 'Limited Entry', 'Premium Limited Entry', 'Youth', 'Management', 'Antlerless', 'CWMU', 'Private Land Only', 'Conservation', 'Statewide Permit', 'Extended Archery' ];
-const SEX_ORDER = ['Buck', 'Bull', 'Ram', 'Ewe', 'Bearded', 'Antlerless', 'Either Sex', "Hunter's Choice"];
-const WEAPON_ORDER = [ 'Any Legal Weapon', 'Archery', 'Extended Archery', 'Restricted Archery', 'Muzzleloader', 'Restricted Muzzleloader', 'Restricted Rifle', 'HAMSS', 'Multiseason', 'Restricted Multiseason' ];
-const DNR_ORANGE = '#ff6600';
-const DNR_BROWN = '#4f2b14';
-const KNOWN_OUTFITTER_COORDS = new Map([
-  ['outfitter-wild-eyez-outfitters', { lat: 39.2574155, lng: -111.631482 }],
-  ['wild eyez outfitters', { lat: 39.2574155, lng: -111.631482 }]
-]);
+const {
+  fetchJson,
+  fetchGeoJson,
+  fetchFirstGeoJson,
+  fetchArcGisPagedGeoJson,
+  loadOfficialBoundaryLookup: loadOfficialBoundaryLookupFromData,
+  applyOfficialBoundaryMappings: applyOfficialBoundaryMappingsFromData,
+  loadOfficialElkBoundaryFeatures: loadOfficialElkBoundaryFeaturesFromData,
+  loadDerivedSpikeElkRecords: loadDerivedSpikeElkRecordsFromData,
+  loadHuntDataRecords,
+  loadFirstNormalizedList
+} = window.UOGA_DATA;
 
 let googleBaselineMap = null, cesiumViewer = null, huntUnitsLayer = null, cesiumHuntDataSource = null, cesiumUtahOutlineDataSource = null, googleApiReady = false, huntHoverFeature = null, selectedBoundaryFeature = null, huntData = [], huntBoundaryGeoJson = null, selectedBoundaryMatches = [], selectedHunt = null, selectionInfoWindow = null, usfsLayer = null, blmLayer = null, blmDetailLayer = null, wildernessLayer = null, utahOutlineLayer = null, sitlaLayer = null, stateLandsLayer = null, stateParksLayer = null, wmaLayer = null, cwmuLayer = null, privateLayer = null, outfitters = [], outfitterFederalCoverage = [], outfitterMarkers = [], activeLoads = 0, currentGlobeBasemap = 'esriImagery', outfitterMarkerRunId = 0, suppressLandClickUntil = 0;
 const outfitterGeocodeCache = new Map();
@@ -229,7 +176,8 @@ function getBoundaryNamesForHunt(h) {
   const code = safe(getUnitCode(h)).trim();
   const unitName = safe(getUnitName(h)).trim();
   const strippedUnitName = unitName.replace(/\s*\((?:conservation|private lands only|select areas only)\)\s*$/i, '').trim();
-  const base = [unitName, strippedUnitName];
+  const officialNames = Array.isArray(h?.officialBoundaryNames) ? h.officialBoundaryNames : [];
+  const base = [unitName, strippedUnitName, ...officialNames];
   const overrides = Array.isArray(HUNT_BOUNDARY_NAME_OVERRIDES[code]) ? HUNT_BOUNDARY_NAME_OVERRIDES[code] : [];
   return [...new Set([...base, ...overrides].map(v => safe(v).trim()).filter(Boolean))];
 }
@@ -241,6 +189,11 @@ function buildBoundaryMatcher(hunts) {
   hunts.forEach(hunt => {
     const boundaryId = safe(getBoundaryId(hunt)).trim();
     if (boundaryId) boundaryIds.add(boundaryId);
+    const officialBoundaryIds = Array.isArray(hunt?.officialBoundaryIds) ? hunt.officialBoundaryIds : [];
+    officialBoundaryIds.forEach(id => {
+      const normalizedId = safe(id).trim();
+      if (normalizedId) boundaryIds.add(normalizedId);
+    });
     const names = getBoundaryNamesForHunt(hunt).map(normalizeBoundaryKey).filter(Boolean);
     names.forEach(name => exactNames.add(name));
     if (!boundaryId) names.forEach(name => prefixNames.add(name));
@@ -255,6 +208,28 @@ function buildBoundaryMatcher(hunts) {
       return false;
     }
   };
+}
+
+let officialBoundaryLookupPromise = null;
+async function loadOfficialBoundaryLookup() {
+  if (!officialBoundaryLookupPromise) {
+    officialBoundaryLookupPromise = loadOfficialBoundaryLookupFromData({
+      OFFICIAL_HUNT_BOUNDARY_TABLE_SOURCES,
+      normalizeHuntCode,
+      safe
+    });
+  }
+  return officialBoundaryLookupPromise;
+}
+
+async function applyOfficialBoundaryMappings(records) {
+  return applyOfficialBoundaryMappingsFromData(records, {
+    OFFICIAL_HUNT_BOUNDARY_TABLE_SOURCES,
+    normalizeHuntCode,
+    getHuntCode,
+    getBoundaryId,
+    safe
+  });
 }
 function getRequiredUsfsForestsForHunt(hunt) {
   const boundaryKeys = getBoundaryNamesForHunt(hunt).map(normalizeBoundaryKey);
@@ -923,149 +898,45 @@ function refreshSelectionMatrix() {
 
 // --- CORE APP LOGIC ---
 async function loadHuntData() {
-  let merged = [];
-  const seenKeys = new Set();
-  updateStatus('Loading hunt data...');
-  for (let s of HUNT_DATA_SOURCES) {
-    for (const candidate of s.candidates) {
-      try {
-        const resp = await fetch(candidate, { cache: 'no-store' });
-        if (!resp.ok) continue;
-        const json = await resp.json();
-        const records = Array.isArray(json.records) ? json.records : (Array.isArray(json) ? json : []);
-        if (records.length > 0) {
-          let added = 0;
-          records.forEach(record => {
-            const key = getHuntRecordKey(record);
-            if (!seenKeys.has(key)) {
-              seenKeys.add(key);
-              merged.push(record);
-              added += 1;
-            }
-          });
-          console.log(`Successfully loaded ${records.length} hunts for ${s.label} from ${candidate} (${added} added after dedupe)`);
-          break;
-        }
-      } catch (e) {
-        console.error(`Failed to load ${s.label} from ${candidate}.`, e);
-      }
-    }
-  }
-  const derivedSpikeRecords = await loadDerivedSpikeElkRecords(merged);
-  if (derivedSpikeRecords.length) {
-    let added = 0;
-    derivedSpikeRecords.forEach(record => {
-      const key = getHuntRecordKey(record);
-      if (!seenKeys.has(key)) {
-        seenKeys.add(key);
-        merged.push(record);
-        added += 1;
-      }
-    });
-    console.log(`Derived ${derivedSpikeRecords.length} spike elk records from official elk table (${added} added after dedupe)`);
-  }
-  huntData = merged;
+  huntData = await loadHuntDataRecords({
+    HUNT_DATA_SOURCES,
+    ELK_BOUNDARY_TABLE_SOURCES,
+    OFFICIAL_HUNT_BOUNDARY_TABLE_SOURCES,
+    SPIKE_ELK_HUNT_CODES,
+    getHuntRecordKey,
+    getHuntCode,
+    getBoundaryId,
+    getSpeciesDisplay,
+    getNormalizedSex,
+    getUnitName,
+    normalizeHuntCode,
+    normalizeBoundaryKey,
+    firstNonEmpty,
+    safe,
+    updateStatus
+  });
   refreshSelectionMatrix();
   updateStatus(`Loaded ${huntData.length} hunts.`);
 }
 
 async function loadOfficialElkBoundaryFeatures() {
-  for (const candidate of ELK_BOUNDARY_TABLE_SOURCES) {
-    try {
-      const resp = await fetch(candidate, { cache: 'no-store' });
-      if (!resp.ok) continue;
-      const json = await resp.json();
-      const features = Array.isArray(json.features) ? json.features : [];
-      if (features.length) {
-        console.log(`Loaded ${features.length} official elk boundary rows from ${candidate}`);
-        return features;
-      }
-    } catch (error) {
-      console.error(`Failed to load official elk boundary rows from ${candidate}.`, error);
-    }
-  }
-  return [];
-}
-
-function getRepresentativeBoundaryRecord(records) {
-  const byBoundary = new Map();
-  records.forEach(record => {
-    const boundaryId = safe(getBoundaryId(record)).trim();
-    if (!boundaryId) return;
-    const existing = byBoundary.get(boundaryId);
-    const existingScore = existing ? getBoundaryRecordScore(existing) : -1;
-    const candidateScore = getBoundaryRecordScore(record);
-    if (!existing || candidateScore > existingScore) {
-      byBoundary.set(boundaryId, record);
-    }
-  });
-  return byBoundary;
-}
-
-function getBoundaryRecordScore(record) {
-  let score = 0;
-  if (getSpeciesDisplay(record) === 'Elk') score += 8;
-  if (getNormalizedSex(record) === 'Bull') score += 4;
-  if (getUnitName(record) && !/units?/i.test(getUnitName(record))) score += 3;
-  if (safe(record.sourceBoundaryName).trim()) score += 2;
-  if (safe(record.region).trim()) score += 1;
-  return score;
-}
-
-function buildDerivedSpikeElkRecord(template, boundaryRecord, boundaryId, officialFeature) {
-  const attrs = officialFeature?.attributes || {};
-  const officialName = firstNonEmpty(
-    boundaryRecord && getUnitName(boundaryRecord),
-    boundaryRecord && boundaryRecord.sourceBoundaryName,
-    attrs.UNIT_NAME,
-    attrs.BOUNDARY_LABEL,
-    attrs.BOUNDARY_NAME,
-    template.sourceBoundaryName,
-    template.unitName
-  );
-  const next = {
-    ...template,
-    boundaryId: Number(boundaryId),
-    sourceBoundaryName: officialName,
-    unitName: officialName,
-    unitCode: normalizeBoundaryKey(officialName || template.unitCode || template.huntCode),
-    boundaryLink: template.boundaryLink || `https://dwrapps.utah.gov/huntboundary/hbstart?HN=${encodeURIComponent(template.huntCode)}`,
-    derivedFromOfficialElkTable: true
-  };
-  if (boundaryRecord) {
-    next.region = firstNonEmpty(boundaryRecord.region, template.region);
-  }
-  return next;
+  return loadOfficialElkBoundaryFeaturesFromData({ ELK_BOUNDARY_TABLE_SOURCES });
 }
 
 async function loadDerivedSpikeElkRecords(existingRecords) {
-  const features = await loadOfficialElkBoundaryFeatures();
-  if (!features.length) return [];
-
-  const templatesByCode = new Map();
-  existingRecords.forEach(record => {
-    const code = normalizeHuntCode(getHuntCode(record));
-    if (!SPIKE_ELK_HUNT_CODES.has(code)) return;
-    if (!templatesByCode.has(code)) templatesByCode.set(code, record);
+  return loadDerivedSpikeElkRecordsFromData(existingRecords, {
+    ELK_BOUNDARY_TABLE_SOURCES,
+    SPIKE_ELK_HUNT_CODES,
+    normalizeHuntCode,
+    getHuntCode,
+    getBoundaryId,
+    getSpeciesDisplay,
+    getNormalizedSex,
+    getUnitName,
+    normalizeBoundaryKey,
+    firstNonEmpty,
+    safe
   });
-  if (!templatesByCode.size) return [];
-
-  const boundaryRefs = getRepresentativeBoundaryRecord(existingRecords);
-  const derived = [];
-  const seen = new Set();
-  features.forEach(feature => {
-    const attrs = feature?.attributes || {};
-    const code = normalizeHuntCode(attrs.HUNT_NUMBER);
-    const boundaryId = safe(attrs.BOUNDARYID).trim();
-    const template = templatesByCode.get(code);
-    if (!template || !boundaryId) return;
-    const dedupeKey = `${code}|${boundaryId}`;
-    if (seen.has(dedupeKey)) return;
-    seen.add(dedupeKey);
-    const boundaryRecord = boundaryRefs.get(boundaryId);
-    derived.push(buildDerivedSpikeElkRecord(template, boundaryRecord, boundaryId, feature));
-  });
-  return derived;
 }
 
 function renderMatchingHunts() {
@@ -2263,77 +2134,11 @@ function openBoundaryPopup(feature, latLng) {
 }
 
 async function loadOutfitters() {
-  for (const candidate of OUTFITTERS_DATA_SOURCES) {
-    try {
-      const resp = await fetch(candidate, { cache: 'no-store' });
-      if (!resp.ok) continue;
-      const json = await resp.json();
-      const normalized = normalizeOutfitterList(json);
-      if (normalized.length) {
-        outfitters = normalized;
-        return;
-      }
-    } catch (error) {
-      console.error('Failed to load outfitters from', candidate, error);
-    }
-  }
-  outfitters = [];
+  outfitters = await loadFirstNormalizedList(OUTFITTERS_DATA_SOURCES, normalizeOutfitterList, []);
 }
 async function loadOutfitterFederalCoverage() {
-  for (const candidate of OUTFITTER_FEDERAL_COVERAGE_SOURCES) {
-    try {
-      const resp = await fetch(candidate, { cache: 'no-store' });
-      if (!resp.ok) continue;
-      const json = await resp.json();
-      const normalized = normalizeOutfitterCoverageList(json);
-      if (normalized.length) {
-        indexOutfitterFederalCoverage(normalized);
-        return;
-      }
-    } catch (error) {
-      console.error('Failed to load outfitter federal coverage from', candidate, error);
-    }
-  }
-  indexOutfitterFederalCoverage([]);
-}
-
-async function fetchGeoJson(url) {
-  const resp = await fetch(url, { cache: 'no-store' });
-  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-  return resp.json();
-}
-async function fetchFirstGeoJson(urls) {
-  let lastError = null;
-  for (const url of urls) {
-    try {
-      return await fetchGeoJson(url);
-    } catch (error) {
-      lastError = error;
-      console.error('Failed to load GeoJSON from', url, error);
-    }
-  }
-  throw lastError || new Error('No GeoJSON source succeeded');
-}
-async function fetchJson(url) {
-  const resp = await fetch(url, { cache: 'no-store' });
-  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-  return resp.json();
-}
-async function fetchArcGisPagedGeoJson(layerUrl, where, pageSize = 2000) {
-  const allFeatures = [];
-  let offset = 0;
-  while (true) {
-    const url = `${layerUrl}/query?where=${encodeURIComponent(where)}&outFields=*&returnGeometry=true&outSR=4326&f=geojson&resultRecordCount=${pageSize}&resultOffset=${offset}`;
-    const geojson = await fetchGeoJson(url);
-    const features = Array.isArray(geojson?.features) ? geojson.features : [];
-    allFeatures.push(...features);
-    if (features.length < pageSize) break;
-    offset += pageSize;
-  }
-  return {
-    type: 'FeatureCollection',
-    features: allFeatures
-  };
+  const normalized = await loadFirstNormalizedList(OUTFITTER_FEDERAL_COVERAGE_SOURCES, normalizeOutfitterCoverageList, []);
+  indexOutfitterFederalCoverage(normalized);
 }
 function getLatLngCacheKey(latLng, precision = 4) {
   if (!latLng) return '';
