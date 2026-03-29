@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>U.O.G.A. | What Is Vetting?</title>
+  <title>U.O.G.A. | Professional Operator Validation</title>
   <style>
     :root {
       --bg: #141414;
@@ -63,18 +63,21 @@
     .brand-copy h1 {
       margin: 0;
       font-family: var(--font-display);
-      font-size: 34px;
-      line-height: 1;
+      font-size: 32px;
+      line-height: .98;
+      text-transform: uppercase;
     }
     .brand-copy p {
       margin: 6px 0 0;
       color: var(--accent);
-      font-size: 23px;
+      font-size: 24px;
       font-family: var(--font-display);
-      line-height: 1;
+      line-height: 1.08;
+      text-transform: none;
     }
     .nav {
       display: flex;
+      align-items: center;
       gap: 10px;
       flex-wrap: wrap;
     }
@@ -97,6 +100,26 @@
       border-color: var(--accent);
       background: rgba(255, 102, 0, 0.16);
     }
+    .nav-icon-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      padding: 0;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+    }
+    .nav-icon-link img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
     .hero {
       margin-top: 18px;
       padding: 28px;
@@ -111,17 +134,22 @@
     .eyebrow {
       margin: 0 0 10px;
       color: var(--accent);
-      font-size: 12px;
+      font-size: 18px;
       font-weight: 900;
-      letter-spacing: .14em;
+      letter-spacing: .1em;
       text-transform: uppercase;
+      text-align: center;
     }
     .hero h2 {
       margin: 0;
-      max-width: 900px;
+      max-width: 1040px;
       font-family: var(--font-display);
-      font-size: clamp(36px, 6vw, 64px);
-      line-height: .95;
+      font-size: clamp(30px, 4.4vw, 50px);
+      line-height: 1.04;
+      color: var(--accent);
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
     }
     .hero p {
       margin: 16px 0 0;
@@ -129,12 +157,16 @@
       color: var(--muted);
       font-size: 18px;
       line-height: 1.6;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
     }
     .hero-actions {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
       margin-top: 22px;
+      justify-content: center;
     }
     .hero-actions a {
       display: inline-flex;
@@ -317,7 +349,7 @@
       .topbar, .hero, .card, .footer-note { padding: 18px; }
       .brand { align-items: flex-start; }
       .brand img { height: 58px; }
-      .brand-copy h1 { font-size: 28px; }
+      .brand-copy h1 { font-size: 26px; }
       .brand-copy p { font-size: 20px; }
       .hero-actions { flex-direction: column; }
       .hero-actions a { width: 100%; }
@@ -330,24 +362,34 @@
       <div class="brand">
         <img src="https://static.wixstatic.com/media/43f827_24f00cd070494533955d4910eef3a2fb~mv2.jpg/v1/fill/w_207,h_105,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Group%20945%20(1).jpg" alt="U.O.G.A. logo">
         <div class="brand-copy">
-          <h1>What Is Vetting?</h1>
-          <p>Standards For Public Designation</p>
+          <h1>U.O.G.A. Standard Operating Procedures</h1>
+          <p>(S.O.P.s) for Vetted and Certified Professional Outfitters (C.P.O.s)</p>
         </div>
       </div>
       <nav class="nav">
         <a href="./index.html">Hunt Planner</a>
         <a href="./hunt-research.html">Hunt Research</a>
-        <a href="./vetting.html" class="active">What Is Vetting?</a>
+        <a href="./vetting.html" class="active">Professional Operator Validation</a>
+        <a
+          href="https://wildlife.utah.gov/licenses/guides.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="nav-icon-link"
+          title="Open Utah DWR guides, outfitters and spotters page"
+          aria-label="Open Utah DWR guides, outfitters and spotters page"
+        >
+          <img src="./assets/logos/DWR-CWMU-LOGO.png" alt="Utah DWR" />
+        </a>
       </nav>
     </header>
 
     <section class="hero">
-      <p class="eyebrow">U.O.G.A. Standards</p>
-      <h2>Trusted publication should mean something.</h2>
+      <p class="eyebrow">Standards Of The Professional Operator Validation</p>
+      <h2>What Public Trusted Publication Means, When and Why Being a Professional Operator Matters, and the Value Added to Operators and Their Clients.</h2>
       <p>
-        U.O.G.A. publishes outfitter designations to help hunters identify operators who have completed review and
-        meet a meaningful standard for public listing. The goal is to provide a stronger, more useful resource without
-        overstating what any designation means in law or in permitting authority.
+        U.O.G.A. exists to strengthen trust, professionalism, and long-term credibility in the outfitting industry.
+        Public designation is intended to create real value for both hunters and operators by identifying outfitters
+        who have met a stronger standard for public presentation, professional standing, and review readiness.
       </p>
       <div class="hero-actions">
         <a class="primary" href="./index.html">Return to Hunt Planner</a>
@@ -357,8 +399,8 @@
         <div class="hero-card">
           <h3>Published Designations</h3>
           <p>
-            Only reviewed outfitters are publicly designated. Incomplete or unresolved records are held back from
-            publication rather than shown with a weak or ambiguous status.
+            Only reviewed outfitters are publicly designated. That gives clients a clearer signal of professionalism,
+            and it gives operators a stronger public platform tied to standards, trust, and industry reputation.
           </p>
           <div class="status-chips">
             <span class="status-chip">Vetted</span>
@@ -366,10 +408,11 @@
           </div>
         </div>
         <div class="hero-card">
-          <h3>Important Limit</h3>
+          <h3>Mission-Aligned, Not Empty Marketing</h3>
           <p>
-            U.O.G.A. designations reflect U.O.G.A.'s review process. They do not replace agency permits, landowner
-            approval, state licensure, or any governing authority's final determination.
+            U.O.G.A. intends these designations to mean something. A published designation should communicate that an
+            outfitter is part of a stronger, more trustworthy resource built around professionalism, clarity, and
+            credible public-facing standards.
           </p>
         </div>
       </div>
@@ -406,22 +449,24 @@
 
       <article class="card span-5">
         <h4>Why It Exists</h4>
-        <h3>Value-added, not value-inflated.</h3>
+        <h3>Value-added, mission-driven, and built to raise the bar.</h3>
         <p>
-          U.O.G.A. wants a designation to carry real weight. A published outfitter should represent more than a name on
-          a list. At the same time, the designation should not suggest powers U.O.G.A. does not have.
+          U.O.G.A. wants public designation to create meaningful value in the market. For operators, that means a
+          stronger public trust signal, more credible differentiation, and better alignment with the mission and values
+          of the organization. For clients, it means greater confidence that a listed outfitter reflects a more
+          serious level of professionalism, readiness, and business credibility than a name gathered from a raw list.
         </p>
         <ul>
-          <li>Better public trust</li>
-          <li>Clearer expectations for outfitters</li>
-          <li>Stronger directory quality</li>
-          <li>A higher professional benchmark for C.P.O.</li>
+          <li>Stronger public confidence in the U.O.G.A. resource</li>
+          <li>More meaningful professional distinction for outfitters</li>
+          <li>Clearer market signal for quality, readiness, and standing</li>
+          <li>A higher and more aspirational benchmark through C.P.O.</li>
         </ul>
       </article>
 
       <article class="card span-6">
         <h4>Vetted Criteria</h4>
-        <h3>Baseline publication standard</h3>
+        <h3>Baseline standard for trusted public publication</h3>
         <ul>
           <li>Business identity information is sufficiently complete</li>
           <li>Contact information is current enough to support listing</li>
@@ -435,7 +480,7 @@
 
       <article class="card span-6">
         <h4>C.P.O. Criteria</h4>
-        <h3>Higher professional designation</h3>
+        <h3>Higher professional designation for stronger operator standing</h3>
         <ul>
           <li>All Vetted requirements are already satisfied</li>
           <li>Business and operating profile is more complete and reliable</li>
@@ -449,7 +494,7 @@
 
       <article class="card span-7">
         <h4>How Review Works</h4>
-        <h3>Administrative review, grounded in available sources.</h3>
+        <h3>Structured review grounded in available sources and professional judgment.</h3>
         <div class="steps">
           <div class="step">
             <div class="step-index">1</div>
@@ -484,7 +529,7 @@
 
       <article class="card span-5">
         <h4>What U.O.G.A. May Review</h4>
-        <h3>Examples of review inputs</h3>
+        <h3>Sources that help support professional validation</h3>
         <ul>
           <li>Submitted outfitter information</li>
           <li>Public business presence and contact data</li>
@@ -493,11 +538,19 @@
           <li>Federal or state permit-reference information where available</li>
           <li>Professional completeness and responsiveness</li>
         </ul>
+        <div class="callout" style="margin-top:16px;">
+          <p>
+            <strong>Utah DWR registration matters.</strong> Where public-land compensated operation requires Utah DWR
+            registration, that status forms part of the baseline regulatory floor considered in U.O.G.A.'s review.
+            U.O.G.A. does not replace DWR authority, but public designation should reflect whether that floor has been
+            clearly addressed.
+          </p>
+        </div>
       </article>
 
       <article class="card span-12">
         <h4>Important Limitation</h4>
-        <h3>What a designation does not mean</h3>
+        <h3>What a designation does not replace</h3>
         <p>
           U.O.G.A. designations are informational and reflect U.O.G.A.'s review process only. They do not constitute a
           legal determination, permit grant, land-access guarantee, or agency authorization. Final authority remains
@@ -508,8 +561,9 @@
 
     <section class="footer-note">
       U.O.G.A. may require updated information, periodic re-review, or removal of a designation if information becomes
-      materially incomplete, inconsistent, outdated, or unreliable. The purpose of this system is to maintain a useful,
-      stronger public resource while keeping its limits clear.
+      materially incomplete, inconsistent, outdated, or unreliable. The purpose of this system is to maintain a public
+      resource that reflects the mission, values, and professional expectations of U.O.G.A. while keeping its role and
+      limitations clear.
     </section>
   </div>
 </body>
