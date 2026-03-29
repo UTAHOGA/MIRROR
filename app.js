@@ -3064,10 +3064,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
       huntBoundaryGeoJson = await fetchFirstGeoJson(HUNT_BOUNDARY_SOURCES);
       if (googleApiReady) buildBoundaryLayer();
+      if (cesiumViewer) {
+        ensureCesiumHuntBoundaries().catch(err => console.error('Cesium hunt boundaries failed', err));
+        ensureCesiumUtahOutline().catch(err => console.error('Cesium Utah outline failed', err));
+      }
   } catch(e) { console.error("GeoJSON load failed", e); }
 
   refreshSelectionMatrix();
   renderMatchingHunts();
+  applyMapMode();
 });
 
 function sortWithPreferredOrder(arr, pref) {

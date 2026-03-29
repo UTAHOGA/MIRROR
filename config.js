@@ -10,7 +10,7 @@ window.UOGA_CONFIG = (() => {
   };
 
   const CLOUDFLARE_BASE = 'https://json.uoga.workers.dev';
-  const HUNT_DATA_VERSION = '20260324-master-1733';
+  const HUNT_DATA_VERSION = '20260329-canonical-1733';
   const OUTFITTERS_DATA_VERSION = '20260327-city-logo-refresh-1';
   const OUTFITTER_COVERAGE_VERSION = '20260327-federal-coverage-demo-1';
 
@@ -59,20 +59,22 @@ window.UOGA_CONFIG = (() => {
 
   const HUNT_DATA_SOURCES = [
     {
-      label: 'Combined master',
+      label: 'Canonical hunt master',
       required: true,
+      authoritative: true,
       candidates: [
         `./data/canonical/hunt-master-canonical.json?v=${HUNT_DATA_VERSION}`,
-        `${CLOUDFLARE_BASE}/utah-hunt-planner-master-all.json?v=${HUNT_DATA_VERSION}`,
-        `./data/utah-hunt-planner-master-all.json?v=${HUNT_DATA_VERSION}`
+        `./data/hunt-master-canonical.json?v=${HUNT_DATA_VERSION}`,
+        `${CLOUDFLARE_BASE}/canonical/hunt-master-canonical.json?v=${HUNT_DATA_VERSION}`,
+        `${CLOUDFLARE_BASE}/hunt-master-canonical.json?v=${HUNT_DATA_VERSION}`
       ]
     },
     {
-      label: 'Spike elk supplemental',
+      label: 'Legacy hunt master fallback',
       required: false,
+      authoritative: false,
       candidates: [
-        `./data/Utah_Hunt_Planner_Master_SpikeElk.json?v=${HUNT_DATA_VERSION}`,
-        `${CLOUDFLARE_BASE}/Utah_Hunt_Planner_Master_SpikeElk.json?v=${HUNT_DATA_VERSION}`
+        `./data/utah-hunt-planner-master-all.json?v=${HUNT_DATA_VERSION}`
       ]
     }
   ];

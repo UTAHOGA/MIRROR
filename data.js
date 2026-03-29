@@ -216,9 +216,12 @@ window.UOGA_DATA = (() => {
 
     const merged = [];
     const seenKeys = new Set();
+    let authoritativeLoaded = false;
+    let loadedPrimaryLabel = '';
     updateStatus('Loading hunt data...');
 
     for (const source of HUNT_DATA_SOURCES) {
+      let sourceLoaded = false;
       for (const candidate of source.candidates) {
         try {
           const json = await fetchJson(candidate);
@@ -234,29 +237,44 @@ window.UOGA_DATA = (() => {
               }
             });
             console.log(`Successfully loaded ${records.length} hunts for ${source.label} from ${candidate} (${added} added after dedupe)`);
+            sourceLoaded = true;
+            if (!loadedPrimaryLabel) loadedPrimaryLabel = source.label;
+            if (source.authoritative) authoritativeLoaded = true;
             break;
           }
         } catch (error) {
           console.error(`Failed to load ${source.label} from ${candidate}.`, error);
         }
       }
+      if (sourceLoaded && source.authoritative) {
+        break;
+      }
     }
 
-    const derivedSpikeRecords = await loadDerivedSpikeElkRecords(merged, deps);
-    if (derivedSpikeRecords.length) {
-      let added = 0;
-      derivedSpikeRecords.forEach(record => {
-        const key = getHuntRecordKey(record);
-        if (!seenKeys.has(key)) {
-          seenKeys.add(key);
-          merged.push(record);
-          added += 1;
-        }
-      });
-      console.log(`Derived ${derivedSpikeRecords.length} spike elk records from official elk table (${added} added after dedupe)`);
+    if (!merged.length) {
+      throw new Error('Unable to load any hunt data records.');
     }
 
-    await applyOfficialBoundaryMappings(merged, deps);
+    if (!authoritativeLoaded) {
+      const derivedSpikeRecords = await loadDerivedSpikeElkRecords(merged, deps);
+      if (derivedSpikeRecords.length) {
+        let added = 0;
+        derivedSpikeRecords.forEach(record => {
+          const key = getHuntRecordKey(record);
+          if (!seenKeys.has(key)) {
+            seenKeys.add(key);
+            merged.push(record);
+            added += 1;
+          }
+        });
+        console.log(`Derived ${derivedSpikeRecords.length} spike elk records from official elk table (${added} added after dedupe)`);
+      }
+
+      await applyOfficialBoundaryMappings(merged, deps);
+    } else {
+      console.log(`Using authoritative hunt data source: ${loadedPrimaryLabel}`);
+    }
+
     return merged;
   }
 
