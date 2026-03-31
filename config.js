@@ -10,7 +10,7 @@ window.UOGA_CONFIG = (() => {
   };
 
   const CLOUDFLARE_BASE = 'https://json.uoga.workers.dev';
-  const HUNT_DATA_VERSION = '20260329-canonical-1733';
+  const HUNT_DATA_VERSION = '20260330-conservation-fix-1';
   const OUTFITTERS_DATA_VERSION = '20260327-city-logo-refresh-1';
   const OUTFITTER_COVERAGE_VERSION = '20260327-federal-coverage-demo-1';
 
