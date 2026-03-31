@@ -1,0 +1,17 @@
+{
+  "sourceRows": 336,
+  "uniqueHuntRows": 271,
+  "matchedPermitRegisterRows": 137,
+  "bySpecies": {
+    "Bison": 6,
+    "Black Bear": 31,
+    "Deer": 36,
+    "Desert Bighorn Sheep": 8,
+    "Elk": 101,
+    "Moose": 5,
+    "Mountain Goat": 7,
+    "Pronghorn": 53,
+    "Rocky Mountain Bighorn Sheep": 6,
+    "Turkey": 18
+  }
+}
