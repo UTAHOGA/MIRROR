@@ -1,0 +1,37 @@
+{
+  "total_rows": 1120,
+  "distinct_hunt_codes": 1120,
+  "duplicate_hunt_codes": [],
+  "missing_hunt_codes": 0,
+  "null_numeric_counts": {
+    "permits_total": 0,
+    "hunters": 0,
+    "harvest": 4,
+    "percent_success": 5
+  },
+  "access_breakdown": [
+    {
+      "access_type": "CWMU",
+      "rows": 304
+    },
+    {
+      "access_type": "Public",
+      "rows": 816
+    }
+  ],
+  "required_fields": [
+    "hunt_code",
+    "species",
+    "hunt_name",
+    "hunt_type",
+    "weapon",
+    "sex_type",
+    "permits_total",
+    "hunters",
+    "harvest",
+    "percent_success",
+    "avg_days",
+    "satisfaction",
+    "access_type"
+  ]
+}
