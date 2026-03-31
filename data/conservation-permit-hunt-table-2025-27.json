@@ -3077,11 +3077,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Beaver, East Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "685"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3000",
+      "EB3024",
+      "EB3025",
+      "EB3077",
+      "EB3102",
+      "EB3158",
+      "EB3159",
+      "EL3000",
+      "EL3024",
+      "EL3025",
+      "EL3077",
+      "EL3158",
+      "EL3159"
+    ]
   },
   {
     "huntCode": "CP-ELK-BEAVER-EAST-BULL-ARCHERY",
@@ -3110,11 +3124,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Beaver, East Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "685"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3000",
+      "EB3024",
+      "EB3025",
+      "EB3077",
+      "EB3102",
+      "EB3158",
+      "EB3159",
+      "EL3000",
+      "EL3024",
+      "EL3025",
+      "EL3077",
+      "EL3158",
+      "EL3159"
+    ]
   },
   {
     "huntCode": "CP-ELK-BEAVER-EAST-BULL-MULTISEASON",
@@ -3143,11 +3171,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Beaver, East Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "685"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3000",
+      "EB3024",
+      "EB3025",
+      "EB3077",
+      "EB3102",
+      "EB3158",
+      "EB3159",
+      "EL3000",
+      "EL3024",
+      "EL3025",
+      "EL3077",
+      "EL3158",
+      "EL3159"
+    ]
   },
   {
     "huntCode": "CP-ELK-BOOK-CLIFFS-BITTER-CREEK-EAST-BULL-ANY-LEGAL-WEAPON",
@@ -3176,12 +3218,26 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Book Cliffs, Bitter Creek/East Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "747",
       "899"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3160",
+      "EB3161",
+      "EB3162",
+      "EB3163",
+      "EB3164",
+      "EB3165",
+      "EB3166",
+      "EL3160",
+      "EL3161",
+      "EL3162",
+      "EL3163",
+      "EL3164",
+      "EL3166"
+    ]
   },
   {
     "huntCode": "CP-ELK-BOOK-CLIFFS-BITTER-CREEK-EAST-BULL-ANY-LEGAL-WEAPON",
@@ -3210,12 +3266,26 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Book Cliffs, Bitter Creek/East Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "747",
       "899"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3160",
+      "EB3161",
+      "EB3162",
+      "EB3163",
+      "EB3164",
+      "EB3165",
+      "EB3166",
+      "EL3160",
+      "EL3161",
+      "EL3162",
+      "EL3163",
+      "EL3164",
+      "EL3166"
+    ]
   },
   {
     "huntCode": "CP-ELK-BOOK-CLIFFS-BITTER-CREEK-EAST-BULL-ARCHERY",
@@ -3244,12 +3314,26 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Book Cliffs, Bitter Creek/East Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "747",
       "899"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3160",
+      "EB3161",
+      "EB3162",
+      "EB3163",
+      "EB3164",
+      "EB3165",
+      "EB3166",
+      "EL3160",
+      "EL3161",
+      "EL3162",
+      "EL3163",
+      "EL3164",
+      "EL3166"
+    ]
   },
   {
     "huntCode": "CP-ELK-BOOK-CLIFFS-BITTER-CREEK-EAST-BULL-MULTISEASON",
@@ -3278,12 +3362,26 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Book Cliffs, Bitter Creek/East Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "747",
       "899"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3160",
+      "EB3161",
+      "EB3162",
+      "EB3163",
+      "EB3164",
+      "EB3165",
+      "EB3166",
+      "EL3160",
+      "EL3161",
+      "EL3162",
+      "EL3163",
+      "EL3164",
+      "EL3166"
+    ]
   },
   {
     "huntCode": "CP-ELK-BOULDER-BULL-ANY-LEGAL-WEAPON",
@@ -3312,14 +3410,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Boulder Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "172",
-      "695",
-      "697",
-      "96"
+      "172"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3145",
+      "EB3148",
+      "EB3151",
+      "EB3154",
+      "EB3156",
+      "EB3190",
+      "EB3191",
+      "EL3145",
+      "EL3148",
+      "EL3151",
+      "EL3154",
+      "EL3190",
+      "EL3191"
+    ]
   },
   {
     "huntCode": "CP-ELK-BOULDER-BULL-ANY-LEGAL-WEAPON",
@@ -3348,14 +3457,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Boulder Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "172",
-      "695",
-      "697",
-      "96"
+      "172"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3145",
+      "EB3148",
+      "EB3151",
+      "EB3154",
+      "EB3156",
+      "EB3190",
+      "EB3191",
+      "EL3145",
+      "EL3148",
+      "EL3151",
+      "EL3154",
+      "EL3190",
+      "EL3191"
+    ]
   },
   {
     "huntCode": "CP-ELK-BOULDER-BULL-ANY-LEGAL-WEAPON",
@@ -3384,14 +3504,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Boulder Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "172",
-      "695",
-      "697",
-      "96"
+      "172"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3145",
+      "EB3148",
+      "EB3151",
+      "EB3154",
+      "EB3156",
+      "EB3190",
+      "EB3191",
+      "EL3145",
+      "EL3148",
+      "EL3151",
+      "EL3154",
+      "EL3190",
+      "EL3191"
+    ]
   },
   {
     "huntCode": "CP-ELK-BOULDER-BULL-ARCHERY",
@@ -3420,14 +3551,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Boulder Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "172",
-      "695",
-      "697",
-      "96"
+      "172"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3145",
+      "EB3148",
+      "EB3151",
+      "EB3154",
+      "EB3156",
+      "EB3190",
+      "EB3191",
+      "EL3145",
+      "EL3148",
+      "EL3151",
+      "EL3154",
+      "EL3190",
+      "EL3191"
+    ]
   },
   {
     "huntCode": "CP-ELK-BOULDER-BULL-MULTISEASON",
@@ -3456,14 +3598,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Boulder Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "172",
-      "695",
-      "697",
-      "96"
+      "172"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3145",
+      "EB3148",
+      "EB3151",
+      "EB3154",
+      "EB3156",
+      "EB3190",
+      "EB3191",
+      "EL3145",
+      "EL3148",
+      "EL3151",
+      "EL3154",
+      "EL3190",
+      "EL3191"
+    ]
   },
   {
     "huntCode": "CP-ELK-BOULDER-BULL-MUZZLELOADER",
@@ -3492,14 +3645,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Boulder Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "172",
-      "695",
-      "697",
-      "96"
+      "172"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3145",
+      "EB3148",
+      "EB3151",
+      "EB3154",
+      "EB3156",
+      "EB3190",
+      "EB3191",
+      "EL3145",
+      "EL3148",
+      "EL3151",
+      "EL3154",
+      "EL3190",
+      "EL3191"
+    ]
   },
   {
     "huntCode": "CP-ELK-BOX-ELDER-GROUSE-CREEK-BULL-MULTISEASON",
@@ -3533,7 +3697,6 @@
       "867"
     ],
     "sourceHuntCodes": [
-      "EB3128",
       "EB3147",
       "EB3150",
       "EB3153",
@@ -3571,15 +3734,11 @@
     "matchedRegisterLabel": "",
     "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "682",
-      "683"
+      "682"
     ],
     "sourceHuntCodes": [
-      "EA1203",
-      "EA1204",
       "EB3031",
       "EB3130",
-      "EB3209",
       "EL3031",
       "EL3130"
     ]
@@ -3720,11 +3879,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Cache, Meadowville Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "33"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3003",
+      "EB3032",
+      "EB3033",
+      "EB3081",
+      "EB3105",
+      "EB3168",
+      "EB3169",
+      "EL3003",
+      "EL3032",
+      "EL3033",
+      "EL3081",
+      "EL3168",
+      "EL3169"
+    ]
   },
   {
     "huntCode": "CP-ELK-CACHE-MEADOWVILLE-BULL-ANY-LEGAL-WEAPON",
@@ -3753,11 +3926,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Cache, Meadowville Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "33"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3003",
+      "EB3032",
+      "EB3033",
+      "EB3081",
+      "EB3105",
+      "EB3168",
+      "EB3169",
+      "EL3003",
+      "EL3032",
+      "EL3033",
+      "EL3081",
+      "EL3168",
+      "EL3169"
+    ]
   },
   {
     "huntCode": "CP-ELK-CACHE-MEADOWVILLE-BULL-MULTISEASON",
@@ -3786,11 +3973,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Cache, Meadowville Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "33"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3003",
+      "EB3032",
+      "EB3033",
+      "EB3081",
+      "EB3105",
+      "EB3168",
+      "EB3169",
+      "EL3003",
+      "EL3032",
+      "EL3033",
+      "EL3081",
+      "EL3168",
+      "EL3169"
+    ]
   },
   {
     "huntCode": "CP-ELK-CACHE-SOUTH-BULL-ANY-LEGAL-WEAPON",
@@ -3819,12 +4020,26 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Cache, South Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "303",
       "41"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3005",
+      "EB3036",
+      "EB3037",
+      "EB3083",
+      "EB3107",
+      "EB3170",
+      "EB3171",
+      "EL3005",
+      "EL3036",
+      "EL3037",
+      "EL3083",
+      "EL3170",
+      "EL3171"
+    ]
   },
   {
     "huntCode": "CP-ELK-CACHE-SOUTH-BULL-MULTISEASON",
@@ -3853,12 +4068,26 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Cache, South Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "303",
       "41"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3005",
+      "EB3036",
+      "EB3037",
+      "EB3083",
+      "EB3107",
+      "EB3170",
+      "EB3171",
+      "EL3005",
+      "EL3036",
+      "EL3037",
+      "EL3083",
+      "EL3170",
+      "EL3171"
+    ]
   },
   {
     "huntCode": "CP-ELK-DIAMOND-MTN-BULL-ANY-LEGAL-WEAPON",
@@ -3889,12 +4118,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Diamond Mtn Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "206",
-      "444"
+      "206"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3020",
+      "EB3068",
+      "EB3069",
+      "EB3098",
+      "EB3122",
+      "EB3195",
+      "EB3196",
+      "EL3020",
+      "EL3068",
+      "EL3069",
+      "EL3098",
+      "EL3195",
+      "EL3196"
+    ]
   },
   {
     "huntCode": "CP-ELK-DIAMOND-MTN-BULL-ANY-LEGAL-WEAPON",
@@ -3923,12 +4165,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Diamond Mtn Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "206",
-      "444"
+      "206"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3020",
+      "EB3068",
+      "EB3069",
+      "EB3098",
+      "EB3122",
+      "EB3195",
+      "EB3196",
+      "EL3020",
+      "EL3068",
+      "EL3069",
+      "EL3098",
+      "EL3195",
+      "EL3196"
+    ]
   },
   {
     "huntCode": "CP-ELK-DIAMOND-MTN-BULL-ARCHERY",
@@ -3957,12 +4212,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Diamond Mtn Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "206",
-      "444"
+      "206"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3020",
+      "EB3068",
+      "EB3069",
+      "EB3098",
+      "EB3122",
+      "EB3195",
+      "EB3196",
+      "EL3020",
+      "EL3068",
+      "EL3069",
+      "EL3098",
+      "EL3195",
+      "EL3196"
+    ]
   },
   {
     "huntCode": "CP-ELK-DIAMOND-MTN-BULL-MULTISEASON",
@@ -3991,12 +4259,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Diamond Mtn Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "206",
-      "444"
+      "206"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3020",
+      "EB3068",
+      "EB3069",
+      "EB3098",
+      "EB3122",
+      "EB3195",
+      "EB3196",
+      "EL3020",
+      "EL3068",
+      "EL3069",
+      "EL3098",
+      "EL3195",
+      "EL3196"
+    ]
   },
   {
     "huntCode": "CP-ELK-FILLMORE-PAHVANT-BULL-ANY-LEGAL-WEAPON",
@@ -4025,11 +4306,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Fillmore, Pahvant Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "88"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3008",
+      "EB3042",
+      "EB3043",
+      "EB3086",
+      "EB3110",
+      "EB3180",
+      "EB3181",
+      "EL3008",
+      "EL3042",
+      "EL3043",
+      "EL3086",
+      "EL3180",
+      "EL3181"
+    ]
   },
   {
     "huntCode": "CP-ELK-FILLMORE-PAHVANT-BULL-ANY-LEGAL-WEAPON",
@@ -4058,11 +4353,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Fillmore, Pahvant Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "88"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3008",
+      "EB3042",
+      "EB3043",
+      "EB3086",
+      "EB3110",
+      "EB3180",
+      "EB3181",
+      "EL3008",
+      "EL3042",
+      "EL3043",
+      "EL3086",
+      "EL3180",
+      "EL3181"
+    ]
   },
   {
     "huntCode": "CP-ELK-FILLMORE-PAHVANT-BULL-ARCHERY",
@@ -4091,11 +4400,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Fillmore, Pahvant Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "88"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3008",
+      "EB3042",
+      "EB3043",
+      "EB3086",
+      "EB3110",
+      "EB3180",
+      "EB3181",
+      "EL3008",
+      "EL3042",
+      "EL3043",
+      "EL3086",
+      "EL3180",
+      "EL3181"
+    ]
   },
   {
     "huntCode": "CP-ELK-FILLMORE-PAHVANT-BULL-MULTISEASON",
@@ -4124,11 +4447,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Fillmore, Pahvant Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "88"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3008",
+      "EB3042",
+      "EB3043",
+      "EB3086",
+      "EB3110",
+      "EB3180",
+      "EB3181",
+      "EL3008",
+      "EL3042",
+      "EL3043",
+      "EL3086",
+      "EL3180",
+      "EL3181"
+    ]
   },
   {
     "huntCode": "CP-ELK-FISHLAKE-ANTLERLESS-ANY-LEGAL-WEAPON",
@@ -4215,7 +4552,6 @@
     "area": "Fishlake/Thousand Lakes",
     "unitCode": "fishlake-thousand-lakes",
     "unitNames": [
-      "Fishlake/Thousand Lake (Expo)",
       "Fishlake/Thousand Lakes"
     ],
     "weapon": "Any Legal Weapon",
@@ -4238,14 +4574,24 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Fishlake/Thousand Lakes Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "175",
-      "698",
-      "699"
+      "175"
     ],
     "sourceHuntCodes": [
-      "EA1221"
+      "EB3018",
+      "EB3063",
+      "EB3064",
+      "EB3065",
+      "EB3096",
+      "EB3120",
+      "EB3192",
+      "EL3018",
+      "EL3063",
+      "EL3064",
+      "EL3065",
+      "EL3096",
+      "EL3192"
     ]
   },
   {
@@ -4257,7 +4603,6 @@
     "area": "Fishlake/Thousand Lakes",
     "unitCode": "fishlake-thousand-lakes",
     "unitNames": [
-      "Fishlake/Thousand Lake (Expo)",
       "Fishlake/Thousand Lakes"
     ],
     "weapon": "Any Legal Weapon",
@@ -4276,14 +4621,24 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Fishlake/Thousand Lakes Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "175",
-      "698",
-      "699"
+      "175"
     ],
     "sourceHuntCodes": [
-      "EA1221"
+      "EB3018",
+      "EB3063",
+      "EB3064",
+      "EB3065",
+      "EB3096",
+      "EB3120",
+      "EB3192",
+      "EL3018",
+      "EL3063",
+      "EL3064",
+      "EL3065",
+      "EL3096",
+      "EL3192"
     ]
   },
   {
@@ -4295,7 +4650,6 @@
     "area": "Fishlake/Thousand Lakes",
     "unitCode": "fishlake-thousand-lakes",
     "unitNames": [
-      "Fishlake/Thousand Lake (Expo)",
       "Fishlake/Thousand Lakes"
     ],
     "weapon": "Archery",
@@ -4314,14 +4668,24 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Fishlake/Thousand Lakes Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "175",
-      "698",
-      "699"
+      "175"
     ],
     "sourceHuntCodes": [
-      "EA1221"
+      "EB3018",
+      "EB3063",
+      "EB3064",
+      "EB3065",
+      "EB3096",
+      "EB3120",
+      "EB3192",
+      "EL3018",
+      "EL3063",
+      "EL3064",
+      "EL3065",
+      "EL3096",
+      "EL3192"
     ]
   },
   {
@@ -4333,7 +4697,6 @@
     "area": "Fishlake/Thousand Lakes",
     "unitCode": "fishlake-thousand-lakes",
     "unitNames": [
-      "Fishlake/Thousand Lake (Expo)",
       "Fishlake/Thousand Lakes"
     ],
     "weapon": "Multiseason",
@@ -4352,14 +4715,24 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Fishlake/Thousand Lakes Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "175",
-      "698",
-      "699"
+      "175"
     ],
     "sourceHuntCodes": [
-      "EA1221"
+      "EB3018",
+      "EB3063",
+      "EB3064",
+      "EB3065",
+      "EB3096",
+      "EB3120",
+      "EB3192",
+      "EL3018",
+      "EL3063",
+      "EL3064",
+      "EL3065",
+      "EL3096",
+      "EL3192"
     ]
   },
   {
@@ -4371,7 +4744,6 @@
     "area": "Fishlake/Thousand Lakes",
     "unitCode": "fishlake-thousand-lakes",
     "unitNames": [
-      "Fishlake/Thousand Lake (Expo)",
       "Fishlake/Thousand Lakes"
     ],
     "weapon": "Multiseason",
@@ -4390,14 +4762,24 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Fishlake/Thousand Lakes Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "175",
-      "698",
-      "699"
+      "175"
     ],
     "sourceHuntCodes": [
-      "EA1221"
+      "EB3018",
+      "EB3063",
+      "EB3064",
+      "EB3065",
+      "EB3096",
+      "EB3120",
+      "EB3192",
+      "EL3018",
+      "EL3063",
+      "EL3064",
+      "EL3065",
+      "EL3096",
+      "EL3192"
     ]
   },
   {
@@ -4409,7 +4791,6 @@
     "area": "Fishlake/Thousand Lakes",
     "unitCode": "fishlake-thousand-lakes",
     "unitNames": [
-      "Fishlake/Thousand Lake (Expo)",
       "Fishlake/Thousand Lakes"
     ],
     "weapon": "Muzzleloader",
@@ -4428,14 +4809,24 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Fishlake/Thousand Lakes Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "175",
-      "698",
-      "699"
+      "175"
     ],
     "sourceHuntCodes": [
-      "EA1221"
+      "EB3018",
+      "EB3063",
+      "EB3064",
+      "EB3065",
+      "EB3096",
+      "EB3120",
+      "EB3192",
+      "EL3018",
+      "EL3063",
+      "EL3064",
+      "EL3065",
+      "EL3096",
+      "EL3192"
     ]
   },
   {
@@ -4556,8 +4947,6 @@
     "area": "La Sal, La Sal Mtns",
     "unitCode": "la-sal-la-sal-mtns",
     "unitNames": [
-      "La Sal (Expo)",
-      "La Sal Mtns",
       "La Sal, La Sal Mtns"
     ],
     "weapon": "Any Legal Weapon",
@@ -4576,14 +4965,18 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "La Sal, La Sal Mtns Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "617",
-      "684",
-      "879"
+      "684"
     ],
     "sourceHuntCodes": [
-      "EA1258"
+      "EL3009",
+      "EL3045",
+      "EL3046",
+      "EL3087",
+      "EL3182",
+      "EL3183"
     ]
   },
   {
@@ -4595,8 +4988,6 @@
     "area": "La Sal, La Sal Mtns",
     "unitCode": "la-sal-la-sal-mtns",
     "unitNames": [
-      "La Sal (Expo)",
-      "La Sal Mtns",
       "La Sal, La Sal Mtns"
     ],
     "weapon": "Any Legal Weapon",
@@ -4615,14 +5006,18 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "La Sal, La Sal Mtns Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "617",
-      "684",
-      "879"
+      "684"
     ],
     "sourceHuntCodes": [
-      "EA1258"
+      "EL3009",
+      "EL3045",
+      "EL3046",
+      "EL3087",
+      "EL3182",
+      "EL3183"
     ]
   },
   {
@@ -4634,8 +5029,6 @@
     "area": "La Sal, La Sal Mtns",
     "unitCode": "la-sal-la-sal-mtns",
     "unitNames": [
-      "La Sal (Expo)",
-      "La Sal Mtns",
       "La Sal, La Sal Mtns"
     ],
     "weapon": "Any Legal Weapon",
@@ -4655,14 +5048,18 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "La Sal, La Sal Mtns Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "617",
-      "684",
-      "879"
+      "684"
     ],
     "sourceHuntCodes": [
-      "EA1258"
+      "EL3009",
+      "EL3045",
+      "EL3046",
+      "EL3087",
+      "EL3182",
+      "EL3183"
     ]
   },
   {
@@ -4674,8 +5071,6 @@
     "area": "La Sal, La Sal Mtns",
     "unitCode": "la-sal-la-sal-mtns",
     "unitNames": [
-      "La Sal (Expo)",
-      "La Sal Mtns",
       "La Sal, La Sal Mtns"
     ],
     "weapon": "Archery",
@@ -4694,14 +5089,18 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "La Sal, La Sal Mtns Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "617",
-      "684",
-      "879"
+      "684"
     ],
     "sourceHuntCodes": [
-      "EA1258"
+      "EL3009",
+      "EL3045",
+      "EL3046",
+      "EL3087",
+      "EL3182",
+      "EL3183"
     ]
   },
   {
@@ -4713,8 +5112,6 @@
     "area": "La Sal, La Sal Mtns",
     "unitCode": "la-sal-la-sal-mtns",
     "unitNames": [
-      "La Sal (Expo)",
-      "La Sal Mtns",
       "La Sal, La Sal Mtns"
     ],
     "weapon": "Multiseason",
@@ -4733,14 +5130,18 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "La Sal, La Sal Mtns Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "617",
-      "684",
-      "879"
+      "684"
     ],
     "sourceHuntCodes": [
-      "EA1258"
+      "EL3009",
+      "EL3045",
+      "EL3046",
+      "EL3087",
+      "EL3182",
+      "EL3183"
     ]
   },
   {
@@ -4752,8 +5153,6 @@
     "area": "La Sal, La Sal Mtns",
     "unitCode": "la-sal-la-sal-mtns",
     "unitNames": [
-      "La Sal (Expo)",
-      "La Sal Mtns",
       "La Sal, La Sal Mtns"
     ],
     "weapon": "Multiseason",
@@ -4772,14 +5171,18 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "La Sal, La Sal Mtns Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "617",
-      "684",
-      "879"
+      "684"
     ],
     "sourceHuntCodes": [
-      "EA1258"
+      "EL3009",
+      "EL3045",
+      "EL3046",
+      "EL3087",
+      "EL3182",
+      "EL3183"
     ]
   },
   {
@@ -4791,8 +5194,6 @@
     "area": "La Sal, La Sal Mtns",
     "unitCode": "la-sal-la-sal-mtns",
     "unitNames": [
-      "La Sal (Expo)",
-      "La Sal Mtns",
       "La Sal, La Sal Mtns"
     ],
     "weapon": "Muzzleloader",
@@ -4811,14 +5212,18 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "La Sal, La Sal Mtns Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "617",
-      "684",
-      "879"
+      "684"
     ],
     "sourceHuntCodes": [
-      "EA1258"
+      "EL3009",
+      "EL3045",
+      "EL3046",
+      "EL3087",
+      "EL3182",
+      "EL3183"
     ]
   },
   {
@@ -4904,8 +5309,7 @@
     "area": "Manti",
     "unitCode": "manti",
     "unitNames": [
-      "Manti",
-      "Manti (Expo)"
+      "Manti"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -4925,25 +5329,24 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Manti Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "43",
-      "445",
-      "446",
-      "45",
-      "47",
-      "49",
-      "51",
-      "55",
-      "58",
-      "59",
-      "63",
-      "861",
-      "862",
-      "938"
+      "51"
     ],
     "sourceHuntCodes": [
-      "EA1220"
+      "EB3006",
+      "EB3038",
+      "EB3039",
+      "EB3084",
+      "EB3108",
+      "EB3126",
+      "EB3172",
+      "EL3006",
+      "EL3038",
+      "EL3039",
+      "EL3084",
+      "EL3126",
+      "EL3172"
     ]
   },
   {
@@ -4955,8 +5358,7 @@
     "area": "Manti",
     "unitCode": "manti",
     "unitNames": [
-      "Manti",
-      "Manti (Expo)"
+      "Manti"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -4974,25 +5376,24 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Manti Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "43",
-      "445",
-      "446",
-      "45",
-      "47",
-      "49",
-      "51",
-      "55",
-      "58",
-      "59",
-      "63",
-      "861",
-      "862",
-      "938"
+      "51"
     ],
     "sourceHuntCodes": [
-      "EA1220"
+      "EB3006",
+      "EB3038",
+      "EB3039",
+      "EB3084",
+      "EB3108",
+      "EB3126",
+      "EB3172",
+      "EL3006",
+      "EL3038",
+      "EL3039",
+      "EL3084",
+      "EL3126",
+      "EL3172"
     ]
   },
   {
@@ -5004,8 +5405,7 @@
     "area": "Manti",
     "unitCode": "manti",
     "unitNames": [
-      "Manti",
-      "Manti (Expo)"
+      "Manti"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -5023,25 +5423,24 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Manti Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "43",
-      "445",
-      "446",
-      "45",
-      "47",
-      "49",
-      "51",
-      "55",
-      "58",
-      "59",
-      "63",
-      "861",
-      "862",
-      "938"
+      "51"
     ],
     "sourceHuntCodes": [
-      "EA1220"
+      "EB3006",
+      "EB3038",
+      "EB3039",
+      "EB3084",
+      "EB3108",
+      "EB3126",
+      "EB3172",
+      "EL3006",
+      "EL3038",
+      "EL3039",
+      "EL3084",
+      "EL3126",
+      "EL3172"
     ]
   },
   {
@@ -5053,8 +5452,7 @@
     "area": "Manti",
     "unitCode": "manti",
     "unitNames": [
-      "Manti",
-      "Manti (Expo)"
+      "Manti"
     ],
     "weapon": "Archery",
     "conditions": [
@@ -5072,25 +5470,24 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Manti Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "43",
-      "445",
-      "446",
-      "45",
-      "47",
-      "49",
-      "51",
-      "55",
-      "58",
-      "59",
-      "63",
-      "861",
-      "862",
-      "938"
+      "51"
     ],
     "sourceHuntCodes": [
-      "EA1220"
+      "EB3006",
+      "EB3038",
+      "EB3039",
+      "EB3084",
+      "EB3108",
+      "EB3126",
+      "EB3172",
+      "EL3006",
+      "EL3038",
+      "EL3039",
+      "EL3084",
+      "EL3126",
+      "EL3172"
     ]
   },
   {
@@ -5102,8 +5499,7 @@
     "area": "Manti",
     "unitCode": "manti",
     "unitNames": [
-      "Manti",
-      "Manti (Expo)"
+      "Manti"
     ],
     "weapon": "Multiseason",
     "conditions": [
@@ -5121,25 +5517,24 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Manti Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "43",
-      "445",
-      "446",
-      "45",
-      "47",
-      "49",
-      "51",
-      "55",
-      "58",
-      "59",
-      "63",
-      "861",
-      "862",
-      "938"
+      "51"
     ],
     "sourceHuntCodes": [
-      "EA1220"
+      "EB3006",
+      "EB3038",
+      "EB3039",
+      "EB3084",
+      "EB3108",
+      "EB3126",
+      "EB3172",
+      "EL3006",
+      "EL3038",
+      "EL3039",
+      "EL3084",
+      "EL3126",
+      "EL3172"
     ]
   },
   {
@@ -5151,8 +5546,7 @@
     "area": "Manti",
     "unitCode": "manti",
     "unitNames": [
-      "Manti",
-      "Manti (Expo)"
+      "Manti"
     ],
     "weapon": "Multiseason",
     "conditions": [
@@ -5170,25 +5564,24 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Manti Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "43",
-      "445",
-      "446",
-      "45",
-      "47",
-      "49",
-      "51",
-      "55",
-      "58",
-      "59",
-      "63",
-      "861",
-      "862",
-      "938"
+      "51"
     ],
     "sourceHuntCodes": [
-      "EA1220"
+      "EB3006",
+      "EB3038",
+      "EB3039",
+      "EB3084",
+      "EB3108",
+      "EB3126",
+      "EB3172",
+      "EL3006",
+      "EL3038",
+      "EL3039",
+      "EL3084",
+      "EL3126",
+      "EL3172"
     ]
   },
   {
@@ -5200,8 +5593,7 @@
     "area": "Manti",
     "unitCode": "manti",
     "unitNames": [
-      "Manti",
-      "Manti (Expo)"
+      "Manti"
     ],
     "weapon": "Muzzleloader",
     "conditions": [
@@ -5219,25 +5611,24 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Manti Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "43",
-      "445",
-      "446",
-      "45",
-      "47",
-      "49",
-      "51",
-      "55",
-      "58",
-      "59",
-      "63",
-      "861",
-      "862",
-      "938"
+      "51"
     ],
     "sourceHuntCodes": [
-      "EA1220"
+      "EB3006",
+      "EB3038",
+      "EB3039",
+      "EB3084",
+      "EB3108",
+      "EB3126",
+      "EB3172",
+      "EL3006",
+      "EL3038",
+      "EL3039",
+      "EL3084",
+      "EL3126",
+      "EL3172"
     ]
   },
   {
@@ -5267,12 +5658,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Monroe Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "115",
       "629"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3010",
+      "EB3047",
+      "EB3048",
+      "EB3088",
+      "EB3112",
+      "EB3184",
+      "EB3185",
+      "EL3010",
+      "EL3047",
+      "EL3048",
+      "EL3088",
+      "EL3184",
+      "EL3185"
+    ]
   },
   {
     "huntCode": "CP-ELK-MONROE-BULL-ANY-LEGAL-WEAPON",
@@ -5301,12 +5705,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Monroe Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "115",
       "629"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3010",
+      "EB3047",
+      "EB3048",
+      "EB3088",
+      "EB3112",
+      "EB3184",
+      "EB3185",
+      "EL3010",
+      "EL3047",
+      "EL3048",
+      "EL3088",
+      "EL3184",
+      "EL3185"
+    ]
   },
   {
     "huntCode": "CP-ELK-MONROE-BULL-ARCHERY",
@@ -5335,12 +5752,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Monroe Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "115",
       "629"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3010",
+      "EB3047",
+      "EB3048",
+      "EB3088",
+      "EB3112",
+      "EB3184",
+      "EB3185",
+      "EL3010",
+      "EL3047",
+      "EL3048",
+      "EL3088",
+      "EL3184",
+      "EL3185"
+    ]
   },
   {
     "huntCode": "CP-ELK-MONROE-BULL-MULTISEASON",
@@ -5369,12 +5799,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Monroe Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "115",
       "629"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3010",
+      "EB3047",
+      "EB3048",
+      "EB3088",
+      "EB3112",
+      "EB3184",
+      "EB3185",
+      "EL3010",
+      "EL3047",
+      "EL3048",
+      "EL3088",
+      "EL3184",
+      "EL3185"
+    ]
   },
   {
     "huntCode": "CP-ELK-MT-DUTTON-BULL-ANY-LEGAL-WEAPON",
@@ -5408,7 +5851,6 @@
       "630"
     ],
     "sourceHuntCodes": [
-      "EA2017",
       "EB3011",
       "EB3049",
       "EB3050",
@@ -5456,7 +5898,6 @@
       "630"
     ],
     "sourceHuntCodes": [
-      "EA2017",
       "EB3011",
       "EB3049",
       "EB3050",
@@ -5504,7 +5945,6 @@
       "630"
     ],
     "sourceHuntCodes": [
-      "EA2017",
       "EB3011",
       "EB3049",
       "EB3050",
@@ -5552,7 +5992,6 @@
       "630"
     ],
     "sourceHuntCodes": [
-      "EA2017",
       "EB3011",
       "EB3049",
       "EB3050",
@@ -5788,9 +6227,6 @@
       "140"
     ],
     "sourceHuntCodes": [
-      "EA1273",
-      "EA1274",
-      "EA1277",
       "EB3013",
       "EB3053",
       "EB3091",
@@ -5834,11 +6270,6 @@
       "634"
     ],
     "sourceHuntCodes": [
-      "EA1069",
-      "EA1283",
-      "EA1284",
-      "EA1285",
-      "EA2018",
       "EB3015",
       "EB3056",
       "EB3057",
@@ -5886,11 +6317,6 @@
       "634"
     ],
     "sourceHuntCodes": [
-      "EA1069",
-      "EA1283",
-      "EA1284",
-      "EA1285",
-      "EA2018",
       "EB3015",
       "EB3056",
       "EB3057",
@@ -5938,11 +6364,6 @@
       "634"
     ],
     "sourceHuntCodes": [
-      "EA1069",
-      "EA1283",
-      "EA1284",
-      "EA1285",
-      "EA2018",
       "EB3015",
       "EB3056",
       "EB3057",
@@ -6220,11 +6641,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Southwest Desert, South Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "872"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3146",
+      "EB3149",
+      "EB3152",
+      "EB3155",
+      "EB3157",
+      "EB3197",
+      "EB3198",
+      "EL3146",
+      "EL3149",
+      "EL3152",
+      "EL3155",
+      "EL3197",
+      "EL3198"
+    ]
   },
   {
     "huntCode": "CP-ELK-SOUTHWEST-DESERT-SOUTH-BULL-ANY-LEGAL-WEAPON",
@@ -6255,11 +6690,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Southwest Desert, South Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "872"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3146",
+      "EB3149",
+      "EB3152",
+      "EB3155",
+      "EB3157",
+      "EB3197",
+      "EB3198",
+      "EL3146",
+      "EL3149",
+      "EL3152",
+      "EL3155",
+      "EL3197",
+      "EL3198"
+    ]
   },
   {
     "huntCode": "CP-ELK-SOUTHWEST-DESERT-SOUTH-BULL-ARCHERY",
@@ -6288,11 +6737,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Southwest Desert, South Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "872"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3146",
+      "EB3149",
+      "EB3152",
+      "EB3155",
+      "EB3157",
+      "EB3197",
+      "EB3198",
+      "EL3146",
+      "EL3149",
+      "EL3152",
+      "EL3155",
+      "EL3197",
+      "EL3198"
+    ]
   },
   {
     "huntCode": "CP-ELK-SOUTHWEST-DESERT-SOUTH-BULL-MULTISEASON",
@@ -6321,11 +6784,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Southwest Desert, South Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "872"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3146",
+      "EB3149",
+      "EB3152",
+      "EB3155",
+      "EB3157",
+      "EB3197",
+      "EB3198",
+      "EL3146",
+      "EL3149",
+      "EL3152",
+      "EL3155",
+      "EL3197",
+      "EL3198"
+    ]
   },
   {
     "huntCode": "CP-ELK-SOUTHWEST-DESERT-SOUTH-BULL-MULTISEASON",
@@ -6354,11 +6831,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Southwest Desert, South Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "872"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3146",
+      "EB3149",
+      "EB3152",
+      "EB3155",
+      "EB3157",
+      "EB3197",
+      "EB3198",
+      "EL3146",
+      "EL3149",
+      "EL3152",
+      "EL3155",
+      "EL3197",
+      "EL3198"
+    ]
   },
   {
     "huntCode": "CP-ELK-SOUTHWEST-DESERT-SOUTH-BULL-MUZZLELOADER",
@@ -6387,11 +6878,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Southwest Desert, South Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
       "872"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3146",
+      "EB3149",
+      "EB3152",
+      "EB3155",
+      "EB3157",
+      "EB3197",
+      "EB3198",
+      "EL3146",
+      "EL3149",
+      "EL3152",
+      "EL3155",
+      "EL3197",
+      "EL3198"
+    ]
   },
   {
     "huntCode": "CP-ELK-STATEWIDE-BULL-ANY-LEGAL-WEAPON",
@@ -6580,9 +7085,7 @@
     "area": "Wasatch Mtns",
     "unitCode": "wasatch-mtns",
     "unitNames": [
-      "Wasatch Mtns",
-      "Wasatch Mtns, East",
-      "Wasatch Mtns, West"
+      "Wasatch Mtns"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -6600,29 +7103,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Wasatch Mtns Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "222",
-      "224",
-      "225",
-      "226",
-      "227",
-      "234",
-      "237",
-      "238",
-      "239",
-      "240",
-      "463",
-      "480",
-      "681",
-      "711",
-      "817",
-      "845",
-      "920",
-      "921",
-      "937"
+      "222"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3022",
+      "EB3072",
+      "EB3073",
+      "EB3100",
+      "EB3124",
+      "EB3127",
+      "EB3199",
+      "EL3022",
+      "EL3072",
+      "EL3073",
+      "EL3100",
+      "EL3127",
+      "EL3199"
+    ]
   },
   {
     "huntCode": "CP-ELK-WASATCH-MTNS-BULL-ANY-LEGAL-WEAPON",
@@ -6633,9 +7132,7 @@
     "area": "Wasatch Mtns",
     "unitCode": "wasatch-mtns",
     "unitNames": [
-      "Wasatch Mtns",
-      "Wasatch Mtns, East",
-      "Wasatch Mtns, West"
+      "Wasatch Mtns"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -6656,29 +7153,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Wasatch Mtns Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "222",
-      "224",
-      "225",
-      "226",
-      "227",
-      "234",
-      "237",
-      "238",
-      "239",
-      "240",
-      "463",
-      "480",
-      "681",
-      "711",
-      "817",
-      "845",
-      "920",
-      "921",
-      "937"
+      "222"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3022",
+      "EB3072",
+      "EB3073",
+      "EB3100",
+      "EB3124",
+      "EB3127",
+      "EB3199",
+      "EL3022",
+      "EL3072",
+      "EL3073",
+      "EL3100",
+      "EL3127",
+      "EL3199"
+    ]
   },
   {
     "huntCode": "CP-ELK-WASATCH-MTNS-BULL-ARCHERY",
@@ -6689,9 +7182,7 @@
     "area": "Wasatch Mtns",
     "unitCode": "wasatch-mtns",
     "unitNames": [
-      "Wasatch Mtns",
-      "Wasatch Mtns, East",
-      "Wasatch Mtns, West"
+      "Wasatch Mtns"
     ],
     "weapon": "Archery",
     "conditions": [
@@ -6709,29 +7200,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Wasatch Mtns Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "222",
-      "224",
-      "225",
-      "226",
-      "227",
-      "234",
-      "237",
-      "238",
-      "239",
-      "240",
-      "463",
-      "480",
-      "681",
-      "711",
-      "817",
-      "845",
-      "920",
-      "921",
-      "937"
+      "222"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3022",
+      "EB3072",
+      "EB3073",
+      "EB3100",
+      "EB3124",
+      "EB3127",
+      "EB3199",
+      "EL3022",
+      "EL3072",
+      "EL3073",
+      "EL3100",
+      "EL3127",
+      "EL3199"
+    ]
   },
   {
     "huntCode": "CP-ELK-WASATCH-MTNS-BULL-MULTISEASON",
@@ -6742,9 +7229,7 @@
     "area": "Wasatch Mtns",
     "unitCode": "wasatch-mtns",
     "unitNames": [
-      "Wasatch Mtns",
-      "Wasatch Mtns, East",
-      "Wasatch Mtns, West"
+      "Wasatch Mtns"
     ],
     "weapon": "Multiseason",
     "conditions": [
@@ -6762,29 +7247,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Wasatch Mtns Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "222",
-      "224",
-      "225",
-      "226",
-      "227",
-      "234",
-      "237",
-      "238",
-      "239",
-      "240",
-      "463",
-      "480",
-      "681",
-      "711",
-      "817",
-      "845",
-      "920",
-      "921",
-      "937"
+      "222"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3022",
+      "EB3072",
+      "EB3073",
+      "EB3100",
+      "EB3124",
+      "EB3127",
+      "EB3199",
+      "EL3022",
+      "EL3072",
+      "EL3073",
+      "EL3100",
+      "EL3127",
+      "EL3199"
+    ]
   },
   {
     "huntCode": "CP-ELK-WASATCH-MTNS-BULL-MULTISEASON",
@@ -6795,9 +7276,7 @@
     "area": "Wasatch Mtns",
     "unitCode": "wasatch-mtns",
     "unitNames": [
-      "Wasatch Mtns",
-      "Wasatch Mtns, East",
-      "Wasatch Mtns, West"
+      "Wasatch Mtns"
     ],
     "weapon": "Multiseason",
     "conditions": [
@@ -6815,29 +7294,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Wasatch Mtns Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "222",
-      "224",
-      "225",
-      "226",
-      "227",
-      "234",
-      "237",
-      "238",
-      "239",
-      "240",
-      "463",
-      "480",
-      "681",
-      "711",
-      "817",
-      "845",
-      "920",
-      "921",
-      "937"
+      "222"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3022",
+      "EB3072",
+      "EB3073",
+      "EB3100",
+      "EB3124",
+      "EB3127",
+      "EB3199",
+      "EL3022",
+      "EL3072",
+      "EL3073",
+      "EL3100",
+      "EL3127",
+      "EL3199"
+    ]
   },
   {
     "huntCode": "CP-ELK-WASATCH-MTNS-BULL-MUZZLELOADER",
@@ -6848,9 +7323,7 @@
     "area": "Wasatch Mtns",
     "unitCode": "wasatch-mtns",
     "unitNames": [
-      "Wasatch Mtns",
-      "Wasatch Mtns, East",
-      "Wasatch Mtns, West"
+      "Wasatch Mtns"
     ],
     "weapon": "Muzzleloader",
     "conditions": [
@@ -6868,29 +7341,25 @@
     ],
     "matchedPermitRegister": true,
     "matchedRegisterLabel": "Wasatch Mtns Conservation Permit",
-    "matchedCanonicalHunts": false,
+    "matchedCanonicalHunts": true,
     "boundaryIds": [
-      "222",
-      "224",
-      "225",
-      "226",
-      "227",
-      "234",
-      "237",
-      "238",
-      "239",
-      "240",
-      "463",
-      "480",
-      "681",
-      "711",
-      "817",
-      "845",
-      "920",
-      "921",
-      "937"
+      "222"
     ],
-    "sourceHuntCodes": []
+    "sourceHuntCodes": [
+      "EB3022",
+      "EB3072",
+      "EB3073",
+      "EB3100",
+      "EB3124",
+      "EB3127",
+      "EB3199",
+      "EL3022",
+      "EL3072",
+      "EL3073",
+      "EL3100",
+      "EL3127",
+      "EL3199"
+    ]
   },
   {
     "huntCode": "CP-MOOSE-CACHE-BULL-ANY-LEGAL-WEAPON",
@@ -7325,8 +7794,7 @@
     "area": "Beaver",
     "unitCode": "beaver",
     "unitNames": [
-      "Beaver",
-      "Beaver - Private Land Only"
+      "Beaver"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -7349,10 +7817,8 @@
       "628"
     ],
     "sourceHuntCodes": [
-      "LP5025",
       "PB5000",
-      "PB5025",
-      "PD1036"
+      "PB5025"
     ]
   },
   {
@@ -7364,8 +7830,7 @@
     "area": "Beaver",
     "unitCode": "beaver",
     "unitNames": [
-      "Beaver",
-      "Beaver - Private Land Only"
+      "Beaver"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -7388,10 +7853,8 @@
       "628"
     ],
     "sourceHuntCodes": [
-      "LP5025",
       "PB5000",
-      "PB5025",
-      "PD1036"
+      "PB5025"
     ]
   },
   {
@@ -7622,8 +8085,7 @@
     ],
     "sourceHuntCodes": [
       "PB5003",
-      "PB5028",
-      "PD1012"
+      "PB5028"
     ]
   },
   {
@@ -7697,8 +8159,7 @@
     "sourceHuntCodes": [
       "PB5005",
       "PB5030",
-      "PB5080",
-      "PD1000"
+      "PB5080"
     ]
   },
   {
@@ -7710,8 +8171,7 @@
     "area": "Box Elder, West",
     "unitCode": "box-elder-west",
     "unitNames": [
-      "Box Elder, West",
-      "Box Elder, West - Private Land Only"
+      "Box Elder, West"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -7734,11 +8194,9 @@
       "755"
     ],
     "sourceHuntCodes": [
-      "LP5031",
       "PB5006",
       "PB5031",
-      "PB5079",
-      "PD1017"
+      "PB5079"
     ]
   },
   {
@@ -7750,8 +8208,7 @@
     "area": "Box Elder, West",
     "unitCode": "box-elder-west",
     "unitNames": [
-      "Box Elder, West",
-      "Box Elder, West - Private Land Only"
+      "Box Elder, West"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -7774,11 +8231,9 @@
       "755"
     ],
     "sourceHuntCodes": [
-      "LP5031",
       "PB5006",
       "PB5031",
-      "PB5079",
-      "PD1017"
+      "PB5079"
     ]
   },
   {
@@ -7790,8 +8245,7 @@
     "area": "Fillmore, Oak Creek South",
     "unitCode": "fillmore-oak-creek-south",
     "unitNames": [
-      "Fillmore, Oak Creek South",
-      "Fillmore, Oak Creek South - Private Land Only"
+      "Fillmore, Oak Creek South"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -7814,13 +8268,9 @@
       "81"
     ],
     "sourceHuntCodes": [
-      "LP5033",
       "PB5008",
       "PB5033",
-      "PB5065",
-      "PD1027",
-      "PD1034",
-      "PD1035"
+      "PB5065"
     ]
   },
   {
@@ -7832,8 +8282,7 @@
     "area": "Fillmore, Oak Creek South",
     "unitCode": "fillmore-oak-creek-south",
     "unitNames": [
-      "Fillmore, Oak Creek South",
-      "Fillmore, Oak Creek South - Private Land Only"
+      "Fillmore, Oak Creek South"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -7856,13 +8305,9 @@
       "81"
     ],
     "sourceHuntCodes": [
-      "LP5033",
       "PB5008",
       "PB5033",
-      "PB5065",
-      "PD1027",
-      "PD1034",
-      "PD1035"
+      "PB5065"
     ]
   },
   {
@@ -7874,8 +8319,7 @@
     "area": "Fillmore, Oak Creek South",
     "unitCode": "fillmore-oak-creek-south",
     "unitNames": [
-      "Fillmore, Oak Creek South",
-      "Fillmore, Oak Creek South - Private Land Only"
+      "Fillmore, Oak Creek South"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -7898,13 +8342,9 @@
       "81"
     ],
     "sourceHuntCodes": [
-      "LP5033",
       "PB5008",
       "PB5033",
-      "PB5065",
-      "PD1027",
-      "PD1034",
-      "PD1035"
+      "PB5065"
     ]
   },
   {
@@ -7979,8 +8419,7 @@
       "PB5010",
       "PB5036",
       "PB5331",
-      "PB5332",
-      "PD1018"
+      "PB5332"
     ]
   },
   {
@@ -8019,8 +8458,7 @@
       "PB5010",
       "PB5036",
       "PB5331",
-      "PB5332",
-      "PD1018"
+      "PB5332"
     ]
   },
   {
@@ -8242,8 +8680,7 @@
       "138"
     ],
     "sourceHuntCodes": [
-      "PB5039",
-      "PD1005"
+      "PB5039"
     ]
   },
   {
@@ -8355,8 +8792,7 @@
     "sourceHuntCodes": [
       "PB5041",
       "PB5054",
-      "PB5061",
-      "PD1039"
+      "PB5061"
     ]
   },
   {
@@ -8393,8 +8829,7 @@
     "sourceHuntCodes": [
       "PB5041",
       "PB5054",
-      "PB5061",
-      "PD1039"
+      "PB5061"
     ]
   },
   {
@@ -8439,13 +8874,7 @@
       "PB5078",
       "PB5333",
       "PB5334",
-      "PB5335",
-      "PD1006",
-      "PD1019",
-      "PD1020",
-      "PD1054",
-      "PD1055",
-      "PD1056"
+      "PB5335"
     ]
   },
   {
@@ -8492,13 +8921,7 @@
       "PB5078",
       "PB5333",
       "PB5334",
-      "PB5335",
-      "PD1006",
-      "PD1019",
-      "PD1020",
-      "PD1054",
-      "PD1055",
-      "PD1056"
+      "PB5335"
     ]
   },
   {
@@ -8535,8 +8958,7 @@
     "sourceHuntCodes": [
       "PB5013",
       "PB5042",
-      "PB5062",
-      "PD1042"
+      "PB5062"
     ]
   },
   {
@@ -8573,8 +8995,7 @@
     "sourceHuntCodes": [
       "PB5013",
       "PB5042",
-      "PB5062",
-      "PD1042"
+      "PB5062"
     ]
   },
   {
@@ -8586,9 +9007,7 @@
     "area": "San Rafael, North",
     "unitCode": "san-rafael-north",
     "unitNames": [
-      "San Rafael North, Mounds Reef",
-      "San Rafael, North",
-      "San Rafael, North - Private Land Only"
+      "San Rafael, North"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -8611,16 +9030,12 @@
     "matchedCanonicalHunts": true,
     "boundaryIds": [
       "194",
-      "202",
-      "90"
+      "202"
     ],
     "sourceHuntCodes": [
-      "LP5046",
       "PB5015",
       "PB5046",
-      "PB5056",
-      "PD1028",
-      "PD1029"
+      "PB5056"
     ]
   },
   {
@@ -8632,9 +9047,7 @@
     "area": "San Rafael, North",
     "unitCode": "san-rafael-north",
     "unitNames": [
-      "San Rafael North, Mounds Reef",
-      "San Rafael, North",
-      "San Rafael, North - Private Land Only"
+      "San Rafael, North"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -8656,16 +9069,12 @@
     "matchedCanonicalHunts": true,
     "boundaryIds": [
       "194",
-      "202",
-      "90"
+      "202"
     ],
     "sourceHuntCodes": [
-      "LP5046",
       "PB5015",
       "PB5046",
-      "PB5056",
-      "PD1028",
-      "PD1029"
+      "PB5056"
     ]
   },
   {
@@ -8677,8 +9086,7 @@
     "area": "Southwest Desert",
     "unitCode": "southwest-desert",
     "unitNames": [
-      "Southwest Desert",
-      "Southwest Desert - Private Land Only"
+      "Southwest Desert"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -8701,7 +9109,6 @@
       "625"
     ],
     "sourceHuntCodes": [
-      "LP5049",
       "PB5018",
       "PB5024",
       "PB5049"
@@ -8716,8 +9123,7 @@
     "area": "Southwest Desert",
     "unitCode": "southwest-desert",
     "unitNames": [
-      "Southwest Desert",
-      "Southwest Desert - Private Land Only"
+      "Southwest Desert"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -8740,7 +9146,6 @@
       "625"
     ],
     "sourceHuntCodes": [
-      "LP5049",
       "PB5018",
       "PB5024",
       "PB5049"
@@ -8755,8 +9160,7 @@
     "area": "Southwest Desert",
     "unitCode": "southwest-desert",
     "unitNames": [
-      "Southwest Desert",
-      "Southwest Desert - Private Land Only"
+      "Southwest Desert"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -8780,7 +9184,6 @@
       "625"
     ],
     "sourceHuntCodes": [
-      "LP5049",
       "PB5018",
       "PB5024",
       "PB5049"
@@ -8795,8 +9198,7 @@
     "area": "Southwest Desert",
     "unitCode": "southwest-desert",
     "unitNames": [
-      "Southwest Desert",
-      "Southwest Desert - Private Land Only"
+      "Southwest Desert"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -8820,7 +9222,6 @@
       "625"
     ],
     "sourceHuntCodes": [
-      "LP5049",
       "PB5018",
       "PB5024",
       "PB5049"
@@ -8835,8 +9236,7 @@
     "area": "Southwest Desert",
     "unitCode": "southwest-desert",
     "unitNames": [
-      "Southwest Desert",
-      "Southwest Desert - Private Land Only"
+      "Southwest Desert"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -8859,7 +9259,6 @@
       "625"
     ],
     "sourceHuntCodes": [
-      "LP5049",
       "PB5018",
       "PB5024",
       "PB5049"
@@ -8874,8 +9273,7 @@
     "area": "Southwest Desert",
     "unitCode": "southwest-desert",
     "unitNames": [
-      "Southwest Desert",
-      "Southwest Desert - Private Land Only"
+      "Southwest Desert"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -8898,7 +9296,6 @@
       "625"
     ],
     "sourceHuntCodes": [
-      "LP5049",
       "PB5018",
       "PB5024",
       "PB5049"
@@ -9204,8 +9601,7 @@
     "area": "West Desert, Rush Valley",
     "unitCode": "west-desert-rush-valley",
     "unitNames": [
-      "West Desert, Rush Valley",
-      "West Desert, Rush Valley - Private Land Only"
+      "West Desert, Rush Valley"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -9228,7 +9624,6 @@
       "245"
     ],
     "sourceHuntCodes": [
-      "LP5051",
       "PB5020",
       "PB5051"
     ]
@@ -9242,8 +9637,7 @@
     "area": "West Desert, Rush Valley",
     "unitCode": "west-desert-rush-valley",
     "unitNames": [
-      "West Desert, Rush Valley",
-      "West Desert, Rush Valley - Private Land Only"
+      "West Desert, Rush Valley"
     ],
     "weapon": "Any Legal Weapon",
     "conditions": [
@@ -9266,7 +9660,6 @@
       "245"
     ],
     "sourceHuntCodes": [
-      "LP5051",
       "PB5020",
       "PB5051"
     ]
