@@ -427,7 +427,7 @@ function normalizeHuntCategoryLabel(raw) {
   return value;
 }
 function getHuntCategory(h) {
-  if (h?.syntheticConservationPermit) return 'Conservation Permit';
+  if (h?.syntheticConservationPermit) return '';
   const raw = firstNonEmpty(h.huntCategory, h.HuntCategory, h.category);
   const normalized = normalizeHuntCategoryLabel(raw);
   const huntType = getHuntType(h);
@@ -511,14 +511,18 @@ function buildSyntheticConservationPermitHunts(records) {
   return conservationPermitAreas.map((area, index) => {
     const matches = getConservationPermitRepresentativeHunts(records, area);
     const representative = matches[0] || {};
-    const boundaryIds = [...new Set(matches.flatMap(record => {
+    const configuredBoundaryIds = (Array.isArray(area?.boundaryIds) ? area.boundaryIds : [])
+      .map(id => safe(id).trim())
+      .filter(Boolean);
+    const matchedBoundaryIds = matches.flatMap(record => {
       const ids = [
         getBoundaryId(record),
         ...(Array.isArray(record?.boundaryIds) ? record.boundaryIds : []),
         ...(Array.isArray(record?.officialBoundaryIds) ? record.officialBoundaryIds : [])
       ];
       return ids.map(id => safe(id).trim()).filter(Boolean);
-    }))];
+    });
+    const boundaryIds = [...new Set([...configuredBoundaryIds, ...matchedBoundaryIds])];
     const boundaryNames = [...new Set([
       ...(Array.isArray(area?.unitNames) ? area.unitNames : []),
       ...matches.flatMap(getBoundaryNamesForHunt)
@@ -539,7 +543,7 @@ function buildSyntheticConservationPermitHunts(records) {
       syntheticConservationPermit: true,
       huntCode,
       species,
-      sex: firstNonEmpty(representative.sex, representative.Sex),
+      sex: firstNonEmpty(area?.sex, representative.sex, representative.Sex),
       huntType: 'Conservation',
       huntCategory: 'Conservation Permit',
       weapon: firstNonEmpty(representative.weapon, representative.Weapon, 'Any Legal Weapon'),
@@ -1046,7 +1050,10 @@ function refreshSelectionMatrix() {
   huntTypeFilter.value = huntTypeOptions.includes(prevHuntType) ? prevHuntType : 'All';
 
   const categoryData = getFilteredHunts('huntCategory');
-  const categoryOptions = sortWithPreferredOrder(Array.from(new Set(['All', ...categoryData.map(getHuntCategory).filter(Boolean)])), ['All', ...HUNT_CLASS_ORDER]);
+  const forceFlatConservationCategory = (huntTypeFilter.value || 'All') === 'Conservation';
+  const categoryOptions = forceFlatConservationCategory
+    ? ['All']
+    : sortWithPreferredOrder(Array.from(new Set(['All', ...categoryData.map(getHuntCategory).filter(Boolean)])), ['All', ...HUNT_CLASS_ORDER]);
   const prevHuntCategory = huntCategoryFilter.value || 'All';
   huntCategoryFilter.innerHTML = categoryOptions.map(v => `<option value="${v}">${v}</option>`).join('');
   huntCategoryFilter.value = categoryOptions.includes(prevHuntCategory) ? prevHuntCategory : 'All';
