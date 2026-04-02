@@ -285,15 +285,15 @@
     const family = getDrawFamily(hunt);
 
     if (family === 'bonus_draw') {
-      return 'This hunt is driven by Utah bonus-point logic, so the research read starts with the projected cutoff, guaranteed lane, and simulated random lane.';
+      return 'This hunt uses Utah bonus points, so the page looks at the top-point draw first, then shows what chance is left in the random draw.';
     }
     if (family === 'preference_draw') {
-      return 'This hunt is driven by preference points, so the research read starts with the cutoff tier and whether your points sit above, on, or below that line.';
+      return 'This hunt uses preference points, so the page starts with the line you need to reach and whether your points land above it, on it, or below it.';
     }
     if (success !== null || pressure !== null || satisfaction !== null) {
-      return `This hunt reads more like access and field performance than a formal draw table${success !== null ? `, with ${formatPercent(success)} harvest success` : ''}${pressure !== null ? ` and ${formatDecimal(pressure, 2)} hunters per permit` : ''}.`;
+      return `This hunt reads more like access and hunt quality than a formal draw table${success !== null ? `, with ${formatPercent(success)} harvest success` : ''}${pressure !== null ? ` and ${formatDecimal(pressure, 2)} hunters per permit` : ''}.`;
     }
-    return 'This hunt currently reads as a context hunt rather than a point-table hunt, so use access, season structure, and hunt details first.';
+    return 'This hunt currently reads more like a hunt-quality and access decision than a point-table decision, so use season details and field conditions first.';
   }
 
   function buildFilters() {
@@ -447,11 +447,11 @@
       return {
         selectedResult: formatProbability(total),
         guaranteedLane: guaranteedFlag || (total !== null && total >= 99.95)
-          ? `${formatInteger(points)} points sits inside the initial max-point draw.`
-          : `${formatProbability(guaranteed)} chance in the initial max-point draw · ${formatInteger(projected.projected_guaranteed_draws_at_point)} guaranteed permits at this point level`,
-        randomLane: `${formatProbability(random)} chance in the random draw after the initial max-point draw · ${formatInteger(projected.projected_random_pool_permits)} random permits`,
-        cutoff: `${cutoff === null ? 'No point line loaded' : `${formatInteger(cutoff)} points is the minimum bonus point line for a fully guaranteed initial draw`} · pressure ${formatDecimal(projected.projected_cutoff_pressure_ratio, 2)}`,
-        method: `2026 simulated projection · ${projected.random_method || 'engine'} · ${formatInteger(projected.simulation_iterations)} iterations`,
+          ? `${formatInteger(points)} points puts you safely inside the top-point draw.`
+          : `${formatProbability(guaranteed)} chance in the top-point draw with ${formatInteger(projected.projected_guaranteed_draws_at_point)} tags going to this point level`,
+        randomLane: `${formatProbability(random)} chance in the random draw after top points with ${formatInteger(projected.projected_random_pool_permits)} random tags available`,
+        cutoff: `${cutoff === null ? 'No guaranteed point line loaded' : `${formatInteger(cutoff)} points is the line to fully clear the top-point draw`} · pressure ${formatDecimal(projected.projected_cutoff_pressure_ratio, 2)}`,
+        method: `Built from the 2026 projection using ${projected.random_method || 'the draw engine'} across ${formatInteger(projected.simulation_iterations)} runs`,
         headline,
         explanation: `${residencyLabel} projection starts with last year's actual results for this same hunt, removes the hunters who already drew, rolls the remaining applicants forward one point, keeps the 0-point baseline flat, and then applies this year's permit numbers before Utah-style random simulation. That gives you a truer read on the hunters most likely to be competing directly with you for this permit.`,
       };
@@ -461,25 +461,25 @@
       return {
         selectedResult: rawRow.success_ratio_text || '2025 row',
         guaranteedLane: getDrawFamily(hunt) === 'preference_draw'
-          ? `Preference row · ${formatInteger(rawRow.permits_awarded)} permits at this tier`
-          : `2025 initial max-point draw row · ${formatInteger(rawRow.bonus_permits)} guaranteed permits`,
+          ? `Last year's preference-point row shows ${formatInteger(rawRow.permits_awarded)} tags at this level`
+          : `Last year's top-point draw row shows ${formatInteger(rawRow.bonus_permits)} guaranteed tags`,
         randomLane: getDrawFamily(hunt) === 'bonus_draw'
-          ? `2025 random draw row · ${formatInteger(rawRow.random_permits)} random permits`
-          : 'Preference draw does not use a bonus/random split',
-        cutoff: `Point line ${formatInteger(residencyKey === 'resident' ? hunt.resident_point_signal : hunt.nonresident_point_signal)} points`,
-        method: '2025 source draw table only',
-        headline: 'Exact source row available',
+          ? `Last year's random draw row shows ${formatInteger(rawRow.random_permits)} random tags`
+          : 'Preference draws do not split into top-point and random sides',
+        cutoff: `Known point line: ${formatInteger(residencyKey === 'resident' ? hunt.resident_point_signal : hunt.nonresident_point_signal)} points`,
+        method: 'Built directly from the accepted 2025 draw table',
+        headline: 'Last year has an exact point row',
         explanation: `${residencyLabel} row ${formatInteger(points)} exists in the accepted 2025 draw table. This page is showing the source row directly because no 2026 simulation row is attached for this hunt family.`,
       };
     }
 
     return {
-      selectedResult: 'No supported point result',
-      guaranteedLane: 'No supported draw row at selected points',
-      randomLane: getDrawFamily(hunt) === 'none' ? 'No-draw hunt' : 'No row loaded',
-      cutoff: 'No cutoff read',
-      method: getDrawFamily(hunt) === 'none' ? 'Access / pressure read' : 'Awaiting engine support',
-      headline: getDrawFamily(hunt) === 'none' ? 'This hunt is not draw-based' : 'Draw family identified, engine row not loaded yet',
+      selectedResult: 'No point result loaded yet',
+      guaranteedLane: 'No point row is attached for your selected points yet',
+      randomLane: getDrawFamily(hunt) === 'none' ? 'This is not a draw hunt' : 'Random-side row not loaded yet',
+      cutoff: 'No guaranteed point line loaded',
+      method: getDrawFamily(hunt) === 'none' ? 'This hunt is being read as access and hunt quality' : 'This hunt family is identified, but the point rows are not attached yet',
+      headline: getDrawFamily(hunt) === 'none' ? 'This hunt is not draw-based' : 'The hunt type is known, but the point row is missing',
       explanation: getDrawFamily(hunt) === 'none'
         ? 'This hunt is interpreted as access, timing, and pressure rather than a point-based draw table.'
         : 'This hunt is mapped to a draw family from the hunt metadata, but the point-by-point engine rows are not attached yet for this hunt and residency.',
@@ -497,15 +497,15 @@
       ['Weapon', hunt.weapon],
       ['Residency', filters.residencyLabel],
       ['Current points', formatInteger(filters.points)],
-      ['Draw family', getDrawFamilyLabel(hunt)],
-      ['Selected result', decision.selectedResult],
-      ['Guaranteed lane', decision.guaranteedLane],
-      ['Random lane', decision.randomLane],
-      ['Point line / pressure', decision.cutoff],
-      ['Current permit read', els.selectedPermitRead?.textContent || 'Not loaded'],
-      ['Permit source', els.detailPermitSource?.textContent || 'Not loaded'],
+      ['How this hunt draws', getDrawFamilyLabel(hunt)],
+      ['Your draw chance', decision.selectedResult],
+      ['Top-point draw', decision.guaranteedLane],
+      ['Random draw chance', decision.randomLane],
+      ['Guaranteed point line / pressure', decision.cutoff],
+      ['Tag count used', els.selectedPermitRead?.textContent || 'Not loaded'],
+      ['Tag source', els.detailPermitSource?.textContent || 'Not loaded'],
       ['Harvest / success', els.detailHarvest?.textContent || 'Not loaded'],
-      ['Pressure / efficiency', els.detailPressure?.textContent || 'Not loaded']
+      ['Hunter pressure / efficiency', els.detailPressure?.textContent || 'Not loaded']
     ];
 
     els.reportSummaryTableBody.innerHTML = rows.map(([label, value]) => `
@@ -528,16 +528,16 @@
       `Weapon: ${hunt.weapon || 'Unknown'}`,
       `Residency: ${filters.residencyLabel}`,
       `Current Points: ${formatInteger(filters.points)}`,
-      `Draw Family: ${getDrawFamilyLabel(hunt)}`,
-      `Selected Result: ${decision.selectedResult}`,
-      `Guaranteed Lane: ${decision.guaranteedLane}`,
-      `Random Lane: ${decision.randomLane}`,
-      `Point Line / Pressure: ${decision.cutoff}`,
-      `Method: ${decision.method}`,
-      `Current Permit Read: ${els.selectedPermitRead?.textContent || 'Not loaded'}`,
-      `Permit Source: ${els.detailPermitSource?.textContent || 'Not loaded'}`,
+      `How This Hunt Draws: ${getDrawFamilyLabel(hunt)}`,
+      `Your Draw Chance: ${decision.selectedResult}`,
+      `Top-Point Draw: ${decision.guaranteedLane}`,
+      `Random Draw Chance: ${decision.randomLane}`,
+      `Guaranteed Point Line / Pressure: ${decision.cutoff}`,
+      `How This Answer Was Built: ${decision.method}`,
+      `Tag Count Used: ${els.selectedPermitRead?.textContent || 'Not loaded'}`,
+      `Tag Source: ${els.detailPermitSource?.textContent || 'Not loaded'}`,
       `Harvest / Success: ${els.detailHarvest?.textContent || 'Not loaded'}`,
-      `Pressure / Efficiency: ${els.detailPressure?.textContent || 'Not loaded'}`,
+      `Hunter Pressure / Efficiency: ${els.detailPressure?.textContent || 'Not loaded'}`,
       '',
       'REPORT READ',
       decision.explanation,
@@ -638,28 +638,28 @@
     els.detailSpeciesWeapon.textContent = `${hunt.species || 'Unknown'} · ${hunt.weapon || 'Unknown weapon'} · ${filters.residencyLabel}`;
     els.detailAccessType.textContent = hunt.access_type || 'Unknown';
     els.detailHarvest.textContent = `${formatPercent(hunt.percent_success)} success · ${formatInteger(hunt.harvest)} harvested`;
-    els.detailPressure.textContent = `${pressure === null ? 'Not available' : `${formatDecimal(pressure, 2)} hunters per permit`} · ${efficiency === null ? 'efficiency n/a' : `${formatDecimal(efficiency, 2)} harvest efficiency`}`;
-    els.detailOutfitters.textContent = `${formatInteger(hunt.verified_outfitter_count)} verified · ${formatInteger(hunt.cpo_outfitter_count)} C.P.O.`;
+    els.detailPressure.textContent = `${pressure === null ? 'Not available' : `${formatDecimal(pressure, 2)} hunters per tag`} · ${efficiency === null ? 'efficiency n/a' : `${formatDecimal(efficiency, 2)} harvest efficiency`}`;
+    els.detailOutfitters.textContent = `${formatInteger(hunt.verified_outfitter_count)} verified outfitters · ${formatInteger(hunt.cpo_outfitter_count)} custom-pricing options`;
     els.detailPermitSource.textContent = permitRecord
-      ? `${permitRecord.source_authority_level || permitRecord.source_type || 'permit source'} · ${permits === null ? 'permits n/a' : formatInteger(permits)} current${priorPermits === null ? '' : ` (${formatInteger(priorPermits)} prior)`}`
-      : 'No current permit authority attached';
+      ? `${permitRecord.source_authority_level || permitRecord.source_type || 'tag source'} · ${permits === null ? 'tag count n/a' : `${formatInteger(permits)} tags used`}${priorPermits === null ? '' : ` (${formatInteger(priorPermits)} tags last year)`}`
+      : 'No current tag source attached';
     els.detailSelectedResult.textContent = decision.selectedResult;
     els.detailGuaranteedLaneLabel.textContent = getDrawFamily(hunt) === 'bonus_draw'
-      ? 'Minimum Bonus Points For 100% Initial Draw'
+      ? 'Points Needed to Be Safe in the Top-Point Draw'
       : 'Guaranteed Draw Read';
     els.detailGuaranteedLane.textContent = decision.guaranteedLane;
     if (els.detailGuaranteedLaneShort) {
       els.detailGuaranteedLaneShort.textContent = shortText(decision.guaranteedLane, 64);
     }
     els.detailRandomLaneLabel.textContent = getDrawFamily(hunt) === 'bonus_draw'
-      ? 'Random Draw Chance After Max-Point Draw'
+      ? 'Chance in the Random Draw After Top Points'
       : 'Random Draw Read';
     els.detailRandomLane.textContent = decision.randomLane;
     if (els.detailRandomLaneShort) {
       els.detailRandomLaneShort.textContent = shortText(decision.randomLane, 64);
     }
     els.detailCutoffLabel.textContent = getDrawFamily(hunt) === 'bonus_draw'
-      ? 'Guaranteed Bonus Point Line / Pressure'
+      ? 'Guaranteed Point Line / Pressure'
       : 'Point Line / Pressure';
     els.detailCutoff.textContent = decision.cutoff;
     if (els.detailCutoffShort) {

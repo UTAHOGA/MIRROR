@@ -663,9 +663,14 @@
             <p><strong>Minimum Bonus Points for 100% Initial Draw</strong> means the lowest point line that fully clears the max-point allocation before the random side begins.</p>
           </div>
           <div class="helper-card formula-card">
-            <span class="label">Projection Formula</span>
-            <p>We show the logic on purpose so the result feels earned, not magical. This is the short version of the engine that powers the report.</p>
-            <code class="formula-line">2026 draw read = (2025 actual applicants - 2025 successful draw hunters) + one-point carry-forward + current permits + Utah draw-lane simulation</code>
+            <span class="label">The Science</span>
+            <p>Text works better here than the full graphic. It keeps the logic visible without crowding the page.</p>
+            <ul>
+              <li>Top-point tags are roughly half the total tags in Utah bonus draws.</li>
+              <li>If the guaranteed point line keeps rising by a full point or more, hunters below that line are losing ground.</li>
+              <li>If new max-point hunters arrive as fast as top-point tags are handed out, point creep becomes permanent.</li>
+              <li>If more top-point tags clear out than new max-point hunters arrive, catch-up can still happen.</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -711,8 +716,8 @@
 
         <section class="result-card">
           <div class="card-head">
-            <p>Draw Reality</p>
-            <h2>Selected Hunt Result</h2>
+            <p>Your Hunt Read</p>
+            <h2>Can You Draw This Hunt?</h2>
           </div>
           <div class="card-body">
             <div id="detailEmpty" class="empty-note">
@@ -723,7 +728,7 @@
             <div id="detailContent" hidden>
               <div class="report-title">
                 <div>
-                  <p>Selected Hunt Research Report</p>
+                  <p>Hunter-friendly report</p>
                   <h2 id="detailTitle">Choose a hunt</h2>
                   <div id="detailSubtitle" class="report-copy"></div>
                 </div>
@@ -737,22 +742,22 @@
 
               <div class="chip-grid">
                 <div class="chip">
-                  <span class="label">Projected Draw Chance</span>
+                  <span class="label">Your Draw Chance</span>
                   <div id="selectedOutlook" class="value likelihood-unknown">Waiting</div>
                   <div class="subvalue" id="detailSelectedResult">No result loaded</div>
                 </div>
                 <div class="chip">
-                  <span class="label">Draw Type</span>
+                  <span class="label">How This Hunt Draws</span>
                   <div id="selectedDrawFamily" class="value">Not loaded</div>
                   <div class="subvalue" id="detailMethod">Method not loaded</div>
                 </div>
                 <div class="chip">
-                  <span class="label">Current Permit Read</span>
+                  <span class="label">Tag Count Used</span>
                   <div id="selectedPermitRead" class="value">Not loaded</div>
-                  <div class="subvalue" id="detailPermitSource">Permit source not loaded</div>
+                  <div class="subvalue" id="detailPermitSource">Tag source not loaded</div>
                 </div>
                 <div class="chip">
-                  <span class="label">Point Read</span>
+                  <span class="label">Where Your Points Sit</span>
                   <div id="selectedCutoffRead" class="value">Not loaded</div>
                   <div class="subvalue" id="detailGoalFit">Research read not loaded</div>
                 </div>
@@ -772,23 +777,23 @@
                   <span id="detailHarvest" class="value">-</span>
                 </div>
                 <div class="summary-card">
-                  <span class="label">Pressure / Efficiency</span>
+                  <span class="label">Hunter Pressure / Efficiency</span>
                   <span id="detailPressure" class="value">-</span>
                 </div>
                 <div class="summary-card">
-                  <span class="label">Initial Guaranteed Read</span>
+                  <span class="label">Top-Point Draw</span>
                   <span id="detailGuaranteedLane" class="value">-</span>
                 </div>
                 <div class="summary-card">
-                  <span class="label">Remaining Draw Read</span>
+                  <span class="label">Random Draw Chance</span>
                   <span id="detailRandomLane" class="value">-</span>
                 </div>
                 <div class="summary-card">
-                  <span class="label">Minimum Bonus Point Line</span>
+                  <span class="label">Guaranteed Point Line</span>
                   <span id="detailCutoff" class="value">-</span>
                 </div>
                 <div class="summary-card">
-                  <span class="label">Verified / C.P.O.</span>
+                  <span class="label">Available Outfitters</span>
                   <span id="detailOutfitters" class="value">-</span>
                 </div>
               </div>
@@ -796,7 +801,7 @@
               <div class="report-grid">
                 <section class="report-table-card">
                   <div class="report-table-head">
-                    <h3 id="detailHeadline">Why this result appears</h3>
+                    <h3 id="detailHeadline">Why this answer shows up</h3>
                     <p id="detailExplanation">Waiting for a selected hunt.</p>
                   </div>
                   <div class="report-table-wrap">
@@ -814,8 +819,8 @@
 
                 <section class="report-info-card">
                   <div class="report-info-head">
-                    <h3>Quick read</h3>
-                    <p>These are the pieces most hunters want first before they dig into the supporting rows.</p>
+                    <h3>Quick take</h3>
+                    <p>These are the few things most hunters want first before they look at the backup details.</p>
                   </div>
                   <div class="quick-grid">
                     <div class="quick-card">
@@ -827,15 +832,15 @@
                       <span id="selectedHuntCodeRead" class="value">Not loaded</span>
                     </div>
                     <div class="quick-card">
-                      <span class="label" id="detailGuaranteedLaneLabel">Minimum Bonus Points for 100% Initial Draw</span>
+                      <span class="label" id="detailGuaranteedLaneLabel">Points Needed to Be Safe in the Top-Point Draw</span>
                       <span id="detailGuaranteedLaneShort" class="value">-</span>
                     </div>
                     <div class="quick-card">
-                      <span class="label" id="detailRandomLaneLabel">Random Draw Chance After Max-Point Draw</span>
+                      <span class="label" id="detailRandomLaneLabel">Chance in the Random Draw After Top Points</span>
                       <span id="detailRandomLaneShort" class="value">-</span>
                     </div>
                     <div class="quick-card">
-                      <span class="label" id="detailCutoffLabel">Guaranteed Bonus Point Line / Pressure</span>
+                      <span class="label" id="detailCutoffLabel">Guaranteed Point Line / Pressure</span>
                       <span id="detailCutoffShort" class="value">-</span>
                     </div>
                     <div class="quick-card">
@@ -848,16 +853,16 @@
 
               <section class="report-info-card">
                 <div class="report-info-head">
-                  <h3>How the Hunt Research engine works</h3>
-                  <p>Simple explanation first. The proof sits below it.</p>
+                  <h3>How this hunt answer is built</h3>
+                  <p>Plain English first. The supporting rows stay lower on the page.</p>
                 </div>
                 <div class="proof-grid">
                   <div class="note-box">
-                    <span class="label">Implemented algorithm</span>
+                    <span class="label">What the page does</span>
                     <p>We factor in last year's successful permittees and remove them from the hunt application pool. Then we normalize current permit numbers and the current max-point structure for the same hunt before we run the selected point level against the updated field.</p>
                   </div>
                   <div class="note-box">
-                    <span class="label">Why the model is stronger</span>
+                    <span class="label">Why this is more useful</span>
                     <p>You do not just get a generic answer for “X points.” You get a current-year read built from last year's actual hunt results and today's permit structure, which gives a better picture of the hunters most likely to be competing directly with you.</p>
                   </div>
                 </div>
@@ -866,7 +871,7 @@
               <div class="table-grid">
                 <section class="report-table-card">
                   <div class="report-table-head">
-                    <h3>2025 Actual Draw Snapshot</h3>
+                    <h3>Last Year's Actual Results</h3>
                     <p>Your selected point row is highlighted in blue. If a cutoff row is attached, it is highlighted in amber.</p>
                   </div>
                   <div id="rawTableEmpty" class="empty-note" style="margin:14px;">No 2025 source draw rows are attached for this hunt and residency.</div>
@@ -889,7 +894,7 @@
 
                 <section class="report-table-card">
                   <div class="report-table-head">
-                    <h3>2026 Projected Draw Snapshot</h3>
+                    <h3>This Year's Projected Results</h3>
                     <p>These projected rows keep the current permit read and the same hunt's carry-forward pool tied together so the hunter can see what changed this year.</p>
                   </div>
                   <div id="projectedTableEmpty" class="empty-note" style="margin:14px;">No 2026 projected rows are attached for this hunt and residency.</div>
