@@ -3,505 +3,478 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/png" href="./assets/logos/favicon.ico.png" />
-  <title>U.O.G.A. Hunt Research</title>
-  <link rel="stylesheet" href="./style.css?v=20260402-hunt-research-2" />
+  <title>U.O.G.A. Hunt Research — Clean Design</title>
   <style>
-    .research-page {
-      position: relative;
-      min-height: 100vh;
+    :root {
+      --bg: #0f0c0a;
+      --panel: rgba(28, 22, 18, 0.94);
+      --panel-2: rgba(38, 29, 23, 0.96);
+      --line: rgba(150, 105, 70, 0.55);
+      --line-soft: rgba(255,255,255,0.08);
+      --text: #f7efe7;
+      --muted: #ccb19a;
+      --accent: #e26c2c;
+      --accent-dark: #aa4d16;
+      --good: #78d58b;
+      --warn: #f1c56b;
+      --bad: #f18b72;
+      --shadow: 0 18px 44px rgba(0,0,0,.32);
+      --radius: 22px;
+      --pill: 999px;
+      --font-display: "Arial Black", Impact, sans-serif;
+      --font-ui: "Segoe UI", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: var(--font-ui);
+      color: var(--text);
       background:
-        linear-gradient(180deg, #0a0908 0%, #100d0b 38%, #15110f 100%);
-      overflow-x: hidden;
+        linear-gradient(180deg, rgba(10,8,7,.78), rgba(10,8,7,.92)),
+        radial-gradient(circle at top left, rgba(226,108,44,.10), transparent 24%),
+        radial-gradient(circle at top right, rgba(255,255,255,.04), transparent 18%),
+        #100d0b;
     }
 
-    .research-page::before,
-    .research-page::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-    }
+    a { color: inherit; }
 
-    .research-page::before {
-      z-index: 0;
-      background-image:
-        linear-gradient(180deg, rgba(8, 7, 7, 0.38) 0%, rgba(12, 10, 9, 0.56) 40%, rgba(15, 11, 9, 0.78) 100%),
-        radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.08), transparent 24%),
-        radial-gradient(circle at 82% 10%, rgba(224, 116, 41, 0.12), transparent 26%),
-        url('./assets/backgrounds/topo-black-with-hills.jpg'),
-        url('./assets/backgrounds/topo-black-white-line-001.jpg'),
-        url('./assets/backgrounds/topo-black-white-line-001.jpg');
-      background-repeat: repeat, no-repeat, no-repeat, repeat-x, repeat, repeat;
-      background-position: center top, 18% 12%, 82% 10%, center top, 0 0, -1px -1px;
-      background-size: auto, auto, auto, 1920px auto, 1920px 1082px, 1920px 1082px;
-      background-blend-mode: normal, screen, normal, screen, screen, normal;
-      opacity: 0.96;
-      filter: contrast(1.1) brightness(1.04);
-    }
-
-    .research-page::after {
-      z-index: 0;
-      background-image:
-        url('./assets/backgrounds/topo-black-white-line-001.jpg'),
-        linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.22));
-      background-repeat: repeat, no-repeat;
-      background-position: 1px 1px, center top;
-      background-size: 1920px 1082px, auto;
-      mix-blend-mode: screen;
-      opacity: 0.26;
-      filter: brightness(1.85) contrast(1.35);
-    }
-
-    .topbar,
-    .research-shell {
-      position: relative;
-      z-index: 1;
-    }
-
-    .research-shell {
-      max-width: 1520px;
+    .shell {
+      width: min(1380px, calc(100vw - 28px));
       margin: 0 auto;
-      padding: 18px 20px 44px;
-      display: grid;
+      padding: 18px 0 40px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       gap: 18px;
-    }
-
-    .research-card {
-      border: 1px solid rgba(126, 90, 60, 0.72);
-      border-radius: 22px;
-      overflow: hidden;
-      background:
-        linear-gradient(180deg, rgba(33, 25, 21, 0.96), rgba(20, 16, 13, 0.98));
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.34);
-    }
-
-    .research-head {
+      flex-wrap: wrap;
       padding: 16px 18px;
-      border-bottom: 1px solid rgba(126, 90, 60, 0.42);
-      background: linear-gradient(180deg, rgba(224, 116, 41, 0.96), rgba(173, 79, 23, 0.98));
-      color: #fff7ef;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
     }
 
-    .research-head .kicker {
-      margin: 0 0 5px;
-      font-size: 11px;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo {
+      width: 82px;
+      height: 48px;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #fff, #ddd);
+      display: grid;
+      place-items: center;
+      color: #111;
       font-weight: 900;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      opacity: 0.88;
+      font-size: 11px;
     }
 
-    .research-head h2,
-    .research-head h3 {
+    .brand-copy h1 {
       margin: 0;
       font-family: var(--font-display);
-      line-height: 0.98;
+      font-size: 30px;
+      line-height: .96;
+      text-transform: uppercase;
     }
 
-    .research-body {
-      padding: 18px;
+    .brand-copy p {
+      margin: 6px 0 0;
+      color: var(--accent);
+      font-weight: 900;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+
+    .nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .nav a {
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: var(--pill);
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .nav a.active {
+      background: rgba(226,108,44,.16);
+      border-color: rgba(226,108,44,.7);
+    }
+
+    .hero {
+      margin-top: 18px;
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background:
+        linear-gradient(135deg, rgba(226,108,44,.14), rgba(226,108,44,0) 40%),
+        var(--panel);
+      box-shadow: var(--shadow);
     }
 
     .hero-grid {
       display: grid;
+      grid-template-columns: 1.15fr .85fr;
       gap: 18px;
-      grid-template-columns: 1.2fr 0.8fr;
       align-items: stretch;
-    }
-
-    .hero-copy {
-      display: grid;
-      gap: 16px;
     }
 
     .eyebrow {
       display: inline-flex;
-      width: fit-content;
       padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(224, 116, 41, 0.45);
-      background: rgba(224, 116, 41, 0.12);
-      color: #ffd8be;
-      font-size: 12px;
+      border-radius: var(--pill);
+      border: 1px solid rgba(226,108,44,.4);
+      background: rgba(226,108,44,.10);
+      color: #ffd7bf;
+      font-size: 11px;
       font-weight: 900;
-      letter-spacing: 0.09em;
+      letter-spacing: .08em;
       text-transform: uppercase;
     }
 
-    .hero-copy h2 {
-      margin: 0;
+    .hero h2 {
+      margin: 14px 0 10px;
       font-family: var(--font-display);
-      font-size: clamp(34px, 4vw, 62px);
-      line-height: 0.92;
-      color: #fff5ea;
+      font-size: clamp(34px, 4.5vw, 64px);
+      line-height: .92;
+      color: #fff7ef;
+      max-width: 12ch;
     }
 
-    .hero-copy p,
-    .explanation-copy p,
-    .helper-copy,
-    .empty-state p {
+    .hero p {
       margin: 0;
-      color: #d0b49e;
+      max-width: 58ch;
+      color: var(--muted);
       font-size: 16px;
-      line-height: 1.66;
+      line-height: 1.65;
     }
 
     .hero-quote {
-      border-radius: 18px;
       padding: 20px;
-      border: 1px solid rgba(224, 116, 41, 0.38);
-      background: linear-gradient(180deg, rgba(224, 116, 41, 0.12), rgba(224, 116, 41, 0.04));
+      border-radius: 20px;
+      border: 1px solid rgba(226,108,44,.35);
+      background: linear-gradient(180deg, rgba(226,108,44,.12), rgba(226,108,44,.04));
       display: grid;
       gap: 10px;
       align-content: start;
     }
 
-    .hero-quote .quote {
-      margin: 0;
+    .hero-quote strong {
       color: #fff7ef;
+      font-size: 28px;
+      line-height: 1.02;
       font-family: var(--font-display);
-      font-size: clamp(28px, 3vw, 42px);
-      line-height: 0.98;
     }
 
-    .hero-quote .caption {
-      color: #f0c9aa;
-      font-size: 13px;
-      line-height: 1.6;
+    .hero-quote span {
+      color: #f0c7a6;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-weight: 900;
-    }
-
-    .pill-grid,
-    .stats-grid,
-    .detail-grid,
-    .lane-grid,
-    .copy-grid,
-    .page-link-grid,
-    .basket-list,
-    .ladder-grid {
-      display: grid;
-      gap: 12px;
-    }
-
-    .pill-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .pill-card,
-    .stat-card,
-    .detail-card,
-    .lane-card,
-    .copy-card,
-    .basket-item,
-    .basket-empty,
-    .empty-state {
-      border-radius: 18px;
-      border: 1px solid rgba(126, 90, 60, 0.58);
-      background: rgba(255, 255, 255, 0.035);
-      padding: 16px;
-    }
-
-    .pill-card .label,
-    .stat-card .label,
-    .detail-card .label,
-    .lane-card .label,
-    .copy-card .label,
-    .basket-item .label {
-      display: block;
-      margin-bottom: 7px;
-      color: #cfa382;
+      letter-spacing: .08em;
       font-size: 11px;
       font-weight: 900;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
     }
 
-    .pill-card .value,
-    .stat-card .value,
-    .detail-card .value,
-    .lane-card .value {
-      color: #fff7ef;
-      font-size: 18px;
-      font-weight: 900;
-      line-height: 1.28;
-    }
-
-    .stats-grid {
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-    }
-
-    .stat-card .value.big {
-      font-family: var(--font-display);
-      font-size: 34px;
-      line-height: 0.95;
-    }
-
-    .likelihood-guaranteed { color: #78d58b; }
-    .likelihood-live { color: #f6d278; }
-    .likelihood-longshot { color: #f4a082; }
-    .likelihood-unknown { color: #8ec8ff; }
-
-    .control-grid {
-      display: grid;
-      gap: 14px;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      margin-bottom: 14px;
-    }
-
-    .control-grid.secondary {
-      grid-template-columns: 1.2fr 0.9fr 1fr 0.9fr;
-    }
-
-    .control-field {
-      display: grid;
-      gap: 8px;
-    }
-
-    .control-field label,
-    .toggle-field legend {
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #e3c8b2;
-    }
-
-    .control-field input,
-    .control-field select {
-      width: 100%;
-      min-width: 0;
-      border-radius: 14px;
-      border: 1px solid rgba(126, 90, 60, 0.72);
-      background: rgba(255, 255, 255, 0.05);
-      color: #fffaf4;
-      padding: 13px 14px;
-      font: inherit;
-    }
-
-    .toggle-field {
-      border: 1px solid rgba(126, 90, 60, 0.58);
-      border-radius: 18px;
-      padding: 12px 14px 14px;
-      background: rgba(255, 255, 255, 0.035);
-    }
-
-    .toggle-row {
+    .hero-actions {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      color: #f5e9dd;
-      font-weight: 700;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
     }
 
-    .toggle-row input {
-      width: 18px;
-      height: 18px;
-      accent-color: #e27427;
-    }
-
-    .action-row {
-      display: grid;
-      gap: 12px;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-
-    .research-btn,
-    .research-link {
+    .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 48px;
-      padding: 12px 16px;
+      min-height: 46px;
+      padding: 10px 16px;
       border-radius: 14px;
-      border: 1px solid rgba(126, 90, 60, 0.82);
-      background: rgba(255, 255, 255, 0.045);
-      color: #fff7ef;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      color: var(--text);
       font-weight: 900;
-      letter-spacing: 0.04em;
+      font-size: 12px;
+      letter-spacing: .05em;
       text-transform: uppercase;
       text-decoration: none;
       cursor: pointer;
-      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
     }
 
-    .research-btn:hover,
-    .research-link:hover {
-      transform: translateY(-1px);
-      border-color: rgba(224, 116, 41, 0.9);
-      background: rgba(224, 116, 41, 0.14);
+    .btn.primary {
+      background: linear-gradient(180deg, var(--accent), var(--accent-dark));
+      border-color: transparent;
     }
 
-    .research-btn.primary {
-      background: linear-gradient(180deg, rgba(226, 116, 39, 0.98), rgba(178, 76, 22, 0.98));
-      border-color: rgba(247, 193, 152, 0.9);
-    }
-
-    .research-layout {
+    .layout {
+      margin-top: 18px;
       display: grid;
+      grid-template-columns: minmax(0, 1.18fr) minmax(320px, .82fr);
       gap: 18px;
-      grid-template-columns: minmax(0, 1.25fr) minmax(360px, 0.75fr);
       align-items: start;
     }
 
-    .matrix-toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .stack { display: grid; gap: 18px; }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card-head {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line-soft);
+      background: linear-gradient(180deg, rgba(226,108,44,.92), rgba(170,77,22,.98));
+      color: #fff8f1;
+    }
+
+    .card-head .kicker {
+      margin: 0 0 5px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      opacity: .9;
+    }
+
+    .card-head h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 26px;
+      line-height: .98;
+    }
+
+    .card-body {
+      padding: 18px;
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1.15fr .8fr .8fr auto;
+      gap: 12px;
+      align-items: end;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .field label {
+      color: #e8d2c2;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      font: inherit;
+      padding: 13px 14px;
+    }
+
+    .goal-grid {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 12px;
+    }
+
+    .goal {
+      border: 1px solid var(--line-soft);
+      border-radius: 16px;
+      padding: 14px;
+      background: rgba(255,255,255,.03);
+    }
+
+    .goal strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 15px;
+      color: #fff7ef;
+    }
+
+    .goal p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+
+    .reality-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
       gap: 12px;
       margin-bottom: 14px;
-      flex-wrap: wrap;
     }
 
-    .matrix-toolbar .count {
-      color: #fff5ea;
+    .metric {
+      border-radius: 18px;
+      border: 1px solid var(--line-soft);
+      background: rgba(255,255,255,.035);
+      padding: 16px;
+    }
+
+    .metric .label {
+      display: block;
+      margin-bottom: 6px;
+      color: #cca482;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .metric .value {
+      color: #fff7ef;
+      font-size: 19px;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .metric .value.big {
       font-family: var(--font-display);
       font-size: 34px;
-      line-height: 0.95;
+      line-height: .95;
     }
 
-    .matrix-toolbar .note {
-      color: #d0b49e;
-      font-size: 14px;
-      line-height: 1.55;
-      max-width: 52ch;
+    .summary {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 14px;
+      align-items: start;
     }
 
-    .matrix-wrap,
-    .table-wrap {
+    .summary-main,
+    .summary-side,
+    .formula-box,
+    .details-grid > div,
+    .pressure-box,
+    .backpack-item,
+    .raw-placeholder {
+      border: 1px solid var(--line-soft);
       border-radius: 18px;
-      border: 1px solid rgba(126, 90, 60, 0.58);
-      background: rgba(255, 255, 255, 0.03);
-      overflow: auto;
+      background: rgba(255,255,255,.03);
+      padding: 16px;
     }
 
-    table.research-table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 920px;
-    }
-
-    .research-table thead th {
-      position: sticky;
-      top: 0;
-      z-index: 1;
-      padding: 12px;
-      background: linear-gradient(180deg, rgba(224, 116, 41, 0.95), rgba(173, 79, 23, 0.98));
+    .summary-main h4,
+    .summary-side h4,
+    .formula-box h4,
+    .pressure-box h4,
+    .backpack h4,
+    .raw-placeholder h4 {
+      margin: 0 0 10px;
       color: #fff7ef;
-      text-align: left;
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      font-size: 16px;
     }
 
-    .research-table tbody td {
-      padding: 12px;
-      border-top: 1px solid rgba(126, 90, 60, 0.32);
-      color: #f4e6d9;
+    .summary-main p,
+    .summary-side p,
+    .formula-box p,
+    .pressure-box p,
+    .raw-placeholder p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
       font-size: 14px;
-      line-height: 1.45;
-      vertical-align: top;
     }
 
-    .research-table tbody tr {
-      cursor: pointer;
-      transition: background 0.16s ease;
+    .summary-main .headline {
+      color: #fffaf5;
+      font-family: var(--font-display);
+      font-size: clamp(26px, 3vw, 40px);
+      line-height: .98;
+      margin: 0 0 10px;
     }
 
-    .research-table tbody tr:hover {
-      background: rgba(224, 116, 41, 0.09);
-    }
-
-    .research-table tbody tr.is-selected {
-      background: rgba(224, 116, 41, 0.16);
-    }
-
-    .matrix-hunt-title {
-      font-weight: 900;
-      color: #fff8f2;
-    }
-
-    .matrix-subline {
-      color: #d3b8a4;
-      font-size: 12px;
-      margin-top: 4px;
-    }
-
-    .tag-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 8px;
-    }
-
-    .tag {
+    .trend {
       display: inline-flex;
       align-items: center;
-      padding: 5px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(126, 90, 60, 0.46);
-      background: rgba(255, 255, 255, 0.04);
-      color: #f0d8c4;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.04em;
+      padding: 8px 12px;
+      border-radius: var(--pill);
+      font-weight: 900;
+      letter-spacing: .05em;
       text-transform: uppercase;
-    }
-
-    .detail-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .lane-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .ladder-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      margin-top: 18px;
-    }
-
-    .copy-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .page-link-grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      margin-top: 18px;
-    }
-
-    .basket-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
+      font-size: 11px;
       margin-bottom: 12px;
     }
 
-    .basket-item {
+    .trend.yellow { background: rgba(241,197,107,.14); color: #ffe6a7; border: 1px solid rgba(241,197,107,.34); }
+    .trend.green { background: rgba(120,213,139,.14); color: #c6ffd1; border: 1px solid rgba(120,213,139,.34); }
+    .trend.red { background: rgba(241,139,114,.14); color: #ffd1c7; border: 1px solid rgba(241,139,114,.34); }
+
+    .formula-box code {
+      display: block;
+      white-space: pre-line;
+      font-family: Consolas, monospace;
+      color: #fff7ef;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .details-grid .label {
+      display: block;
+      margin-bottom: 6px;
+      color: #cca482;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .details-grid .value {
+      color: #fff7ef;
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .backpack-list {
       display: grid;
       gap: 10px;
     }
 
-    .basket-item h4 {
-      margin: 0;
-      color: #fff6ee;
-      font-size: 16px;
-      line-height: 1.3;
+    .backpack-item strong {
+      display: block;
+      margin-bottom: 5px;
+      color: #fff7ef;
     }
 
-    .basket-item p {
-      margin: 0;
-      color: #d0b49e;
+    .backpack-item p {
+      margin: 0 0 10px;
+      color: var(--muted);
       font-size: 13px;
       line-height: 1.5;
     }
 
-    .basket-actions {
+    .mini-row {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
@@ -512,470 +485,317 @@
       align-items: center;
       justify-content: center;
       min-height: 34px;
-      padding: 8px 10px;
+      padding: 7px 10px;
       border-radius: 10px;
-      border: 1px solid rgba(126, 90, 60, 0.72);
-      background: rgba(255, 255, 255, 0.05);
-      color: #fff5ea;
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      cursor: pointer;
-    }
-
-    .mini-btn:hover {
-      border-color: rgba(224, 116, 41, 0.85);
-      background: rgba(224, 116, 41, 0.14);
-    }
-
-    .status-box {
-      border-radius: 16px;
-      border: 1px solid rgba(126, 90, 60, 0.58);
-      background: rgba(255, 255, 255, 0.04);
-      padding: 14px;
-      color: #d4b8a2;
-      line-height: 1.6;
-    }
-
-    .empty-state strong {
-      display: block;
-      margin-bottom: 8px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
       color: #fff7ef;
-      font-size: 16px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .05em;
+      text-transform: uppercase;
     }
 
-    .muted-link {
-      color: #88c5ff;
-      font-weight: 800;
-      text-decoration: none;
+    .raw-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
     }
 
-    .muted-link:hover {
-      text-decoration: underline;
+    .footer-note {
+      margin-top: 18px;
+      padding: 18px 20px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 14px;
     }
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1180px) {
       .hero-grid,
-      .research-layout,
-      .copy-grid,
-      .ladder-grid,
-      .detail-grid,
-      .lane-grid,
-      .page-link-grid,
-      .control-grid,
-      .control-grid.secondary,
-      .action-row,
-      .pill-grid,
-      .stats-grid {
+      .layout,
+      .summary,
+      .raw-grid,
+      .goal-grid,
+      .reality-grid,
+      .details-grid,
+      .controls-grid {
         grid-template-columns: 1fr;
       }
+    }
 
-      .research-shell {
-        padding: 14px 14px 28px;
-      }
+    @media (max-width: 760px) {
+      .shell { width: min(100vw - 18px, 1380px); }
+      .topbar, .hero, .card-body, .card-head, .footer-note { padding-left: 16px; padding-right: 16px; }
+      .brand-copy h1 { font-size: 24px; }
+      .hero h2 { max-width: none; }
+      .btn { width: 100%; }
+      .hero-actions { flex-direction: column; }
     }
   </style>
 </head>
-<body class="theme-dark research-page">
-  <header class="topbar">
-    <div class="brand">
-      <div class="brand-logo-lockup">
-        <a href="https://www.uoga.org" target="_blank" title="Go to U.O.G.A. Home">
-          <img src="https://static.wixstatic.com/media/43f827_24f00cd070494533955d4910eef3a2fb~mv2.jpg/v1/fill/w_207,h_105,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Group%20945%20(1).jpg" alt="U.O.G.A. Logo">
-        </a>
-        <div>
-          <h1>U.O.G.A. Hunt Research</h1>
-          <p>Truth-Based Draw Research</p>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-logo">U.O.G.A.</div>
+        <div class="brand-copy">
+          <h1>Hunt Research</h1>
+          <p>Can you draw this hunt?</p>
         </div>
       </div>
-    </div>
-    <div class="controls">
-      <nav class="utility-nav" aria-label="Site sections">
-        <a class="utility-link" href="./index.html">Hunt Planner</a>
-        <a class="utility-link active" href="./hunt-research.html" aria-current="page">Hunt Research</a>
-        <a class="utility-link" href="./vetting.html">Outfitter Verification</a>
+      <nav class="nav">
+        <a href="#">Hunt Planner</a>
+        <a href="#" class="active">Hunt Research</a>
+        <a href="#">Outfitter Verification</a>
       </nav>
-    </div>
-  </header>
+    </header>
 
-  <main class="research-shell">
-    <section class="research-card">
-      <div class="research-body">
-        <div class="hero-grid">
-          <div class="hero-copy">
-            <span class="eyebrow">Blindfold Easy Research Flow</span>
-            <h2>Pick a species, set your points, and let the draw engines narrow the field.</h2>
-            <p>
-              This page is built to answer the next real question after Hunt Planner: what can I actually draw, what does the
-              point ladder say, and what happens when current permit numbers hit the same hunt next year?
-            </p>
-            <div class="pill-grid">
-              <div class="pill-card">
-                <span class="label">Real Inputs</span>
-                <span class="value">2025 raw ladders + 2026 permit counts</span>
-              </div>
-              <div class="pill-card">
-                <span class="label">Real Methods</span>
-                <span class="value">Preference ladders and Utah bonus Monte Carlo stay separate</span>
-              </div>
-              <div class="pill-card">
-                <span class="label">Real Decision Help</span>
-                <span class="value">Matrix view, raw ladder detail, and persistent hunt basket</span>
-              </div>
-            </div>
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow">Result-first design</span>
+          <h2>Enter your points. Get a real answer.</h2>
+          <p>
+            This page is built around one job: take a selected hunt, compare your points to actual draw pressure, and tell you what is real now — not after ten screens of clutter.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#controls">Run Hunt Research</a>
+            <a class="btn" href="#backpack">Open Hunt Backpack</a>
           </div>
-
-          <div class="hero-quote">
-            <p class="caption">Public-facing positioning</p>
-            <p class="quote">Utah doesn’t use simple odds, so we don’t either.</p>
-            <p>
-              Most tools flatten Utah into one draw formula. This page keeps bonus, preference, and no-draw hunts separate,
-              then shows the result in plain language so hunters can move from curiosity to a real plan.
-            </p>
-          </div>
+        </div>
+        <div class="hero-quote">
+          <span>Public-facing positioning</span>
+          <strong>Utah doesn’t use simple odds, so this page doesn’t either.</strong>
+          <p>This layout separates Draw Pressure from Draw Reality so the hunter sees the answer fast and the proof stays close by.</p>
         </div>
       </div>
     </section>
 
-    <section class="research-card">
-      <div class="research-head">
-        <p class="kicker">Hunter Inputs</p>
-        <h2>Matrix Filters + Planner Handoff</h2>
-      </div>
-      <div class="research-body">
-        <div class="control-grid">
-          <div class="control-field">
-            <label for="huntCodeInput">Hunt Code</label>
-            <input id="huntCodeInput" type="text" placeholder="DB1019" />
+    <div class="layout">
+      <div class="stack">
+        <section class="card" id="controls">
+          <div class="card-head">
+            <p class="kicker">Hunter Inputs</p>
+            <h3>Select the Hunt. Set the Goal. Run the Answer.</h3>
           </div>
-          <div class="control-field">
-            <label for="speciesSelect">Species</label>
-            <select id="speciesSelect"></select>
-          </div>
-          <div class="control-field">
-            <label for="weaponSelect">Weapon</label>
-            <select id="weaponSelect"></select>
-          </div>
-          <div class="control-field">
-            <label for="residencySelect">Residency</label>
-            <select id="residencySelect">
-              <option value="Resident">Resident</option>
-              <option value="Nonresident">Nonresident</option>
-            </select>
-          </div>
-          <div class="control-field">
-            <label for="pointsInput">Apply With Points</label>
-            <input id="pointsInput" type="number" min="0" max="32" step="1" value="12" />
-          </div>
-          <div class="control-field">
-            <label for="goalTypeSelect">Goal Type</label>
-            <select id="goalTypeSelect">
-              <option value="OPPORTUNITY">Opportunity</option>
-              <option value="HIGH_QUALITY">High Quality</option>
-              <option value="MAX_TROPHY">Max Trophy</option>
-              <option value="MEAT">Meat</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="control-grid secondary">
-          <div class="control-field">
-            <label for="searchInput">Search</label>
-            <input id="searchInput" type="text" placeholder="hunt code, unit, hunt name..." />
-          </div>
-          <fieldset class="toggle-field">
-            <legend>Outfitter Filter</legend>
-            <div class="toggle-row">
-              <span>Only show hunts with verified outfitters available</span>
-              <input id="wantsOutfitterToggle" type="checkbox" />
-            </div>
-          </fieldset>
-          <div class="status-box" id="filterReadout">
-            Waiting for the research bundle to load.
-          </div>
-          <div class="status-box" id="plannerReadout">
-            Hunt Planner handoff is active. If you selected a hunt on the planner page, this screen will pick it up automatically.
-          </div>
-        </div>
-
-        <div class="action-row">
-          <button id="runResearchButton" class="research-btn primary" type="button">Run Hunt Research</button>
-          <button id="clearFiltersButton" class="research-btn" type="button">Clear Filters</button>
-          <button id="addToBasketButton" class="research-btn" type="button">Add Selected Hunt</button>
-          <a class="research-link" href="./index.html">Back to Hunt Planner</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="research-card">
-      <div class="research-body">
-        <div class="stats-grid">
-          <div class="stat-card">
-            <span class="label">Visible Hunts</span>
-            <span id="visibleCount" class="value big">0</span>
-          </div>
-          <div class="stat-card">
-            <span class="label">Selected Draw Outlook</span>
-            <span id="selectedOutlook" class="value likelihood-unknown">Waiting</span>
-          </div>
-          <div class="stat-card">
-            <span class="label">Draw Family</span>
-            <span id="selectedDrawFamily" class="value">Not loaded</span>
-          </div>
-          <div class="stat-card">
-            <span class="label">Current Permit Read</span>
-            <span id="selectedPermitRead" class="value">Not loaded</span>
-          </div>
-          <div class="stat-card">
-            <span class="label">Cutoff Read</span>
-            <span id="selectedCutoffRead" class="value">Not loaded</span>
-          </div>
-          <div class="stat-card">
-            <span class="label">Basket Size</span>
-            <span id="basketCount" class="value big">0</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="research-layout">
-      <section class="research-card">
-        <div class="research-head">
-          <p class="kicker">Matrix View</p>
-          <h3>Matching Hunts</h3>
-        </div>
-        <div class="research-body">
-          <div class="matrix-toolbar">
-            <div>
-              <div id="matrixCount" class="count">0</div>
-              <div class="note">Sorted by the selected goal type, while keeping the draw family logic separate. Click any row to load the full hunt read.</div>
-            </div>
-            <div class="tag-row">
-              <span class="tag">Bonus simulation where available</span>
-              <span class="tag">Preference ladder stays preference</span>
-              <span class="tag">No-draw hunts stay no-draw</span>
-            </div>
-          </div>
-
-          <div class="matrix-wrap">
-            <table class="research-table">
-              <thead>
-                <tr>
-                  <th>Hunt</th>
-                  <th>Residency</th>
-                  <th>Current Permits</th>
-                  <th>Projected / Row Odds</th>
-                  <th>Cutoff / Signal</th>
-                  <th>Access</th>
-                  <th>Outfitters</th>
-                </tr>
-              </thead>
-              <tbody id="matrixBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <div style="display:grid; gap:18px;">
-        <section class="research-card">
-          <div class="research-head">
-            <p class="kicker">Selected Hunt</p>
-            <h3 id="detailTitle">Choose a hunt from the matrix</h3>
-          </div>
-          <div class="research-body">
-            <div id="detailEmpty" class="empty-state">
-              <strong>No hunt selected yet</strong>
-              <p>Run the filters or use the planner handoff. Once a hunt is selected, this panel shows the real engine result, the raw ladder, and the current permit read.</p>
+          <div class="card-body">
+            <div class="controls-grid">
+              <div class="field">
+                <label>Hunt Code</label>
+                <input type="text" value="DB1019" />
+              </div>
+              <div class="field">
+                <label>Residency</label>
+                <select>
+                  <option>Resident</option>
+                  <option>Nonresident</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Your Points</label>
+                <input type="number" value="16" />
+              </div>
+              <button class="btn primary">Run</button>
             </div>
 
-            <div id="detailContent" hidden>
-              <div class="detail-grid">
-                <div class="detail-card">
-                  <span class="label">Species / Weapon</span>
-                  <span id="detailSpeciesWeapon" class="value">-</span>
-                </div>
-                <div class="detail-card">
-                  <span class="label">Access Type</span>
-                  <span id="detailAccessType" class="value">-</span>
-                </div>
-                <div class="detail-card">
-                  <span class="label">Harvest Success / Harvest</span>
-                  <span id="detailHarvest" class="value">-</span>
-                </div>
-                <div class="detail-card">
-                  <span class="label">Pressure / Efficiency</span>
-                  <span id="detailPressure" class="value">-</span>
-                </div>
-                <div class="detail-card">
-                  <span class="label">Verified / C.P.O.</span>
-                  <span id="detailOutfitters" class="value">-</span>
-                </div>
-                <div class="detail-card">
-                  <span class="label">Recommended Permit Source</span>
-                  <span id="detailPermitSource" class="value">-</span>
-                </div>
+            <div class="goal-grid">
+              <div class="goal">
+                <strong>Draw Fast</strong>
+                <p>Best for hunters who care more about getting a tag soon than holding out for a premium unit.</p>
               </div>
-
-              <div class="lane-grid" style="margin-top:18px;">
-                <div class="lane-card">
-                  <span class="label">Selected Result</span>
-                  <span id="detailSelectedResult" class="value">-</span>
-                </div>
-                <div class="lane-card">
-                  <span class="label">Guaranteed Lane</span>
-                  <span id="detailGuaranteedLane" class="value">-</span>
-                </div>
-                <div class="lane-card">
-                  <span class="label">Random Lane</span>
-                  <span id="detailRandomLane" class="value">-</span>
-                </div>
+              <div class="goal">
+                <strong>Balanced Strategy</strong>
+                <p>Best for hunters trying to stay realistic while still pursuing a quality hunt.</p>
               </div>
-
-              <div class="lane-grid" style="margin-top:12px;">
-                <div class="lane-card">
-                  <span class="label">Cutoff / Pressure</span>
-                  <span id="detailCutoff" class="value">-</span>
-                </div>
-                <div class="lane-card">
-                  <span class="label">Method</span>
-                  <span id="detailMethod" class="value">-</span>
-                </div>
-                <div class="lane-card">
-                  <span class="label">Goal Fit Read</span>
-                  <span id="detailGoalFit" class="value">-</span>
-                </div>
-              </div>
-
-              <div class="research-card" style="margin-top:18px;">
-                <div class="research-head">
-                  <p class="kicker">Decision Read</p>
-                  <h3 id="detailHeadline">Waiting</h3>
-                </div>
-                <div class="research-body">
-                  <p id="detailExplanation" class="helper-copy"></p>
-                </div>
-              </div>
-
-              <div class="page-link-grid">
-                <a id="openPlannerLink" class="research-link" href="./index.html">Return to Planner</a>
-                <a id="openDwrLink" class="research-link" href="#" target="_blank" rel="noopener noreferrer">Open Official DWR Hunt</a>
-                <a class="research-link" href="./vetting.html">Open Outfitter Verification</a>
-                <button id="detailBasketButton" class="research-btn" type="button">Save Hunt to Basket</button>
+              <div class="goal">
+                <strong>Chase the Max</strong>
+                <p>Best for hunters who want the premium track and are willing to wait for the guaranteed side.</p>
               </div>
             </div>
           </div>
         </section>
 
-        <section class="research-card">
-          <div class="research-head">
-            <p class="kicker">Hunt Basket</p>
-            <h3>Persistent Across Pages</h3>
+        <section class="card">
+          <div class="card-head">
+            <p class="kicker">Draw Reality</p>
+            <h3>Selected Hunt Result</h3>
           </div>
-          <div class="research-body">
-            <div class="basket-head">
-              <p class="helper-copy">Saved with local storage first so a hunter can move between Hunt Planner, Hunt Research, and Outfitter Verification without losing shortlists.</p>
-              <button id="clearBasketButton" class="mini-btn" type="button">Clear Basket</button>
+          <div class="card-body">
+            <div class="reality-grid">
+              <div class="metric">
+                <span class="label">Guaranteed At</span>
+                <span class="value big">18</span>
+              </div>
+              <div class="metric">
+                <span class="label">Your Points</span>
+                <span class="value big">16</span>
+              </div>
+              <div class="metric">
+                <span class="label">Status</span>
+                <span class="value">2 pts short of guaranteed</span>
+              </div>
+              <div class="metric">
+                <span class="label">Draw Odds</span>
+                <span class="value big">11.4%</span>
+              </div>
             </div>
-            <div id="basketList" class="basket-list"></div>
+
+            <div class="summary">
+              <div class="summary-main">
+                <div class="trend yellow">Yellow Light — May Draw in 5–10 Years</div>
+                <div class="headline">You are not guaranteed. Your real chance is coming from the remaining pool.</div>
+                <p>
+                  This hunt is still alive, but it is under pressure. Hunters above you are still consuming guaranteed-side permits faster than you gain points. That does not mean you are out. It means this hunt is no longer a clean guaranteed-track play right now.
+                </p>
+
+                <div class="details-grid">
+                  <div>
+                    <span class="label">Species / Weapon</span>
+                    <span class="value">Limited Entry Deer / Rifle</span>
+                  </div>
+                  <div>
+                    <span class="label">Current Permit Read</span>
+                    <span class="value">33 Resident / 4 Nonresident</span>
+                  </div>
+                  <div>
+                    <span class="label">Goal Fit</span>
+                    <span class="value">Better for Balanced than Draw Fast</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="summary-side">
+                <div class="formula-box">
+                  <h4>Formula</h4>
+                  <code>Gap = Guaranteed Points − Your Points
+
+ΔGap = (Next Year Guaranteed Points − Current Guaranteed Points) − 1
+
+ΔGap &gt; 0 → Falling Behind
+ΔGap = 0 → Holding Ground
+ΔGap &lt; 0 → Catching Up</code>
+                  <p style="margin-top:10px;">Meaning: if the guaranteed requirement stays on trend, you will never catch max points.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-head">
+            <p class="kicker">Draw Pressure</p>
+            <h3>Why the Hunt Looks Like This</h3>
+          </div>
+          <div class="card-body">
+            <div class="pressure-box">
+              <h4>Pressure Read</h4>
+              <p>
+                Draw Pressure is the point-level stack above and around the hunter. This is the data layer: how many applicants are ahead of you, how many sit at your point level, and how much permit volume is already consumed before the draw reaches you.
+              </p>
+              <div class="details-grid" style="margin-top:14px;">
+                <div>
+                  <span class="label">Applicants Above You</span>
+                  <span class="value">41</span>
+                </div>
+                <div>
+                  <span class="label">Applicants At Your Level</span>
+                  <span class="value">19</span>
+                </div>
+                <div>
+                  <span class="label">Remaining Pool Basis</span>
+                  <span class="value">After higher-point applicants</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-head">
+            <p class="kicker">Raw Support</p>
+            <h3>Keep the Proof Close, Not in the Way</h3>
+          </div>
+          <div class="card-body">
+            <div class="raw-grid">
+              <div class="raw-placeholder">
+                <h4>2025 Actual Draw Snapshot</h4>
+                <p>Point-level applicants, permits, and draws from the actual prior draw table go here. Keep this collapsed or lower on the page so it supports the answer without burying it.</p>
+              </div>
+              <div class="raw-placeholder">
+                <h4>2026 Projected Table</h4>
+                <p>Projected queue movement and remaining-pool read go here. This is where you prove the trend label, not where you make the hunter work for the basic answer.</p>
+              </div>
+            </div>
           </div>
         </section>
       </div>
+
+      <aside class="stack" id="backpack">
+        <section class="card backpack">
+          <div class="card-head">
+            <p class="kicker">Hunt Backpack</p>
+            <h3>Recent Hunts</h3>
+          </div>
+          <div class="card-body">
+            <div class="backpack-list">
+              <div class="backpack-item">
+                <strong>DB1019 — Fillmore, Oak Creek</strong>
+                <p>LE Deer • Rifle • Current focus hunt</p>
+                <div class="mini-row">
+                  <span class="mini-btn">Load</span>
+                  <span class="mini-btn">Compare</span>
+                </div>
+              </div>
+              <div class="backpack-item">
+                <strong>DB1017 — Book Cliffs, North</strong>
+                <p>LE Deer • Rifle • Backup option</p>
+                <div class="mini-row">
+                  <span class="mini-btn">Load</span>
+                  <span class="mini-btn">Compare</span>
+                </div>
+              </div>
+              <div class="backpack-item">
+                <strong>MB6006 — North Slope Moose</strong>
+                <p>OIL • Resident view</p>
+                <div class="mini-row">
+                  <span class="mini-btn">Load</span>
+                  <span class="mini-btn">Compare</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-head">
+            <p class="kicker">Design Rules</p>
+            <h3>What This Layout Fixes</h3>
+          </div>
+          <div class="card-body">
+            <div class="backpack-item">
+              <strong>One primary path</strong>
+              <p>Enter hunt. Enter points. Read the answer.</p>
+            </div>
+            <div class="backpack-item">
+              <strong>Result first</strong>
+              <p>The hunter sees Draw Reality before tables, proof, or explanation blocks.</p>
+            </div>
+            <div class="backpack-item">
+              <strong>Proof stays nearby</strong>
+              <p>Draw Pressure and Formula remain visible, but they do not overpower the result.</p>
+            </div>
+          </div>
+        </section>
+      </aside>
     </div>
 
-    <section class="research-card">
-      <div class="research-head">
-        <p class="kicker">Raw Data Detail</p>
-        <h3>Prior-Year Ladder + Current Projection</h3>
-      </div>
-      <div class="research-body">
-        <div class="ladder-grid">
-          <div>
-            <h3 style="margin:0 0 12px; color:#fff6ed; font-family:var(--font-display);">2025 Source Ladder</h3>
-            <div id="rawTableEmpty" class="empty-state">
-              <strong>No source ladder loaded</strong>
-              <p>Select a hunt to inspect the actual 2025 point ladder used by the engine.</p>
-            </div>
-            <div id="rawTableWrap" class="table-wrap" hidden>
-              <table class="research-table">
-                <thead>
-                  <tr>
-                    <th>Point</th>
-                    <th>Applicants</th>
-                    <th id="rawColA">Permit A</th>
-                    <th id="rawColB">Permit B</th>
-                    <th id="rawColC">Permit C</th>
-                    <th>Row Odds</th>
-                  </tr>
-                </thead>
-                <tbody id="rawTableBody"></tbody>
-              </table>
-            </div>
-          </div>
-
-          <div>
-            <h3 style="margin:0 0 12px; color:#fff6ed; font-family:var(--font-display);">2026 Engine Ladder</h3>
-            <div id="projectedTableEmpty" class="empty-state">
-              <strong>No 2026 projection loaded</strong>
-              <p>Bonus-draw hunts will show the simulated 2026 point ladder here. Other hunt families stay on their source ladder until their engine is attached.</p>
-            </div>
-            <div id="projectedTableWrap" class="table-wrap" hidden>
-              <table class="research-table">
-                <thead>
-                  <tr>
-                    <th>Point</th>
-                    <th>Carryover</th>
-                    <th>Guaranteed %</th>
-                    <th>Random %</th>
-                    <th>Total %</th>
-                    <th>Cutoff</th>
-                  </tr>
-                </thead>
-                <tbody id="projectedTableBody"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
+    <section class="footer-note">
+      This is a clean design direction, not a finished engine. It gives you the right structure: Draw Pressure as the proof layer, Draw Reality as the answer layer, and the hunter’s goal close to the inputs so the recommendation can actually mean something.
     </section>
-
-    <section class="research-card">
-      <div class="research-head">
-        <p class="kicker">Public Explanation Copy</p>
-        <h3>Positioning, Tooltips, and FAQ</h3>
-      </div>
-      <div class="research-body">
-        <div class="copy-grid">
-          <div class="copy-card">
-            <span class="label">Homepage Blurb</span>
-            <p>Utah doesn’t use simple odds, so we don’t either. Hunt Research ties real draw ladders, current permit numbers, and hunt performance into one clean decision screen.</p>
-          </div>
-          <div class="copy-card">
-            <span class="label">Medium Explainer</span>
-            <p>General-season and many antlerless hunts are not modeled the same way as limited-entry and O.I.L. permits. This page keeps those draw methods separate, then shows the actual ladder or simulation that matches the hunt.</p>
-          </div>
-          <div class="copy-card">
-            <span class="label">Tooltip Copy</span>
-            <p>Bonus draw hunts use Utah-style simulation. Preference hunts stay on the preference ladder. No-draw hunts are shown as access-and-pressure reads instead of fake odds.</p>
-          </div>
-          <div class="copy-card">
-            <span class="label">FAQ Answer</span>
-            <p>We project from last year’s actual draw table and apply current permit numbers. We do not invent applicant growth, and we do not collapse every hunt into one shortcut formula.</p>
-          </div>
-          <div class="copy-card">
-            <span class="label">Advertising Block</span>
-            <p>Most odds tools simplify Utah’s random side. This system doesn’t. It keeps the real draw family, the real ladder, and the current permit numbers together so hunters can plan around truth instead of averages.</p>
-          </div>
-          <div class="copy-card">
-            <span class="label">Source Trail</span>
-            <p>The page uses the U.O.G.A. processed databank, then links back out to the official DWR hunt page and the outfitter verification explainer so users can keep moving without losing context.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <script src="./config.js?v=20260402-hunt-research-2"></script>
-  <script src="./hunt-research.js?v=20260402-hunt-research-2"></script>
+  </div>
 </body>
 </html>
