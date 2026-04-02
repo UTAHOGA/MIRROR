@@ -285,15 +285,15 @@
     const family = getDrawFamily(hunt);
 
     if (family === 'bonus_draw') {
-      return 'This hunt uses Utah bonus points, so the page looks at the top-point draw first, then shows what chance is left in the random draw.';
+      return 'Top-point side first, then random.';
     }
     if (family === 'preference_draw') {
-      return 'This hunt uses preference points, so the page starts with the line you need to reach and whether your points land above it, on it, or below it.';
+      return 'Preference-point hunt.';
     }
     if (success !== null || pressure !== null || satisfaction !== null) {
-      return `This hunt reads more like access and hunt quality than a formal draw table${success !== null ? `, with ${formatPercent(success)} harvest success` : ''}${pressure !== null ? ` and ${formatDecimal(pressure, 2)} hunters per permit` : ''}.`;
+      return `More about access and hunt quality${success !== null ? ` · ${formatPercent(success)} success` : ''}${pressure !== null ? ` · ${formatDecimal(pressure, 2)} pressure` : ''}.`;
     }
-    return 'This hunt currently reads more like a hunt-quality and access decision than a point-table decision, so use season details and field conditions first.';
+    return 'More about access than points.';
   }
 
   function buildFilters() {
@@ -327,28 +327,37 @@
   function renderFilterReadout(filters) {
     const backpackCount = getBasket().length;
     els.filterReadout.textContent = filters.huntCode
-      ? `Researching ${filters.huntCode} for ${filters.residencyLabel.toLowerCase()} applicants at ${filters.points} point${filters.points === 1 ? '' : 's'}.`
+      ? `${filters.huntCode} · ${filters.residencyLabel} · ${filters.points} point${filters.points === 1 ? '' : 's'}.`
       : backpackCount
-        ? `Hunt Pack ready with ${backpackCount} saved hunt${backpackCount === 1 ? '' : 's'} · choose one or type a hunt code to override it.`
-        : `Waiting for a planner handoff or packed hunt · residency is set to ${filters.residencyLabel.toLowerCase()} at ${filters.points} point${filters.points === 1 ? '' : 's'}.`;
+        ? `${backpackCount} hunt${backpackCount === 1 ? '' : 's'} in Hunt Pack.`
+        : `${filters.residencyLabel} · ${filters.points} point${filters.points === 1 ? '' : 's'}.`;
     els.plannerReadout.textContent = state.selectedHuntCode
-      ? `Planner handoff active for ${state.selectedHuntCode}. The Hunt Pack is carrying that selection across pages.`
-      : 'Hunt Planner handoff is active. If you selected a hunt on the planner page, this screen will pick it up automatically.';
+      ? `Planner handoff: ${state.selectedHuntCode}.`
+      : 'Planner handoff ready.';
   }
 
-  function rowClassNames(isUserRow, isCutoffRow) {
+  function rowClassNames(isUserRow, isCutoffRow, isGuaranteedRow) {
     const classes = [];
     if (isUserRow) classes.push('is-user-row');
     if (isCutoffRow) classes.push('is-cutoff-row');
+    if (isGuaranteedRow) classes.push('is-guaranteed-row');
     return classes.join(' ');
   }
 
+  function buildMarkerHtml(markers) {
+    if (!markers.length) return '<span class="marker-pill">Reference</span>';
+    return `<div class="marker-stack">${markers.map((marker) => `<span class="marker-pill ${marker.kind}">${escapeHtml(marker.label)}</span>`).join('')}</div>`;
+  }
+
   function renderRawTable(hunt, residencyKey, points) {
-    const rows = getRawRows(hunt, residencyKey)
+    const rawRows = getRawRows(hunt, residencyKey)
       .slice()
       .sort((a, b) => (num(b.point_level) ?? -1) - (num(a.point_level) ?? -1));
+    const projectedMap = new Map(
+      getProjectedRows(hunt, residencyKey).map((row) => [num(row.apply_with_points), row])
+    );
 
-    if (!rows.length) {
+    if (!rawRows.length && !projectedMap.size) {
       els.rawTableWrap.hidden = true;
       els.rawTableEmpty.hidden = false;
       els.rawTableBody.innerHTML = '';
@@ -357,33 +366,56 @@
 
     const isBonus = getDrawFamily(hunt) === 'bonus_draw';
     const cutoffSignal = residencyKey === 'resident' ? num(hunt.resident_point_signal) : num(hunt.nonresident_point_signal);
-    els.rawColA.textContent = isBonus ? 'Bonus' : 'Permits';
-    els.rawColB.textContent = isBonus ? 'Random' : 'Source';
-    els.rawColC.textContent = isBonus ? 'Total' : 'Type';
+    els.rawColA.textContent = isBonus ? '2025 Top-Point' : '2025 Permits';
+    els.rawColB.textContent = isBonus ? '2025 Random' : '2025 Draw Type';
+    els.rawColC.textContent = '2025 Row Odds';
 
-    els.rawTableBody.innerHTML = rows.map((row) => {
-      const rowPoint = num(row.point_level);
-      const className = rowClassNames(rowPoint === points, cutoffSignal !== null && rowPoint === cutoffSignal);
+    const pointSet = new Set([
+      ...rawRows.map((row) => num(row.point_level)),
+      ...Array.from(projectedMap.keys()),
+    ]);
+    const pointRows = Array.from(pointSet)
+      .filter((value) => value !== null)
+      .sort((a, b) => b - a);
+    const rawMap = new Map(rawRows.map((row) => [num(row.point_level), row]));
+
+    els.rawTableBody.innerHTML = pointRows.map((rowPoint) => {
+      const row = rawMap.get(rowPoint) || {};
+      const projected = projectedMap.get(rowPoint) || null;
+      const cutoff = projected ? num(projected.projected_cutoff_point) : cutoffSignal;
+      const isGuaranteedRow = projected ? Boolean(projected.is_guaranteed_draw) : false;
+      const className = rowClassNames(rowPoint === points, cutoff !== null && rowPoint === cutoff, isGuaranteedRow);
+      const markers = [];
+      if (rowPoint === points) markers.push({ kind: 'user', label: 'Your point level' });
+      if (cutoff !== null && rowPoint === cutoff) markers.push({ kind: 'cutoff', label: 'Guaranteed-at line' });
+      if (isGuaranteedRow) markers.push({ kind: 'guaranteed', label: 'Guaranteed in 2026' });
+
       if (isBonus) {
         return `
           <tr class="${className}">
-            <td>${formatInteger(row.point_level)}</td>
+            <td>${formatInteger(rowPoint)}</td>
             <td>${formatInteger(row.applicants)}</td>
             <td>${formatInteger(row.bonus_permits)}</td>
             <td>${formatInteger(row.random_permits)}</td>
-            <td>${formatInteger(row.total_permits)}</td>
             <td>${escapeHtml(row.success_ratio_text || 'N/A')}</td>
+            <td>${projected ? formatInteger(projected.projected_carryover_pool_at_point) : 'Not attached'}</td>
+            <td>${projected ? formatProbability(projected.projected_guaranteed_probability_pct) : 'Not attached'}</td>
+            <td>${projected ? formatProbability(projected.projected_total_probability_pct) : 'Not attached'}</td>
+            <td>${buildMarkerHtml(markers)}</td>
           </tr>`;
       }
 
       return `
         <tr class="${className}">
-          <td>${formatInteger(row.point_level)}</td>
+          <td>${formatInteger(rowPoint)}</td>
           <td>${formatInteger(row.applicants)}</td>
           <td>${formatInteger(row.permits_awarded)}</td>
           <td>Preference</td>
-          <td>Row</td>
           <td>${escapeHtml(row.success_ratio_text || 'N/A')}</td>
+          <td>${projected ? formatInteger(projected.projected_carryover_pool_at_point) : 'Not attached'}</td>
+          <td>${projected ? formatProbability(projected.projected_guaranteed_probability_pct) : 'Not attached'}</td>
+          <td>${projected ? formatProbability(projected.projected_total_probability_pct) : 'Not attached'}</td>
+          <td>${buildMarkerHtml(markers)}</td>
         </tr>`;
     }).join('');
 
@@ -406,7 +438,7 @@
     els.projectedTableBody.innerHTML = rows.map((row) => {
       const rowPoint = num(row.apply_with_points);
       const cutoff = num(row.projected_cutoff_point);
-      const className = rowClassNames(rowPoint === points, cutoff !== null && rowPoint === cutoff);
+      const className = rowClassNames(rowPoint === points, cutoff !== null && rowPoint === cutoff, Boolean(row.is_guaranteed_draw));
       return `
       <tr class="${className}">
         <td>${formatInteger(row.apply_with_points)}</td>
@@ -449,11 +481,11 @@
         guaranteedLane: guaranteedFlag || (total !== null && total >= 99.95)
           ? `${formatInteger(points)} points puts you safely inside the top-point draw.`
           : `${formatProbability(guaranteed)} chance in the top-point draw with ${formatInteger(projected.projected_guaranteed_draws_at_point)} tags going to this point level`,
-        randomLane: `${formatProbability(random)} chance in the random draw after top points with ${formatInteger(projected.projected_random_pool_permits)} random tags available`,
-        cutoff: `${cutoff === null ? 'No guaranteed point line loaded' : `${formatInteger(cutoff)} points is the line to fully clear the top-point draw`} · pressure ${formatDecimal(projected.projected_cutoff_pressure_ratio, 2)}`,
-        method: `Built from the 2026 projection using ${projected.random_method || 'the draw engine'} across ${formatInteger(projected.simulation_iterations)} runs`,
+        randomLane: `${formatProbability(random)} random-side chance · ${formatInteger(projected.projected_random_pool_permits)} tags`,
+        cutoff: `${cutoff === null ? 'Top-point line does not apply on this read' : `${formatInteger(cutoff)} points is the line to fully clear the top-point draw`} · pressure ${formatDecimal(projected.projected_cutoff_pressure_ratio, 2)}`,
+        method: `2026 projected row · ${formatInteger(projected.simulation_iterations)} runs`,
         headline,
-        explanation: `${residencyLabel} projection starts with last year's actual results for this same hunt, removes the hunters who already drew, rolls the remaining applicants forward one point, keeps the 0-point baseline flat, and then applies this year's permit numbers before Utah-style random simulation. That gives you a truer read on the hunters most likely to be competing directly with you for this permit.`,
+        explanation: `Built from last year's draw, current tags, and carry-forward pressure.`,
       };
     }
 
@@ -467,22 +499,35 @@
           ? `Last year's random draw row shows ${formatInteger(rawRow.random_permits)} random tags`
           : 'Preference draws do not split into top-point and random sides',
         cutoff: `Known point line: ${formatInteger(residencyKey === 'resident' ? hunt.resident_point_signal : hunt.nonresident_point_signal)} points`,
-        method: 'Built directly from the accepted 2025 draw table',
+        method: 'Exact 2025 row',
         headline: 'Last year has an exact point row',
-        explanation: `${residencyLabel} row ${formatInteger(points)} exists in the accepted 2025 draw table. This page is showing the source row directly because no 2026 simulation row is attached for this hunt family.`,
+        explanation: 'Using the matching 2025 point row.',
       };
     }
 
-    return {
-      selectedResult: 'No point result loaded yet',
-      guaranteedLane: 'No point row is attached for your selected points yet',
-      randomLane: getDrawFamily(hunt) === 'none' ? 'This is not a draw hunt' : 'Random-side row not loaded yet',
-      cutoff: 'No guaranteed point line loaded',
-      method: getDrawFamily(hunt) === 'none' ? 'This hunt is being read as access and hunt quality' : 'This hunt family is identified, but the point rows are not attached yet',
-      headline: getDrawFamily(hunt) === 'none' ? 'This hunt is not draw-based' : 'The hunt type is known, but the point row is missing',
+      return {
+        selectedResult: getDrawFamily(hunt) === 'none'
+          ? 'This hunt is not draw-based'
+          : 'This hunt is loaded, but your exact point-level row is not attached yet',
+        guaranteedLane: getDrawFamily(hunt) === 'none'
+          ? 'This hunt is being read as access and hunt quality instead of point rows'
+          : 'No 2026 row at your point level yet.',
+        randomLane: getDrawFamily(hunt) === 'none'
+          ? 'No random draw applies to this hunt'
+          : 'No 2025 fallback row at your point level yet.',
+      cutoff: (() => {
+        const knownCutoff = residencyKey === 'resident' ? num(hunt.resident_point_signal) : num(hunt.nonresident_point_signal);
+        return knownCutoff === null
+          ? 'No guaranteed point line is attached yet'
+          : `Known point line: ${formatInteger(knownCutoff)} points`;
+      })(),
+      method: getDrawFamily(hunt) === 'none'
+        ? 'This hunt is being read as access and hunt quality'
+        : '2026 ladder first. 2025 fallback second.',
+      headline: getDrawFamily(hunt) === 'none' ? 'This hunt is not draw-based' : 'The hunt loaded, but the exact point-level row is still missing',
       explanation: getDrawFamily(hunt) === 'none'
-        ? 'This hunt is interpreted as access, timing, and pressure rather than a point-based draw table.'
-        : 'This hunt is mapped to a draw family from the hunt metadata, but the point-by-point engine rows are not attached yet for this hunt and residency.',
+        ? 'Access and quality read.'
+        : 'Point-level row not attached yet.',
     };
   }
 
@@ -498,10 +543,10 @@
       ['Residency', filters.residencyLabel],
       ['Current points', formatInteger(filters.points)],
       ['How this hunt draws', getDrawFamilyLabel(hunt)],
-      ['Your draw chance', decision.selectedResult],
-      ['Top-point draw', decision.guaranteedLane],
-      ['Random draw chance', decision.randomLane],
-      ['Guaranteed point line / pressure', decision.cutoff],
+      ['Your draw chance today', decision.selectedResult],
+      ['What the top-point side says', decision.guaranteedLane],
+      ['What the random side says', decision.randomLane],
+      ['Guaranteed line / pressure', decision.cutoff],
       ['Tag count used', els.selectedPermitRead?.textContent || 'Not loaded'],
       ['Tag source', els.detailPermitSource?.textContent || 'Not loaded'],
       ['Harvest / success', els.detailHarvest?.textContent || 'Not loaded'],
@@ -638,11 +683,13 @@
     els.detailSpeciesWeapon.textContent = `${hunt.species || 'Unknown'} · ${hunt.weapon || 'Unknown weapon'} · ${filters.residencyLabel}`;
     els.detailAccessType.textContent = hunt.access_type || 'Unknown';
     els.detailHarvest.textContent = `${formatPercent(hunt.percent_success)} success · ${formatInteger(hunt.harvest)} harvested`;
-    els.detailPressure.textContent = `${pressure === null ? 'Not available' : `${formatDecimal(pressure, 2)} hunters per tag`} · ${efficiency === null ? 'efficiency n/a' : `${formatDecimal(efficiency, 2)} harvest efficiency`}`;
-    els.detailOutfitters.textContent = `${formatInteger(hunt.verified_outfitter_count)} verified outfitters · ${formatInteger(hunt.cpo_outfitter_count)} custom-pricing options`;
+    els.detailPressure.textContent = `${pressure === null ? 'Not available' : `${formatDecimal(pressure, 2)} pressure`} · ${efficiency === null ? 'eff. n/a' : `${formatDecimal(efficiency, 2)} efficiency`}`;
+    els.detailOutfitters.textContent = `${formatInteger(hunt.verified_outfitter_count)} verified · ${formatInteger(hunt.cpo_outfitter_count)} C.P.O.`;
     els.detailPermitSource.textContent = permitRecord
-      ? `${permitRecord.source_authority_level || permitRecord.source_type || 'tag source'} · ${permits === null ? 'tag count n/a' : `${formatInteger(permits)} tags used`}${priorPermits === null ? '' : ` (${formatInteger(priorPermits)} tags last year)`}`
-      : 'No current tag source attached';
+      ? `${permits === null ? 'Tag count n/a' : `${formatInteger(permits)} tags used`}${priorPermits === null ? '' : ` · ${formatInteger(priorPermits)} last year`}`
+      : (permits === null
+        ? 'No tag count attached'
+        : `${formatInteger(permits)} tags loaded`);
     els.detailSelectedResult.textContent = decision.selectedResult;
     els.detailGuaranteedLaneLabel.textContent = getDrawFamily(hunt) === 'bonus_draw'
       ? 'Points Needed to Be Safe in the Top-Point Draw'
@@ -727,7 +774,7 @@
         <span class="label">${escapeHtml(item.hunt_code)}</span>
         <h4>${escapeHtml(item.hunt_name || item.hunt_code)}</h4>
         <p>${escapeHtml(item.species || '')}${item.weapon ? ' · ' + escapeHtml(item.weapon) : ''} · ${escapeHtml(item.residency || 'Resident')} · ${formatInteger(item.selected_points)} points</p>
-        <p>${item.projected_total_probability_pct === null ? 'No projected result stored.' : `Stored outlook: ${formatProbability(item.projected_total_probability_pct)}`}</p>
+        <p>${item.projected_total_probability_pct === null ? 'Saved with hunt details only.' : `Stored outlook: ${formatProbability(item.projected_total_probability_pct)}`}</p>
         <div class="basket-actions">
           <button class="mini-btn" type="button" data-basket-load="${escapeHtml(item.hunt_code)}">Load</button>
           <button class="mini-btn" type="button" data-basket-remove="${escapeHtml(item.hunt_code)}">Remove</button>
@@ -905,12 +952,12 @@
       bootstrapSelection();
       bindEvents();
       const loadedSource = await loadBundle();
-      els.filterReadout.textContent = `Research bundle loaded from ${loadedSource}`;
+      els.filterReadout.textContent = 'Research bundle loaded.';
       runResearch();
     } catch (error) {
       console.error(error);
-      els.filterReadout.textContent = error.message || 'Failed to load the Hunt Research engine.';
-      els.plannerReadout.textContent = 'The page shell loaded, but the research bundle did not.';
+      els.filterReadout.textContent = error.message || 'Research bundle failed to load.';
+      els.plannerReadout.textContent = 'Page loaded. Data did not.';
     }
   }
 
