@@ -113,7 +113,8 @@ const searchInput = document.getElementById('searchInput'),
 function escapeHtml(v) { return String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 function safe(v) { return String(v ?? ''); }
 function firstNonEmpty(...a) { for (let x of a) { let t = safe(x).trim(); if (t) return t; } return ''; }
-function titleCaseWords(v) { return safe(v).split(/\s+/).filter(Boolean).map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' '); }
+  function titleCaseWords(v) { return safe(v).split(/\s+/).filter(Boolean).map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' '); }
+  function normalizeVisibleVerificationLabel(v) { return safe(v).replace(/\bVetted\b/g, 'Verified'); }
 function assetUrl(path) {
   try {
     return new URL(path, window.location.href).href;
@@ -1787,13 +1788,13 @@ function renderOutfitters() {
   const container = document.getElementById('outfitterResults');
   if (!container) return;
   if (!selectedHunt) {
-    container.innerHTML = '<div class="empty-note">Select a hunt to load matching vetted outfitters.</div>';
+    container.innerHTML = '<div class="empty-note">Select a hunt to load matching verified outfitters.</div>';
     clearOutfitterMarkers();
     return;
   }
   const matches = getMatchingOutfittersForHunt(selectedHunt);
   if (!matches.length) {
-    container.innerHTML = '<div class="empty-note">No vetted outfitters matched this hunt yet.</div>';
+    container.innerHTML = '<div class="empty-note">No verified outfitters matched this hunt yet.</div>';
     clearOutfitterMarkers();
     return;
   }
@@ -1810,7 +1811,7 @@ function renderOutfitters() {
           ${logo ? `<img class="outfitter-card-logo" src="${escapeHtml(logo)}" alt="${escapeHtml(o.listingName || 'Outfitter logo')}">` : ''}
           <div class="outfitter-card-title-wrap">
             <div class="hunt-card-title">${escapeHtml(o.listingName || 'Outfitter')}</div>
-            <div class="outfitter-card-subline">${escapeHtml(firstNonEmpty(o.verificationStatus, o.certLevel, o.listingType, 'Outfitter'))}</div>
+            <div class="outfitter-card-subline">${escapeHtml(normalizeVisibleVerificationLabel(firstNonEmpty(o.verificationStatus, o.certLevel, o.listingType, 'Outfitter')))}</div>
           </div>
         </div>
         ${location ? `<div class="outfitter-card-subline">${escapeHtml(location)}</div>` : ''}
@@ -1870,7 +1871,7 @@ function getOutfitterPrimaryEmail(outfitter) {
 }
 function getOutfitterSummaryTags(outfitter) {
   const tags = [];
-  const listingType = firstNonEmpty(outfitter.verificationStatus, outfitter.certLevel, outfitter.listingType);
+  const listingType = normalizeVisibleVerificationLabel(firstNonEmpty(outfitter.verificationStatus, outfitter.certLevel, outfitter.listingType));
   if (listingType) tags.push(listingType);
   if (outfitter.guidedHunts) tags.push('Guided Hunts');
   if (outfitter.packTrips) tags.push('Pack Trips');
@@ -1985,7 +1986,7 @@ function buildOutfitterPopupCard(outfitter) {
       <div style="display:grid;grid-template-columns:58px minmax(0,1fr);align-items:center;gap:12px;">
         ${logo ? `<img src="${escapeHtml(logo)}" alt="${escapeHtml(name)} logo" style="width:58px;height:58px;object-fit:cover;object-position:center;border-radius:12px;background:#fff;padding:3px;border:1px solid #d6c1ae;box-shadow:0 6px 14px rgba(0,0,0,.14);">` : ''}
         <div>
-          <div style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:${DNR_ORANGE};">Vetted Outfitter</div>
+          <div style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:${DNR_ORANGE};">Verified Outfitter</div>
           <div style="font-size:17px;font-weight:900;color:#2b1c12;line-height:1.15;">${escapeHtml(name)}</div>
         </div>
       </div>
