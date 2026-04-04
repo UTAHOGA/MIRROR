@@ -445,7 +445,7 @@
       renderOutlookLight('red');
       els.summaryGuaranteed.textContent = 'Guaranteed At: Not available';
       els.summaryPoints.textContent = `Your Points: ${formatInteger(filters.points)} pts`;
-      els.summaryStatus.textContent = `Status: ${coverageMessage || 'No modeled row available.'}`;
+        els.summaryStatus.textContent = `Point Status: ${coverageMessage || 'No modeled row available.'}`;
       els.summaryOdds.textContent = 'Estimated Draw Odds: Not available';
       renderTrendLight('red');
         if (els.summaryTrendText) els.summaryTrendText.textContent = 'Not available';
@@ -465,7 +465,7 @@
       ? `Preference Line: ${formatInteger(row.guaranteed_at_2026)} pts`
       : `Guaranteed At: ${formatInteger(row.guaranteed_at_2026)} pts`;
     els.summaryPoints.textContent = `Your Points: ${formatInteger(filters.points)} pts`;
-    els.summaryStatus.textContent = `Status: ${formatGapStatus(row.gap)}`;
+    els.summaryStatus.textContent = `Point Status: ${formatGapStatus(row.gap)}`;
     els.summaryOdds.textContent = getPrimaryOddsLabel(meta, row, displayedOdds);
     renderTrendLight(getTrendSignal(row));
     if (els.summaryTrendText) els.summaryTrendText.textContent = row.trend || 'Not available';
