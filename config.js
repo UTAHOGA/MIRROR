@@ -10,10 +10,10 @@ window.UOGA_CONFIG = (() => {
   };
 
   const CLOUDFLARE_BASE = 'https://json.uoga.workers.dev';
-  const HUNT_DATA_VERSION = '20260330-conservation-fix-8';
+  const HUNT_DATA_VERSION = '20260404-selection-matrix-fix-1';
   const OUTFITTERS_DATA_VERSION = '20260327-city-logo-refresh-1';
   const OUTFITTER_COVERAGE_VERSION = '20260327-federal-coverage-demo-1';
-  const HUNT_RESEARCH_DATA_VERSION = '20260402-hunt-research-2026-3';
+  const HUNT_RESEARCH_DATA_VERSION = '20260404-selection-matrix-fix-1';
 
   const HUNT_BOUNDARY_SOURCES = [
     `${CLOUDFLARE_BASE}/hunt_boundaries.geojson?v=${HUNT_DATA_VERSION}`,
@@ -56,6 +56,7 @@ window.UOGA_CONFIG = (() => {
   ];
 
   const LOGO_DNR = 'https://static.wixstatic.com/media/43f827_34cd9f26f53f4b9ebcb200f6d878bea2~mv2.jpg';
+  const LOGO_DWR_SELECTOR = './assets/logos/DWR-LOGO.png';
   const LOGO_DNR_ROOMY = 'https://static.wixstatic.com/media/43f827_28020dbfc9b9434c91dc6d92d9a07cd4~mv2.png';
   const LOGO_CWMU = './assets/logos/DWR-CWMU-LOGO.png';
   const LOGO_DWR_WMA = './assets/logos/DWR-WMA.LOGO.png';
@@ -179,6 +180,7 @@ window.UOGA_CONFIG = (() => {
     HUNT_RESEARCH_LADDER_SOURCES,
     HUNT_RESEARCH_MASTER_SOURCES,
     LOGO_DNR,
+    LOGO_DWR_SELECTOR,
     LOGO_DNR_ROOMY,
     LOGO_CWMU,
     LOGO_DWR_WMA,
