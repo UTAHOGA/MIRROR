@@ -296,11 +296,17 @@ window.UOGA_UI = (() => {
         cursor: pointer;
         box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
       }
-      .uoga-backpack-shell.is-open .uoga-backpack-toggle {
-        border-color: var(--accent);
-        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22);
-      }
-      .uoga-backpack-toggle:hover { transform: translateY(-1px); }
+        .uoga-backpack-shell.is-open .uoga-backpack-toggle {
+          border-color: #d1ab83;
+          background: linear-gradient(180deg, rgba(224, 116, 41, 0.98), rgba(183, 89, 32, 0.98));
+          color: #2f1d12;
+          box-shadow: 0 10px 24px rgba(82, 44, 20, 0.28);
+        }
+        .uoga-backpack-toggle:hover {
+          transform: translateY(-2px);
+          border-color: var(--accent);
+          box-shadow: 0 0 0 2px rgba(255, 102, 0, 0.16), 0 12px 28px rgba(82, 44, 20, 0.30);
+        }
       .uoga-backpack-mark-wrap {
         display: inline-flex;
         align-items: center;
