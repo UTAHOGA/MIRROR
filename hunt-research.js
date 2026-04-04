@@ -41,6 +41,8 @@
     addToBasketButton: document.getElementById('addToBasketButton'),
     selectedOutlook: document.getElementById('selectedOutlook'),
     selectedHuntCodeRead: document.getElementById('selectedHuntCodeRead'),
+    selectedResidentPermits: document.getElementById('selectedResidentPermits'),
+    selectedNonresidentPermits: document.getElementById('selectedNonresidentPermits'),
     detailTitle: document.getElementById('detailTitle'),
     detailSubtitle: document.getElementById('detailSubtitle'),
     detailEmpty: document.getElementById('detailEmpty'),
@@ -52,6 +54,7 @@
     summaryStatus: document.getElementById('summaryStatus'),
     summaryOdds: document.getElementById('summaryOdds'),
     summaryTrend: document.getElementById('summaryTrend'),
+    summaryTrendText: document.getElementById('summaryTrendText'),
     summaryRecommendation: document.getElementById('summaryRecommendation'),
     ladderTableEmpty: document.getElementById('ladderTableEmpty'),
     ladderTableWrap: document.getElementById('ladderTableWrap'),
@@ -321,6 +324,49 @@
     }
   }
 
+  function getOutlookSignal(meta, row) {
+    const maxPointPermits = num(row?.max_point_permits_2026);
+    if (maxPointPermits !== null && maxPointPermits <= 0) return 'red';
+    if (row?.status === 'MAX POOL') return 'green';
+    const maxPoolChance = num(row?.max_pool_projection_2026);
+    if (maxPoolChance !== null && maxPoolChance > 0) return 'yellow';
+    const nonresidentPermits = num(meta?.public_nonresident_permits);
+    const residentPermits = num(meta?.public_resident_permits);
+    if ((nonresidentPermits !== null || residentPermits !== null) && maxPointPermits === 0) return 'red';
+    if (row?.draw_outlook === 'MAY DRAW IN 5-10 YEARS' || num(row?.gap) === 1) return 'yellow';
+    if (row?.draw_outlook === 'GREEN LIGHT') return 'green';
+    return 'red';
+  }
+
+  function renderOutlookLight(signal) {
+    if (!els.selectedOutlook) return;
+    const active = signal || 'red';
+    els.selectedOutlook.innerHTML = `
+      <span class="outlook-light red${active === 'red' ? ' is-active' : ''}"></span>
+      <span class="outlook-light yellow${active === 'yellow' ? ' is-active' : ''}"></span>
+      <span class="outlook-light green${active === 'green' ? ' is-active' : ''}"></span>
+    `;
+    els.selectedOutlook.setAttribute('aria-label', `${active} outlook`);
+  }
+
+  function getTrendSignal(row) {
+    const trend = String(row?.trend || '').trim().toUpperCase();
+    if (trend === 'GREEN') return 'green';
+    if (trend === 'YELLOW') return 'yellow';
+    return 'red';
+  }
+
+  function renderTrendLight(signal) {
+    if (!els.summaryTrend) return;
+    const active = signal || 'red';
+    els.summaryTrend.innerHTML = `
+      <span class="outlook-light red${active === 'red' ? ' is-active' : ''}"></span>
+      <span class="outlook-light yellow${active === 'yellow' ? ' is-active' : ''}"></span>
+      <span class="outlook-light green${active === 'green' ? ' is-active' : ''}"></span>
+    `;
+    els.summaryTrend.setAttribute('aria-label', `${active} trend`);
+  }
+
   function renderFilterReadout(filters) {
     els.filterReadout.textContent = filters.huntCode
       ? `${filters.huntCode} · ${filters.residency} · ${filters.points} point${filters.points === 1 ? '' : 's'}.`
@@ -332,29 +378,43 @@
 
   function renderSummary(meta, row, filters, coverageMessage) {
     if (!row) {
-      els.selectedOutlook.textContent = coverageMessage ? 'Coverage gap' : 'Not loaded';
+      renderOutlookLight('red');
       els.summaryGuaranteed.textContent = 'Guaranteed At: Not available';
       els.summaryPoints.textContent = `Your Points: ${formatInteger(filters.points)} pts`;
       els.summaryStatus.textContent = `Status: ${coverageMessage || 'No modeled row available.'}`;
       els.summaryOdds.textContent = 'Estimated Draw Odds: Not available';
-      els.summaryTrend.textContent = 'Trend: Not available';
+      renderTrendLight('red');
+        if (els.summaryTrendText) els.summaryTrendText.textContent = 'Not available';
       els.summaryRecommendation.textContent = coverageMessage || 'Recommendation not available.';
+      if (els.selectedResidentPermits) {
+        els.selectedResidentPermits.textContent = meta?.public_resident_permits || 'Not loaded';
+      }
+      if (els.selectedNonresidentPermits) {
+        els.selectedNonresidentPermits.textContent = meta?.public_nonresident_permits || 'Not loaded';
+      }
       return;
     }
 
     const displayedOdds = getDisplayedOdds(row);
-    els.selectedOutlook.textContent = row.draw_outlook || 'Not available';
+    renderOutlookLight(getOutlookSignal(meta, row));
     els.summaryGuaranteed.textContent = `Guaranteed At: ${formatInteger(row.guaranteed_at_2026)} pts`;
     els.summaryPoints.textContent = `Your Points: ${formatInteger(filters.points)} pts`;
     els.summaryStatus.textContent = `Status: ${formatGapStatus(row.gap)}`;
-    els.summaryOdds.textContent = displayedOdds.source === 'guaranteed'
-      ? '2026 Max Pool: 1 in 1.0'
-      : `2026 Random Draw: ${displayedOdds.value}`;
-    els.summaryTrend.textContent = `Trend: ${row.trend || 'Not available'}`;
+      els.summaryOdds.textContent = displayedOdds.source === 'guaranteed'
+        ? '2026 Max Pool: 100%'
+        : `2026 Random Draw: ${displayedOdds.value}`;
+    renderTrendLight(getTrendSignal(row));
+    if (els.summaryTrendText) els.summaryTrendText.textContent = row.trend || 'Not available';
     els.summaryRecommendation.textContent = getRecommendation(row);
 
     if (els.selectedHuntCodeRead) {
       els.selectedHuntCodeRead.textContent = meta?.hunt_code || filters.huntCode || 'Not loaded';
+    }
+    if (els.selectedResidentPermits) {
+      els.selectedResidentPermits.textContent = meta?.public_resident_permits || 'Not loaded';
+    }
+    if (els.selectedNonresidentPermits) {
+      els.selectedNonresidentPermits.textContent = meta?.public_nonresident_permits || 'Not loaded';
     }
   }
 
@@ -388,7 +448,7 @@
         <tr class="${classes.join(' ')}">
           <td>${formatInteger(row.points)}</td>
           <td>${escapeHtml(row.odds_2025_actual || 'Not available')}</td>
-          <td>${escapeHtml(row.max_pool_projection_2026 || 'N/A')}</td>
+            <td>${formatProbability(row.max_pool_projection_2026)}</td>
           <td>${formatProbability(row.random_draw_projection_2026)}</td>
           <td>${markerHtml(markers)}</td>
         </tr>`;
