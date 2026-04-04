@@ -42,6 +42,18 @@ window.UOGA_CONFIG = (() => {
     `${CLOUDFLARE_BASE}/hunt_research_2026.json?v=${HUNT_RESEARCH_DATA_VERSION}`,
     `./processed_data/hunt_research_2026.json?v=${HUNT_RESEARCH_DATA_VERSION}`
   ];
+  const HUNT_RESEARCH_ENGINE_SOURCES = [
+    `./processed_data/draw_reality_engine.csv?v=${HUNT_RESEARCH_DATA_VERSION}`,
+    `${CLOUDFLARE_BASE}/draw_reality_engine.csv?v=${HUNT_RESEARCH_DATA_VERSION}`
+  ];
+  const HUNT_RESEARCH_LADDER_SOURCES = [
+    `./processed_data/point_ladder_view.csv?v=${HUNT_RESEARCH_DATA_VERSION}`,
+    `${CLOUDFLARE_BASE}/point_ladder_view.csv?v=${HUNT_RESEARCH_DATA_VERSION}`
+  ];
+  const HUNT_RESEARCH_MASTER_SOURCES = [
+    `./processed_data/hunt_master_enriched.csv?v=${HUNT_RESEARCH_DATA_VERSION}`,
+    `${CLOUDFLARE_BASE}/hunt_master_enriched.csv?v=${HUNT_RESEARCH_DATA_VERSION}`
+  ];
 
   const LOGO_DNR = 'https://static.wixstatic.com/media/43f827_34cd9f26f53f4b9ebcb200f6d878bea2~mv2.jpg';
   const LOGO_DNR_ROOMY = 'https://static.wixstatic.com/media/43f827_28020dbfc9b9434c91dc6d92d9a07cd4~mv2.png';
@@ -163,6 +175,9 @@ window.UOGA_CONFIG = (() => {
     CONSERVATION_PERMIT_AREA_SOURCES,
     CONSERVATION_PERMIT_HUNT_TABLE_SOURCES,
     HUNT_RESEARCH_DATA_SOURCES,
+    HUNT_RESEARCH_ENGINE_SOURCES,
+    HUNT_RESEARCH_LADDER_SOURCES,
+    HUNT_RESEARCH_MASTER_SOURCES,
     LOGO_DNR,
     LOGO_DNR_ROOMY,
     LOGO_CWMU,

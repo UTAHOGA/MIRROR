@@ -708,9 +708,9 @@
       <div class="card-body">
         <div class="hero-grid">
           <div class="hero-copy">
-            <span class="eyebrow">Result-first research</span>
-            <h2>Bring your saved hunt in, set residency and points, and get a real answer fast.</h2>
-            <p>Fast odds, clean proof, saved hunts close by.</p>
+            <span class="eyebrow">Production engine read</span>
+            <h2>Enter a hunt code, set residency and points, and get the answer in seconds.</h2>
+            <p>One summary, one ladder, one recommendation.</p>
             <div class="hero-actions">
               <button class="research-btn primary" type="button" onclick="document.getElementById('huntCodeInput').focus()">Run Hunt Research</button>
               <button class="research-btn" type="button" onclick="document.getElementById('basketList').scrollIntoView({ behavior: 'smooth', block: 'start' })">Open Hunt Pack</button>
@@ -718,39 +718,8 @@
           </div>
 
           <div class="note-box">
-            <span class="label">Why this is different</span>
-            <p>Each hunt is read by the right DWR draw method.</p>
-          </div>
-        </div>
-
-        <div class="helper-grid" style="margin-top:14px;">
-          <div class="helper-card">
-            <span class="label">What the engine does</span>
-            <ul>
-              <li>Starts with the same hunt's accepted 2025 draw results.</li>
-              <li>Removes the hunters who already drew from that applicant pool.</li>
-              <li>Rolls the remaining hunters forward one point where the draw family requires it.</li>
-              <li>Applies current permit numbers and runs the hunt through the correct DWR draw method.</li>
-            </ul>
-          </div>
-          <div class="helper-card">
-            <span class="label">Why that matters</span>
-            <ul>
-              <li>You are not just seeing generic chances at your point level.</li>
-              <li>You are seeing the current hunt re-read against the hunters most likely to be competing directly with you for that same permit.</li>
-            </ul>
-          </div>
-          <div class="helper-card">
-            <span class="label">Guaranteed line explained</span>
-            <p><strong>Minimum Bonus Points for 100% Initial Draw</strong> = the safe line before the random side starts.</p>
-          </div>
-          <div class="helper-card formula-card">
-            <span class="label">The Science</span>
-            <p>The math behind the read.</p>
-            <div class="science-frame">
-              <img src="./assets/the-science.png" alt="The Science formula graphic">
-            </div>
-            <p class="science-caption">U.O.G.A. field note: this panel explains why some DWR bonus-point hunts become permanent point-creep hunts while others still allow catch-up.</p>
+            <span class="label">What this page shows</span>
+            <p>Guaranteed line, your point position, remaining-pool odds, and whether the hunt is realistically catchable.</p>
           </div>
         </div>
       </div>
@@ -800,21 +769,19 @@
             <h2>Can You Draw This Hunt?</h2>
           </div>
           <div class="card-body">
-            <div id="detailEmpty" class="empty-note">
-              <strong style="display:block;margin-bottom:8px;color:#fff8f1;font-size:16px;">No hunt selected yet</strong>
-              Load a hunt from the Hunt Pack, use the Hunt Planner handoff, or type a hunt code directly. Once a hunt is selected, the page will show the draw answer first and the supporting proof directly underneath it.
+              <div id="detailEmpty" class="empty-note">
+                <strong style="display:block;margin-bottom:8px;color:#fff8f1;font-size:16px;">No hunt selected yet</strong>
+              Load a hunt from the Hunt Pack, use the Hunt Planner handoff, or type a hunt code directly. Once a hunt is selected, the page will show the summary first, then one point ladder and one short recommendation.
             </div>
 
             <div id="detailContent" hidden>
               <div class="report-title">
                 <div>
-                  <p>Hunter-friendly report</p>
+                  <p>Hunt point summary</p>
                   <h2 id="detailTitle">Choose a hunt</h2>
                   <div id="detailSubtitle" class="report-copy"></div>
                 </div>
                 <div class="report-actions">
-                  <button id="printReportButton" class="research-btn" type="button">Print Report</button>
-                  <button id="downloadReportButton" class="research-btn" type="button">Download Report</button>
                   <a id="openPlannerLink" class="research-link" href="./index.html">Open Planner</a>
                   <a id="openDwrLink" class="research-link" href="#" target="_blank" rel="noopener noreferrer">Open DWR Hunt</a>
                 </div>
@@ -822,182 +789,71 @@
 
               <div class="chip-grid">
                 <div class="chip">
-                  <span class="label">Your Draw Chance</span>
+                  <span class="label">Draw Outlook</span>
                   <div id="selectedOutlook" class="value likelihood-unknown">Waiting</div>
-                  <div class="subvalue" id="detailSelectedResult">No result loaded</div>
                 </div>
                 <div class="chip">
-                  <span class="label">How This Hunt Draws</span>
-                  <div id="selectedDrawFamily" class="value">Not loaded</div>
-                  <div class="subvalue" id="detailMethod">Method not loaded</div>
-                </div>
-                <div class="chip">
-                  <span class="label">Tag Count Used</span>
-                  <div id="selectedPermitRead" class="value">Not loaded</div>
-                  <div class="subvalue" id="detailPermitSource">Tag source not loaded</div>
-                </div>
-                <div class="chip">
-                  <span class="label">Where Your Points Sit</span>
-                  <div id="selectedCutoffRead" class="value">Not loaded</div>
-                  <div class="subvalue" id="detailGoalFit">Research read not loaded</div>
+                  <span class="label">Selected Hunt Code</span>
+                  <div id="selectedHuntCodeRead" class="value">Not loaded</div>
                 </div>
               </div>
 
               <div class="summary-grid">
                 <div class="summary-card">
-                  <span class="label">Species / Weapon</span>
-                  <span id="detailSpeciesWeapon" class="value">-</span>
+                  <span class="label">Guaranteed At</span>
+                  <span id="summaryGuaranteed" class="value">Guaranteed At: Not available</span>
                 </div>
                 <div class="summary-card">
-                  <span class="label">Access Type</span>
-                  <span id="detailAccessType" class="value">-</span>
+                  <span class="label">Your Points</span>
+                  <span id="summaryPoints" class="value">Your Points: Not available</span>
                 </div>
                 <div class="summary-card">
-                  <span class="label">Harvest Success / Harvest</span>
-                  <span id="detailHarvest" class="value">-</span>
+                  <span class="label">Status</span>
+                  <span id="summaryStatus" class="value">Status: Not available</span>
                 </div>
                 <div class="summary-card">
-                  <span class="label">Hunter Pressure / Efficiency</span>
-                  <span id="detailPressure" class="value">-</span>
+                  <span class="label">Estimated Draw Odds</span>
+                  <span id="summaryOdds" class="value">Estimated Draw Odds: Not available</span>
                 </div>
                 <div class="summary-card">
-                  <span class="label">Top-Point Draw</span>
-                  <span id="detailGuaranteedLane" class="value">-</span>
+                  <span class="label">Trend</span>
+                  <span id="summaryTrend" class="value">Trend: Not available</span>
                 </div>
-                <div class="summary-card">
-                  <span class="label">Random Draw Chance</span>
-                  <span id="detailRandomLane" class="value">-</span>
-                </div>
-                <div class="summary-card">
-                  <span class="label">Guaranteed Point Line</span>
-                  <span id="detailCutoff" class="value">-</span>
-                </div>
-                <div class="summary-card">
-                  <span class="label">Available Outfitters</span>
-                  <span id="detailOutfitters" class="value">-</span>
-                </div>
-              </div>
-
-              <div class="report-grid">
-                <section class="report-table-card">
-                  <div class="report-table-head">
-                    <h3 id="detailHeadline">Why this answer shows up</h3>
-                    <p id="detailExplanation">Waiting for a selected hunt.</p>
-                  </div>
-                  <div class="report-table-wrap">
-                    <table class="report-table">
-                      <thead>
-                        <tr>
-                          <th>Field</th>
-                          <th>Report Value</th>
-                        </tr>
-                      </thead>
-                      <tbody id="reportSummaryTableBody"></tbody>
-                    </table>
-                  </div>
-                </section>
-
-                <section class="report-info-card">
-                  <div class="report-info-head">
-                    <h3>Best quick read</h3>
-                    <p>Short version first.</p>
-                  </div>
-                  <div class="quick-grid">
-                    <div class="quick-card">
-                      <span class="label">Pack Size</span>
-                      <span id="basketCount" class="value big">0</span>
-                    </div>
-                    <div class="quick-card">
-                      <span class="label">Selected Hunt Code</span>
-                      <span id="selectedHuntCodeRead" class="value">Not loaded</span>
-                    </div>
-                    <div class="quick-card">
-                      <span class="label" id="detailGuaranteedLaneLabel">Points Needed to Be Safe in the Top-Point Draw</span>
-                      <span id="detailGuaranteedLaneShort" class="value">-</span>
-                    </div>
-                    <div class="quick-card">
-                      <span class="label" id="detailRandomLaneLabel">Chance in the Random Draw After Top Points</span>
-                      <span id="detailRandomLaneShort" class="value">-</span>
-                    </div>
-                    <div class="quick-card">
-                      <span class="label" id="detailCutoffLabel">Guaranteed Point Line / Pressure</span>
-                      <span id="detailCutoffShort" class="value">-</span>
-                    </div>
-                    <div class="quick-card">
-                      <span class="label">Save This Hunt</span>
-                      <button id="detailBasketButton" class="research-btn" type="button">Save Hunt to Pack</button>
-                    </div>
-                  </div>
-                </section>
               </div>
 
               <section class="report-info-card">
                 <div class="report-info-head">
-                  <h3>How U.O.G.A. builds the answer</h3>
-                  <p>Short answer up top. Proof below.</p>
+                  <h3>Recommendation</h3>
+                  <p>One short call on whether this hunt is realistically catchable.</p>
                 </div>
-                <div class="proof-grid">
+                <div class="proof-grid" style="grid-template-columns:1fr;">
                   <div class="note-box">
-                    <span class="label">How the read is built</span>
-                    <p>2025 draw table, minus winners, plus current tags.</p>
-                  </div>
-                  <div class="note-box">
-                    <span class="label">Why hunters use it</span>
-                    <p>Shows where your points sit right now.</p>
+                    <span class="label">Short recommendation</span>
+                    <p id="summaryRecommendation">Recommendation not available.</p>
                   </div>
                 </div>
               </section>
 
-              <div class="table-grid">
-                <section class="report-table-card">
-                  <div class="report-table-head">
-                    <h3>Point ladder: 2025 actual + 2026 projected</h3>
-                    <p>Blue = you. Amber = line. Green = guaranteed.</p>
-                  </div>
-                  <div id="rawTableEmpty" class="empty-note" style="margin:14px;">No point ladder rows are attached for this hunt and residency yet.</div>
-                  <div id="rawTableWrap" class="report-table-wrap" hidden>
-                    <table class="report-table">
-                      <thead>
-                        <tr>
-                          <th>Point</th>
-                          <th>2025 Applicants</th>
-                          <th id="rawColA">2025 Top-Point</th>
-                          <th id="rawColB">2025 Random</th>
-                          <th id="rawColC">2025 Row Odds</th>
-                          <th>2026 Carryover</th>
-                          <th>2026 Top-Point %</th>
-                          <th>2026 Draw %</th>
-                          <th>Markers</th>
-                        </tr>
-                      </thead>
-                      <tbody id="rawTableBody"></tbody>
-                    </table>
-                  </div>
-                </section>
-
-                <section class="report-table-card">
-                  <div class="report-table-head">
-                    <h3>2026 odds ladder</h3>
-                    <p>Projected odds by point level.</p>
-                  </div>
-                  <div id="projectedTableEmpty" class="empty-note" style="margin:14px;">No 2026 projected rows are attached for this hunt and residency.</div>
-                  <div id="projectedTableWrap" class="report-table-wrap" hidden>
-                    <table class="report-table">
-                      <thead>
-                        <tr>
-                          <th>Point</th>
-                          <th>Carryover</th>
-                          <th>Guaranteed %</th>
-                          <th>Random %</th>
-                          <th>Total %</th>
-                          <th>Cutoff</th>
-                        </tr>
-                      </thead>
-                      <tbody id="projectedTableBody"></tbody>
-                    </table>
-                  </div>
-                </section>
-              </div>
+              <section class="report-table-card">
+                <div class="report-table-head">
+                  <h3>Point ladder</h3>
+                  <p>Blue = you. Green = guaranteed.</p>
+                </div>
+                <div id="ladderTableEmpty" class="empty-note" style="margin:14px;">No modeled ladder rows are attached for this hunt and residency yet.</div>
+                <div id="ladderTableWrap" class="report-table-wrap" hidden>
+                  <table class="report-table">
+                    <thead>
+                      <tr>
+                        <th>Point</th>
+                        <th>2025 Actual Odds</th>
+                        <th>2026 Projected Odds</th>
+                        <th>Markers</th>
+                      </tr>
+                    </thead>
+                    <tbody id="ladderTableBody"></tbody>
+                  </table>
+                </div>
+              </section>
             </div>
           </div>
         </section>
@@ -1018,28 +874,6 @@
           </div>
         </section>
 
-        <section class="side-card">
-          <div class="card-head">
-            <p>Plain-English guide</p>
-            <h3>What this page answers first</h3>
-          </div>
-          <div class="card-body">
-            <div class="backpack-list">
-              <div class="backpack-card">
-                <strong>Can I realistically draw this hunt?</strong>
-                <p>Your odds and tag count first.</p>
-              </div>
-              <div class="backpack-card">
-                <strong>Where do my points sit today?</strong>
-                <p>Shows safe, line-fight, or random side.</p>
-              </div>
-              <div class="backpack-card">
-                <strong>Why does U.O.G.A. like or dislike it?</strong>
-                <p>Odds plus hunt quality on one page.</p>
-              </div>
-            </div>
-          </div>
-        </section>
       </aside>
     </div>
   </main>
