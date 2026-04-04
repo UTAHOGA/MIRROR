@@ -619,7 +619,7 @@
       const coverageMessage = getModeledCoverageStatus(meta, engineRows.length > 0);
 
     if (!filters.huntCode || (!meta && !engineRows.length)) {
-      renderEmpty(filters, coverageMessage || 'Type a hunt code or load one from Hunt Pack.');
+      renderEmpty(filters, coverageMessage || 'Type a hunt code or load one from Hunt Backpack.');
       return;
     }
 

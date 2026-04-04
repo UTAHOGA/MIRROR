@@ -888,7 +888,7 @@
             <p>One summary, one ladder, one recommendation.</p>
             <div class="hero-actions">
               <button class="research-btn primary" type="button" onclick="document.getElementById('huntCodeInput').focus()">Run Hunt Research</button>
-              <button class="research-btn" type="button" onclick="document.getElementById('basketList').scrollIntoView({ behavior: 'smooth', block: 'start' })">Open Hunt Pack</button>
+              <button class="research-btn" type="button" onclick="document.getElementById('basketList').scrollIntoView({ behavior: 'smooth', block: 'start' })">Open Hunt Backpack</button>
             </div>
           </div>
 
@@ -933,7 +933,7 @@
 
             <div class="status-grid">
               <div id="filterReadout" class="status-box">Waiting for the Hunt Research bundle to load.</div>
-              <div id="plannerReadout" class="status-box">If a hunt was selected on Hunt Planner, this page will try to pick it up and make it available inside your Hunt Pack.</div>
+              <div id="plannerReadout" class="status-box">If a hunt was selected on Hunt Planner, this page will try to pick it up and make it available inside your Hunt Backpack.</div>
             </div>
           </div>
         </section>
@@ -946,7 +946,7 @@
           <div class="card-body">
               <div id="detailEmpty" class="empty-note">
                 <strong style="display:block;margin-bottom:8px;color:#fff8f1;font-size:16px;">No hunt selected yet</strong>
-              Load a hunt from the Hunt Pack, use the Hunt Planner handoff, or type a hunt code directly. Once a hunt is selected, the page will show the summary first, then one point ladder and one short recommendation.
+              Load a hunt from the Hunt Backpack, use the Hunt Planner handoff, or type a hunt code directly. Once a hunt is selected, the page will show the summary first, then one point ladder and one short recommendation.
             </div>
 
             <div id="detailContent" hidden>
@@ -1055,13 +1055,13 @@
       <aside class="side-stack">
         <section class="side-card">
           <div class="card-head">
-            <p>Hunt Pack</p>
+            <p>Hunt Backpack</p>
             <h3>Recent Hunts</h3>
           </div>
           <div class="card-body">
             <p class="proof-note" style="margin-bottom:12px;">Hunts carried over from Hunt Planner or saved on this page stay here so the hunter can load the next unit without starting over.</p>
             <div class="backpack-actions" style="margin-bottom:12px;">
-              <button id="clearBasketButton" class="mini-btn" type="button">Clear Pack</button>
+              <button id="clearBasketButton" class="mini-btn" type="button">Clear Hunt Backpack</button>
             </div>
             <div id="basketList" class="basket-list"></div>
           </div>
