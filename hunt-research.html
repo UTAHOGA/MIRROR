@@ -553,13 +553,39 @@
       }
 
     .report-table tbody tr.is-guaranteed-row {
-        background: rgba(255, 255, 255, 0.98);
-        color: #2f1d12;
-      }
+          background:
+            linear-gradient(90deg, rgba(224, 116, 41, 0.18) 0, rgba(224, 116, 41, 0.08) 28px, rgba(255, 248, 241, 0.96) 28px, rgba(255, 248, 241, 0.96) 100%);
+          color: #2f1d12;
+          box-shadow: inset 0 0 0 1px rgba(224, 116, 41, 0.38);
+        }
+
+    .report-table tbody tr.is-user-row {
+          background:
+            linear-gradient(90deg, rgba(255, 214, 64, 0.16) 0, rgba(255, 214, 64, 0.08) 28px, rgba(255, 252, 233, 0.94) 28px, rgba(255, 252, 233, 0.94) 100%);
+          color: #2f2414;
+          box-shadow: inset 0 0 0 1px rgba(255, 214, 64, 0.26);
+        }
 
     .report-table tbody tr.is-user-row.is-guaranteed-row {
-        background: rgba(255, 255, 255, 0.99);
-      }
+          background:
+            linear-gradient(90deg, rgba(255, 214, 64, 0.22) 0, rgba(255, 214, 64, 0.10) 18px, rgba(224, 116, 41, 0.16) 18px, rgba(255, 248, 241, 0.98) 38px, rgba(255, 248, 241, 0.98) 100%);
+          color: #2f1d12;
+          box-shadow: inset 0 0 0 1px rgba(224, 116, 41, 0.40);
+        }
+
+    .report-table tbody tr.is-guaranteed-row td,
+    .report-table tbody tr.is-user-row td,
+    .report-table tbody tr.is-user-row.is-guaranteed-row td {
+          color: inherit;
+          font-weight: 600;
+        }
+
+    .report-table tbody tr.is-guaranteed-row td:first-child,
+    .report-table tbody tr.is-user-row td:first-child,
+    .report-table tbody tr.is-user-row.is-guaranteed-row td:first-child {
+          color: #23150d;
+          font-weight: 700;
+        }
 
     .marker-stack {
       display: flex;
@@ -595,10 +621,18 @@
     }
 
     .marker-pill.guaranteed {
-        border-color: rgba(224, 116, 41, 0.92);
-        background: rgba(255, 246, 240, 0.98);
-        color: #e07429;
-      }
+          border-color: rgba(224, 116, 41, 0.96);
+          background: rgba(255, 246, 240, 0.98);
+          color: #e07429;
+          box-shadow: 0 0 0 1px rgba(224, 116, 41, 0.22);
+        }
+
+    .marker-pill.user {
+          border-color: rgba(255, 214, 64, 0.95);
+          background: rgba(47, 29, 18, 0.94);
+          color: #ffd640;
+          box-shadow: 0 0 0 1px rgba(255, 214, 64, 0.18);
+        }
 
     .marker-pill.sources {
         border-color: rgba(224, 116, 41, 0.92);
