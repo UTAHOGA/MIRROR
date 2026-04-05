@@ -129,6 +129,13 @@
     return `${Math.abs(parsed)} pts above guaranteed`;
   }
 
+  function isRandomOnlyBonusCase(meta, row) {
+    if (isPreferenceAntlerless(meta)) return false;
+    const maxPointPermits = num(row?.max_point_permits_2026);
+    const randomPermits = num(row?.random_permits_2026);
+    return maxPointPermits !== null && maxPointPermits <= 0 && randomPermits !== null && randomPermits > 0;
+  }
+
   function getCurrentPoints() {
     const value = num(els.pointsInput.value);
     return value === null ? 0 : Math.max(0, Math.min(32, value));
@@ -344,6 +351,9 @@
 
   function getRecommendation(meta, row) {
     if (!row) return 'Modeled recommendation not available for this hunt and residency yet.';
+    if (isRandomOnlyBonusCase(meta, row)) {
+      return 'This hunt has no meaningful max-pool path at this residency. Your outcome depends on weighted random draw only.';
+    }
     if (isPreferenceAntlerless(meta)) {
       if (row.status === 'MAX POOL') {
         return 'This hunt is currently inside the preference-point line at your selected point level.';
@@ -371,6 +381,9 @@
   function getPrimaryOddsLabel(meta, row, displayedOdds) {
     if (isPreferenceAntlerless(meta)) {
       return `2026 Preference Draw: ${formatProbability(row?.odds_2026_projected)}`;
+    }
+    if (isRandomOnlyBonusCase(meta, row)) {
+      return `2026 Random Draw: ${displayedOdds.value}`;
     }
     return displayedOdds.source === 'guaranteed'
       ? '2026 Max Pool: 100%'
@@ -475,12 +488,16 @@
 
     const displayedOdds = getDisplayedOdds(row);
     renderOutlookLight(getOutlookSignal(meta, row));
-    els.summaryGuaranteed.textContent = `${formatInteger(row.guaranteed_at_2026)} pts`;
+    els.summaryGuaranteed.textContent = isRandomOnlyBonusCase(meta, row)
+      ? 'Not applicable'
+      : `${formatInteger(row.guaranteed_at_2026)} pts`;
     els.summaryPoints.textContent = `${formatInteger(filters.points)} pts`;
-    els.summaryStatus.textContent = formatGapStatus(row.gap);
+    els.summaryStatus.textContent = isRandomOnlyBonusCase(meta, row)
+      ? 'Random draw only'
+      : formatGapStatus(row.gap);
     els.summaryOdds.textContent = getPrimaryOddsLabel(meta, row, displayedOdds);
     renderTrendLight(getTrendSignal(row));
-    if (els.summaryTrendText) els.summaryTrendText.textContent = row.trend || 'Not available';
+    if (els.summaryTrendText) els.summaryTrendText.textContent = isRandomOnlyBonusCase(meta, row) ? 'Not applicable' : (row.trend || 'Not available');
     els.summaryRecommendation.textContent = getRecommendation(meta, row);
 
     if (els.selectedHuntCodeRead) {
