@@ -258,6 +258,7 @@ def build_simulated_rows(rows: list[dict[str, str]]) -> tuple[list[dict[str, str
             )
 
             updated = dict(row)
+            updated["uses_bonus_pool_model"] = bool_text(bonus_model)
             updated["projected_bonus_pool_permits"] = str(reserved_bonus_pool)
             updated["projected_random_pool_permits"] = str(random_pool)
             updated["projected_guaranteed_probability_pct"] = (

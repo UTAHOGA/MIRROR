@@ -330,7 +330,7 @@ def uses_bonus_pool_model(
     normalized_residency = str(residency or "").strip()
     normalized_category = str(permit_category or "").upper()
 
-    if normalized_code.startswith("PB") and normalized_residency == "Nonresident":
+    if normalized_residency == "Nonresident" and normalized_code.startswith(("PB", "DB")):
         return (normalized_code, normalized_residency) in historical_bonus_pairs
 
     if "PRONGHORN" in normalized_category and normalized_code.startswith("PD"):
