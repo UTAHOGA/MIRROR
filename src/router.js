@@ -24,8 +24,10 @@ window.UOGA_ROUTER = (() => {
   function handleRouteChange() {
     const route = getCurrentRoute();
     callbacks.forEach(cb => cb(route));
-    if (Object.prototype.hasOwnProperty.call(routes, route)) routes[route](route);
-    else if (Object.prototype.hasOwnProperty.call(routes, '*')) routes['*'](route);
+    const handler = Object.prototype.hasOwnProperty.call(routes, route) ? routes[route] : null;
+    const fallback = Object.prototype.hasOwnProperty.call(routes, '*') ? routes['*'] : null;
+    if (typeof handler === 'function') handler(route);
+    else if (typeof fallback === 'function') fallback(route);
   }
 
   window.addEventListener('hashchange', handleRouteChange);
