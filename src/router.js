@@ -1,5 +1,5 @@
 window.UOGA_ROUTER = (() => {
-  const routes = {};
+  const routes = new Map();
   const callbacks = [];
 
   function navigate(path) {
@@ -14,7 +14,7 @@ window.UOGA_ROUTER = (() => {
   }
 
   function on(path, handler) {
-    routes[path] = handler;
+    routes.set(path, handler);
   }
 
   function onRoute(callback) {
@@ -24,10 +24,8 @@ window.UOGA_ROUTER = (() => {
   function handleRouteChange() {
     const route = getCurrentRoute();
     callbacks.forEach(cb => cb(route));
-    const handler = Object.prototype.hasOwnProperty.call(routes, route) ? routes[route] : null;
-    const fallback = Object.prototype.hasOwnProperty.call(routes, '*') ? routes['*'] : null;
+    const handler = routes.get(route) ?? routes.get('*');
     if (typeof handler === 'function') handler(route);
-    else if (typeof fallback === 'function') fallback(route);
   }
 
   window.addEventListener('hashchange', handleRouteChange);
