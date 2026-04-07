@@ -30,7 +30,6 @@ import { isGoogleApiReady } from './modules/map/map-manager.js';
 const { GOOGLE_MAPS_API_KEY } = window.UOGA_CONFIG;
 
 let googleMapsLoadTimeoutId = null;
-let googleApiReady = false;
 
 // Expose Google Maps callback globally
 window.initGoogleBaseline = initGoogleBaseline;

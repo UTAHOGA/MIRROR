@@ -175,6 +175,7 @@ export function updateCesiumBoundaryStyles() {
     const isSelected = !!selectedMatcher && selectedMatcher.matches(id, name);
     const visible = showBoundaries && isMatch;
     entity.show = visible;
+    // Selected boundary fill is transparent (alpha 0.0) so the map shows through; outline is drawn via polyline instead
     const fillColor = Cesium.Color.fromCssColorString(isSelected ? '#ff8a3d' : '#3653b3').withAlpha(isSelected ? 0.0 : 0.32);
     if (entity.polygon) {
       entity.polygon.material = fillColor;

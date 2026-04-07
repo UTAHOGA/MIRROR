@@ -223,7 +223,7 @@ export function geocodeOutfitter(outfitter) {
   const queries = getOutfitterGeocodeQueries(outfitter);
   if (!queries.length) return Promise.resolve(null);
   const geocoder = new google.maps.Geocoder();
-  return new Promise(async resolve => {
+  return (async () => {
     for (const query of queries) {
       const loc = await new Promise(done => {
         geocoder.geocode({
@@ -239,13 +239,12 @@ export function geocodeOutfitter(outfitter) {
       });
       if (loc) {
         outfitterGeocodeCache.set(key, loc);
-        resolve(loc);
-        return;
+        return loc;
       }
     }
     outfitterGeocodeCache.set(key, null);
-    resolve(null);
-  });
+    return null;
+  })();
 }
 
 export function createOutfitterLogoMarker(position, outfitter) {
