@@ -429,7 +429,7 @@ window.UOGA_TEMPLATES.vetting = function vetting() {
           </article>
 
           <article class="card span-5">
-            <h4>Why It Exists</h4>
+            <h4>Purpose</h4>
             <h3>Why It Exists</h3>
             <ul>
               <li>Filters weak or unreliable listings</li>

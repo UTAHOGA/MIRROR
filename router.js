@@ -13,7 +13,7 @@ window.UOGA_ROUTER = (() => {
     const path = qIdx === -1 ? raw : raw.slice(0, qIdx);
     const search = qIdx === -1 ? '' : raw.slice(qIdx + 1);
     const params = new URLSearchParams(search);
-    return { path: path || '/', params };
+    return { path, params };
   }
 
   function register(path, handler) {
