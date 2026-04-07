@@ -22,9 +22,9 @@
     </div>
     <div class="controls">
       <nav class="utility-nav" aria-label="Site sections">
-        <a class="utility-link active" href="./index.html" aria-current="page">Hunt Planner</a>
-        <a class="utility-link" href="./hunt-research.html">Hunt Research</a>
-        <a class="utility-link" href="./vetting.html">Outfitter Verification</a>
+        <a class="utility-link active" href="#/" data-route="/" aria-current="page">Hunt Planner</a>
+        <a class="utility-link" href="./hunt-research.html" data-route="/research">Hunt Research</a>
+        <a class="utility-link" href="./vetting.html" data-route="/vetting">Outfitter Verification</a>
       </nav>
       <button id="themeToggleBtn" type="button" class="secondary">Light Mode</button>
       <div class="control-group">
@@ -216,6 +216,14 @@
   <script src="./config.js?v=20260404-selection-matrix-fix-1"></script>
   <script src="./ui.js?v=20260402-hunt-backpack-tray-1"></script>
   <script src="./data.js?v=20260404-selection-matrix-fix-1"></script>
+  <script src="./src/state.js"></script>
+  <script src="./src/modules/storage.js"></script>
+  <script src="./src/modules/api.js"></script>
+  <script src="./src/modules/hunts.js"></script>
+  <script src="./src/modules/outfitters.js"></script>
+  <script src="./src/modules/map.js"></script>
+  <script src="./src/router.js"></script>
+  <script src="./src/constants.js"></script>
   <script src="app.js?v=20260404-selection-matrix-fix-1"></script>
 </body>
 </html>
