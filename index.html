@@ -6,7 +6,8 @@
   <link rel="icon" type="image/png" href="./assets/logos/favicon.ico.png" />
   <title>U.O.G.A. Hunt Planner | VERIFIED OUTFITTERS</title>
   <link rel="stylesheet" href="./style.css?v=20260330-conservation-fix-8" />
- </head>
+  <link rel="stylesheet" href="https://cesium.com/downloads/cesiumjs/releases/1.135/Build/Cesium/Widgets/widgets.css">
+</head>
 <body class="theme-dark">
   <header class="topbar">
     <div class="brand">
@@ -126,90 +127,27 @@
       </section>
     </aside>
 
-    <section class="map-wrap">
-      <div class="map-stage">
-        <div id="map" aria-label="Google DWR mirror map"></div>
-        <div id="globeMap" aria-label="Cesium globe view"></div>
-      </div>
+  <!-- Shared third-party libraries -->
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.135/Build/Cesium/Cesium.js"></script>
 
-      <div id="mapChooser" class="map-chooser" aria-hidden="true">
-        <div class="map-chooser-head">
-          <div>
-            <div id="mapChooserKicker" class="map-chooser-kicker">Selected Unit</div>
-            <h3 id="mapChooserTitle" class="map-chooser-title">Matching Hunts</h3>
-          </div>
-          <button id="closeMapChooserBtn" type="button" class="secondary">Close</button>
-        </div>
-        <div id="mapChooserBody" class="map-chooser-body">
-          <div class="map-chooser-empty">Click a boundary to load hunts.</div>
-        </div>
-      </div>
+  <!-- Shared UOGA scripts -->
+  <script src="./config.js?v=20260404-selection-matrix-fix-1"></script>
+  <script src="./ui.js?v=20260402-hunt-backpack-tray-1"></script>
+  <script src="./data.js?v=20260404-selection-matrix-fix-1"></script>
 
-      <div id="selectedHuntFloat" class="selected-hunt-float" aria-hidden="true"></div>
-      <div id="globeBasemapPanel" class="globe-basemap-panel" aria-hidden="true">
-        <div class="globe-basemap-title">Globe Basemap</div>
-        <p class="globe-basemap-note">Switch globe backgrounds.</p>
-        <select id="globeBasemapSelect" class="hunt-select globe-basemap-select">
-          <option value="osm">OpenStreetMap</option>
-          <option value="esriImagery">Esri World Imagery</option>
-          <option value="esriTopo">Esri World Topo</option>
-          <option value="esriStreet">Esri World Street</option>
-          <option value="esriNatGeo">Esri NatGeo</option>
-          <option value="usgsImagery">USGS Imagery</option>
-          <option value="usgsTopo">USGS Topo</option>
-          <option value="openTopo">OpenTopoMap</option>
-          <option value="cartoLight">Carto Light</option>
-          <option value="cartoDark">Carto Dark</option>
-        </select>
-        <div id="globeBasemapGrid" class="globe-basemap-grid">
-          <button type="button" class="globe-basemap-btn" data-globe-basemap="esriImagery">Esri Imagery</button>
-          <button type="button" class="globe-basemap-btn" data-globe-basemap="usgsImagery">USGS Imagery</button>
-          <button type="button" class="globe-basemap-btn" data-globe-basemap="esriTopo">Esri Topo</button>
-          <button type="button" class="globe-basemap-btn" data-globe-basemap="usgsTopo">USGS Topo</button>
-          <button type="button" class="globe-basemap-btn" data-globe-basemap="esriStreet">Esri Street</button>
-          <button type="button" class="globe-basemap-btn" data-globe-basemap="esriNatGeo">Esri NatGeo</button>
-          <button type="button" class="globe-basemap-btn" data-globe-basemap="openTopo">OpenTopoMap</button>
-          <button type="button" class="globe-basemap-btn" data-globe-basemap="osm">OpenStreetMap</button>
-          <button type="button" class="globe-basemap-btn" data-globe-basemap="cartoLight">Carto Light</button>
-          <button type="button" class="globe-basemap-btn" data-globe-basemap="cartoDark">Carto Dark</button>
-        </div>
-      </div>
-    </section>
+  <!-- Page templates (define window.UOGA_TEMPLATES.*) -->
+  <script src="./templates/shared.js"></script>
+  <script src="./templates/hunt-planner.js"></script>
+  <script src="./templates/hunt-research.js"></script>
+  <script src="./templates/vetting.js"></script>
 
-    <aside class="rightbar">
-      <div class="rightbar-header">
-        <h2 class="rightbar-header-title">U.O.G.A.</h2>
-        <p class="rightbar-header-subtitle">Verified Outfitters</p>
-      </div>
-      <section class="panel">
-        <h2>Outfitters</h2>
-        <div class="panel-body">
-          <p class="helper" style="margin-bottom:12px;">Verified outfitters are matched by species, unit, and service fit. <a href="./vetting.html">See how verification works</a>.</p>
-          <div id="outfitterResults" class="outfitter-list">
-            <div class="empty-note">Select a hunt to load outfitters.</div>
-          </div>
-        </div>
-      </section>
-    </aside>
-  </main>
+  <!-- SPA infrastructure -->
+  <script src="./router.js"></script>
+  <script src="./event-handlers.js"></script>
 
-  <section id="huntDetailsSection" class="hunt-details-section" hidden>
-    <div class="hunt-details-head">
-      <div>
-        <p class="hunt-details-kicker">Official Utah DWR Hunt Details</p>
-        <h2 id="huntDetailsTitle" class="hunt-details-title">Selected Hunt Details</h2>
-        <p id="huntDetailsMeta" class="hunt-details-meta"></p>
-      </div>
-      <button id="closeHuntDetailsBtn" type="button" class="secondary">Close</button>
-    </div>
-    <div class="hunt-details-body">
-      <p class="hunt-details-note">
-        Official details are loaded below so visitors can stay on U.O.G.A. If the DWR page blocks embedding, use
-        <a id="huntDetailsFallbackLink" href="#" target="_blank" rel="noopener noreferrer">this fallback link</a>.
-      </p>
-      <iframe id="huntDetailsFrame" class="hunt-details-frame" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </div>
-  </section>
+  <!-- SPA bootstrap — must register its DOMContentLoaded before app.js and hunt-research.js
+       so the route template is rendered before those modules query the DOM. -->
+  <script src="./app-spa.js"></script>
 
   <link rel="stylesheet" href="https://cesium.com/downloads/cesiumjs/releases/1.135/Build/Cesium/Widgets/widgets.css">
   <script src="https://cesium.com/downloads/cesiumjs/releases/1.135/Build/Cesium/Cesium.js"></script>

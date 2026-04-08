@@ -1,5 +1,4 @@
-window.UOGA_HUNT_RESEARCH = (function () {
-  const ENGINE_SOURCES = (window.UOGA_CONFIG && Array.isArray(window.UOGA_CONFIG.HUNT_RESEARCH_ENGINE_SOURCES) && window.UOGA_CONFIG.HUNT_RESEARCH_ENGINE_SOURCES.length)
+GINE_SOURCES = (window.UOGA_CONFIG && Array.isArray(window.UOGA_CONFIG.HUNT_RESEARCH_ENGINE_SOURCES) && window.UOGA_CONFIG.HUNT_RESEARCH_ENGINE_SOURCES.length)
     ? window.UOGA_CONFIG.HUNT_RESEARCH_ENGINE_SOURCES
     : ['./processed_data/draw_reality_engine.csv'];
   const LADDER_SOURCES = (window.UOGA_CONFIG && Array.isArray(window.UOGA_CONFIG.HUNT_RESEARCH_LADDER_SOURCES) && window.UOGA_CONFIG.HUNT_RESEARCH_LADDER_SOURCES.length)
@@ -13,7 +12,8 @@ window.UOGA_HUNT_RESEARCH = (function () {
       : ['./processed_data/hunt_unit_reference_linked.csv'];
   const SELECTED_HUNT_KEY = 'selected_hunt_code';
   const SELECTED_RESIDENCY_KEY = 'selected_hunt_research_residency';
-  const SELECTED_POINTS_KEY = 'selected_hunt_research_points';
+  const SELECTED_POIwindow.UOGA_HUNT_RESEARCH = (function () {
+  const ENNTS_KEY = 'selected_hunt_research_points';
   const BASKET_KEY = 'uoga_hunt_basket_v1';
   const LEGACY_BASKET_KEY = 'hunt_research_recent_hunts';
   // Public draw permits already account for Expo permits. Conservation permits are not part of draw odds.
@@ -35,7 +35,12 @@ window.UOGA_HUNT_RESEARCH = (function () {
       referenceByKey: new Map(),
     };
 
-    const els = {
+  // els is populated by grabEls() inside init() so the SPA can render the
+  // hunt-research template before this module is activated.
+  let els = {};
+
+  function grabEls() {
+    els = {
     huntCodeInput: document.getElementById('huntCodeInput'),
     residencySelect: document.getElementById('residencySelect'),
     pointsInput: document.getElementById('pointsInput'),
@@ -76,6 +81,7 @@ window.UOGA_HUNT_RESEARCH = (function () {
       basketList: document.getElementById('basketList'),
       clearBasketButton: document.getElementById('clearBasketButton'),
     };
+  }
 
   function normalizeKey(value) {
     return String(value || '').trim().toUpperCase();
@@ -855,6 +861,7 @@ window.UOGA_HUNT_RESEARCH = (function () {
     }
 
   async function init() {
+    grabEls();
     try {
       renderBasket();
       bootstrapSelection();
@@ -864,8 +871,8 @@ window.UOGA_HUNT_RESEARCH = (function () {
       runResearch();
     } catch (error) {
       console.error(error);
-      els.filterReadout.textContent = error.message || 'Hunt Research data failed to load.';
-      els.plannerReadout.textContent = 'Page loaded. Production data did not.';
+      if (els.filterReadout) els.filterReadout.textContent = error.message || 'Hunt Research data failed to load.';
+      if (els.plannerReadout) els.plannerReadout.textContent = 'Page loaded. Production data did not.';
     }
   }
 

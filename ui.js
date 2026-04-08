@@ -130,7 +130,31 @@ window.UOGA_UI = (() => {
     return Number.isFinite(parsed) ? `${parsed.toLocaleString()} pt${parsed === 1 ? '' : 's'}` : '';
   }
 
+  function isSpaMode() {
+    return !!document.getElementById('app');
+  }
+
+  function researchHref(huntCode) {
+    const encoded = encodeURIComponent(huntCode);
+    return isSpaMode()
+      ? `#/research?hunt_code=${encoded}`
+      : `./hunt-research.html?hunt_code=${encoded}`;
+  }
+
+  function plannerHref(huntCode) {
+    const encoded = encodeURIComponent(huntCode);
+    return isSpaMode()
+      ? `#/?hunt_code=${encoded}`
+      : `./index.html?hunt_code=${encoded}`;
+  }
+
   function getCurrentPageHref() {
+    if (isSpaMode()) {
+      const hash = (window.location.hash || '').slice(1).split('?')[0];
+      if (hash === '/research') return '#/research';
+      if (hash === '/vetting') return '#/vetting';
+      return '#/';
+    }
     const path = (window.location.pathname || '').toLowerCase();
     if (path.endsWith('/hunt-research.html') || path.endsWith('hunt-research.html')) return './hunt-research.html';
     if (path.endsWith('/vetting.html') || path.endsWith('vetting.html')) return './vetting.html';
@@ -180,14 +204,14 @@ window.UOGA_UI = (() => {
                 <p class="uoga-backpack-kicker">${sectionType === 'saved' ? 'Saved shortlist' : 'Recently opened'}</p>
                 <h4>${escapeHtml(item.hunt_code)}</h4>
               </div>
-              <a class="uoga-backpack-chip" href="./hunt-research.html?hunt_code=${encodeURIComponent(item.hunt_code)}" data-backpack-link="research" data-hunt-code="${escapeHtml(item.hunt_code)}">Resume</a>
+              <a class="uoga-backpack-chip" href="${researchHref(item.hunt_code)}" data-backpack-link="research" data-hunt-code="${escapeHtml(item.hunt_code)}">Resume</a>
             </div>
             <div class="uoga-backpack-name">${escapeHtml(item.hunt_name || item.hunt_code)}</div>
             <div class="uoga-backpack-meta">${escapeHtml(itemMeta(item) || 'Hunt details will fill in as more research is saved.')}</div>
             <div class="uoga-backpack-subvalue">${escapeHtml(itemSubvalue(item))}</div>
             <div class="uoga-backpack-actions">
-              <a href="./hunt-research.html?hunt_code=${encodeURIComponent(item.hunt_code)}" data-backpack-link="research" data-hunt-code="${escapeHtml(item.hunt_code)}">Research</a>
-              <a href="./index.html?hunt_code=${encodeURIComponent(item.hunt_code)}" data-backpack-link="planner" data-hunt-code="${escapeHtml(item.hunt_code)}">Planner</a>
+              <a href="${researchHref(item.hunt_code)}" data-backpack-link="research" data-hunt-code="${escapeHtml(item.hunt_code)}">Research</a>
+              <a href="${plannerHref(item.hunt_code)}" data-backpack-link="planner" data-hunt-code="${escapeHtml(item.hunt_code)}">Planner</a>
               ${sectionType === 'saved'
                 ? `<button type="button" data-backpack-remove="${escapeHtml(item.hunt_code)}">Remove</button>`
                 : '<span class="uoga-backpack-ghost">Recent</span>'}
@@ -217,7 +241,7 @@ window.UOGA_UI = (() => {
         <div class="hunt-basket-sub">${escapeHtml(itemSubvalue(item))}</div>
         <div class="hunt-basket-actions">
           <button type="button" class="hunt-basket-open" data-basket-sidebar-open="${escapeHtml(item.hunt_code)}">View in planner</button>
-          <a href="./hunt-research.html?hunt_code=${encodeURIComponent(item.hunt_code)}">Research</a>
+          <a href="${researchHref(item.hunt_code)}">Research</a>
         </div>
       </article>
     `).join('');
@@ -238,6 +262,8 @@ window.UOGA_UI = (() => {
         if (typeof window.selectHuntByCode === 'function') {
           window.selectHuntByCode(code);
           document.getElementById('selectedHuntPanel')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } else if (isSpaMode() && window.UOGA_ROUTER) {
+          window.UOGA_ROUTER.navigate(`/?hunt_code=${encodeURIComponent(code)}`);
         } else {
           window.location.href = `./index.html?hunt_code=${encodeURIComponent(code)}`;
         }
@@ -659,6 +685,16 @@ window.UOGA_UI = (() => {
   }
 
   function initBackpackTray() {
+    // If trayShell exists but has been removed from the DOM by a template swap,
+    // reset cached references so we re-create it in the new template.
+    if (trayShell && !trayShell.isConnected) {
+      trayShell = null;
+      trayButton = null;
+      trayPanel = null;
+      trayBadge = null;
+      traySections = null;
+      trayOpen = false;
+    }
     if (trayShell) {
       refreshBackpackUI();
       return;
